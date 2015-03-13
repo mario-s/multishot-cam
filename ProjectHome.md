@@ -1,0 +1,1 @@
+This is a simple camera app to take at least 3 photos in a row with different exposures, so that the images can be processed further for one HDR image.
