@@ -30,11 +30,14 @@ class PhotoHandler implements PictureCallback {
 	private static final String NO_DIR = "No directory to save image.";
 
 	private final Context context;
-	private static DateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmm");
+	private final InternalMemoryAccessor memAccessor;
+	
 	private File pictureFileDir;
 	private int imageCounter;
 	private int defaultExposureCompensation;
 	private List<String> imagesNames = new ArrayList<String>(REQ_IMAGES);
+	
+	 
 
 	public PhotoHandler(Context context) {
 		this(0, context);
@@ -43,6 +46,7 @@ class PhotoHandler implements PictureCallback {
 	public PhotoHandler(int imageCounter, Context context) {
 		this.imageCounter = imageCounter;
 		this.context = context;
+		this.memAccessor = new InternalMemoryAccessor(context);
 		pictureFileDir = getExternalStoragePublicDirectory(DIRECTORY_DCIM);
 	}
 
@@ -55,6 +59,14 @@ class PhotoHandler implements PictureCallback {
 			return;
 		}
 
+		saveToExternalStorage(data);
+
+		imageCounter++;
+
+		nextPhoto(camera);
+	}
+
+	private void saveToExternalStorage(byte[] data) {
 		String pictureFilename = createFileName();
 		try {
 			File pictureFile = new File(pictureFileDir, pictureFilename);
@@ -68,13 +80,10 @@ class PhotoHandler implements PictureCallback {
 			Toast.makeText(context, "Image could not be saved.",
 					Toast.LENGTH_LONG).show();
 		}
-
-		imageCounter++;
-
-		nextPhoto(camera);
 	}
 
 	private String createFileName() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmm");
 		String date = dateFormat.format(new Date());
 
 		StringBuilder builder = new StringBuilder(25);
