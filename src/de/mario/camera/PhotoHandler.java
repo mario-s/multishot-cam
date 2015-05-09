@@ -2,6 +2,7 @@ package de.mario.camera;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,13 +32,12 @@ class PhotoHandler implements PictureCallback {
 
 	private final Context context;
 	private final InternalMemoryAccessor memAccessor;
-	
+
 	private File pictureFileDir;
 	private int imageCounter;
 	private int defaultExposureCompensation;
+	private List<String> internaNames = new ArrayList<String>(REQ_IMAGES);
 	private List<String> imagesNames = new ArrayList<String>(REQ_IMAGES);
-	
-	 
 
 	public PhotoHandler(Context context) {
 		this(0, context);
@@ -59,27 +59,57 @@ class PhotoHandler implements PictureCallback {
 			return;
 		}
 
-		saveToExternalStorage(data);
+		if (imageCounter < REQ_IMAGES) {
+			saveInternal(data);
+		} else {
+			saveExternal(data);
+		}
 
 		imageCounter++;
 
 		nextPhoto(camera);
 	}
 
-	private void saveToExternalStorage(byte[] data) {
-		String pictureFilename = createFileName();
+	private void saveInternal(byte[] data) {
+		String name = createFileName();
 		try {
-			File pictureFile = new File(pictureFileDir, pictureFilename);
+			memAccessor.save(data, name);
+			internaNames.add(name);
+		} catch (IOException e) {
+			logException(name, e);
+		}
+	}
+
+	private void saveExternal(byte[] data) {
+		String name = createFileName();
+		saveExternal(data, name);
+		
+		for(String internal : internaNames){
+			try {
+				saveExternal(memAccessor.load(internal),internal);
+			} catch (IOException e) {
+				logException(internal, e);
+			}
+		}
+	}
+
+	private void saveExternal(byte[] data, String name) {
+		try {
+			File pictureFile = new File(pictureFileDir, name);
 			FileOutputStream fos = new FileOutputStream(pictureFile);
 			fos.write(data);
 			fos.close();
 			imagesNames.add(pictureFile.getPath());
-		} catch (Exception error) {
-			Log.e(PhotoActivity.DEBUG_TAG, "File" + pictureFilename
-					+ "not saved: " + error.getMessage());
-			Toast.makeText(context, "Image could not be saved.",
-					Toast.LENGTH_LONG).show();
+		} catch (Exception exc) {
+			logException(name, exc);
 		}
+	}
+
+	private void logException(String name, Exception exc) {
+		Log.e(PhotoActivity.DEBUG_TAG,
+				"File" + name + "not saved: " + exc.getMessage());
+		Toast.makeText(context, "Image could not be saved.", Toast.LENGTH_LONG)
+				.show();
 	}
 
 	private String createFileName() {
@@ -88,8 +118,7 @@ class PhotoHandler implements PictureCallback {
 
 		StringBuilder builder = new StringBuilder(25);
 		builder.append("Picture_").append(date).append("_")
-				.append(imageCounter)
-				.append(JPG);
+				.append(imageCounter).append(JPG);
 
 		return builder.toString();
 	}

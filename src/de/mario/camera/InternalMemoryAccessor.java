@@ -5,11 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.MediaStore.Files;
 
 
 /**
@@ -18,34 +20,39 @@ import android.graphics.BitmapFactory;
  * @author Mario
  * 
  */
-class InternalMemoryAccessor {
+final class InternalMemoryAccessor {
+	private static final String DIR = "/data/data/multishot/app_data/image";
 	private final Context context;
 	
-	public InternalMemoryAccessor(Context context) {
+	InternalMemoryAccessor(Context context) {
 		this.context = context;
 	}
 	
-	String saveToInternalSorage(Bitmap bitmapImage)
+	void save(byte[] data, String name)
 			throws IOException {
-		ContextWrapper cw = new ContextWrapper(context);
-		// path to /data/data/yourapp/app_data/imageDir
-		File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 		// Create imageDir
-		File mypath = new File(directory, "profile.jpg");
-
-		FileOutputStream fos = new FileOutputStream(mypath);
-
-		// Use the compress method on the BitMap object to write image to
-		// the OutputStream
-		bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+		File pictureFile = new File(getDirectory(), name);
+		FileOutputStream fos = new FileOutputStream(pictureFile);
+		fos.write(data);
 		fos.close();
-		return directory.getAbsolutePath();
+
+	}
+	
+	byte[] load(String name) throws IOException {
+
+		File f = new File(getDirectory(), name);
+		RandomAccessFile file = new RandomAccessFile(f.getAbsolutePath(), "r");
+		byte[] b = new byte[(int)file.length()];
+		file.read(b);
+		return b;
 	}
 
-	Bitmap loadImageFromStorage(String path) throws FileNotFoundException {
-
-		File f = new File(path, "profile.jpg");
-		return BitmapFactory.decodeStream(new FileInputStream(f));
+	private File getDirectory() {
+		ContextWrapper cw = new ContextWrapper(context);
+		// path to 
+		return cw.getDir(DIR, Context.MODE_PRIVATE);
 	}
+
+
 
 }
