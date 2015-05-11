@@ -1,17 +1,12 @@
 package de.mario.camera;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.provider.MediaStore.Files;
 
 
 /**
@@ -44,6 +39,7 @@ final class InternalMemoryAccessor {
 		RandomAccessFile file = new RandomAccessFile(f.getAbsolutePath(), "r");
 		byte[] b = new byte[(int)file.length()];
 		file.read(b);
+		file.close();
 		return b;
 	}
 
