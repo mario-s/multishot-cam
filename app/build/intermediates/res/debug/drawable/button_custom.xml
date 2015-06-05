@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/red_button"
+          android:state_pressed="true" />
+    <item android:drawable="@drawable/yellow_button"
+          android:state_focused="true" />
+    <item android:drawable="@drawable/gray_button" />
+</selector><!-- From: file:/C:/Users/Mario/develop/projects/android_studio/multishot-cam/app/src/main/res/drawable/button_custom.xml -->

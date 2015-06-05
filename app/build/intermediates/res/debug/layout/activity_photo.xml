@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:id="@+id/layout">
+
+	<FrameLayout android:id="@+id/preview"
+		android:layout_weight="1" 
+		android:layout_width="fill_parent"
+		android:layout_height="0dip">
+	</FrameLayout>
+
+	<ImageButton
+	    android:id="@+id/buttonClick"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="end"
+	    android:onClick="onClick"
+	    android:src="@drawable/button_custom"
+	    android:background="@null"
+	    android:text="@string/take_photo" />
+
+</LinearLayout>
+<!-- From: file:/C:/Users/Mario/develop/projects/android_studio/multishot-cam/app/src/main/res/layout/activity_photo.xml -->
