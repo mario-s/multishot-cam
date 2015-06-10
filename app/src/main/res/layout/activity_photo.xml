@@ -12,10 +12,11 @@
 	    android:id="@+id/buttonClick"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_gravity="end"
+	    android:layout_gravity="center"
 	    android:onClick="onClick"
 	    android:src="@drawable/button_custom"
 	    android:background="@null"
-	    android:text="@string/take_photo" />
+	    android:text="@string/take_photo"
+		android:contentDescription="@string/shutter" />
 
 </LinearLayout>

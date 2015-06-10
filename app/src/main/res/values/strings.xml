@@ -4,5 +4,6 @@
     <string name="app_name">MultishotCamera</string>
     <string name="action_settings">Settings</string>
     <string name="take_photo">Take!</string>
+    <string name="shutter">Shutter</string>
 
 </resources>
