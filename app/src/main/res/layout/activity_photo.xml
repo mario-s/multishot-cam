@@ -1,22 +1,27 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:id="@+id/layout">
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:id="@+id/layout">
 
 	<FrameLayout android:id="@+id/preview"
 		android:layout_weight="1" 
 		android:layout_width="fill_parent"
-		android:layout_height="0dip">
+		android:layout_height="fill_parent">
 	</FrameLayout>
 
 	<ImageButton
-	    android:id="@+id/buttonClick"
-	    android:layout_width="wrap_content"
+	    android:id="@+id/shutter"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
 	    android:onClick="onClick"
+		android:layout_alignBottom="@+id/preview"
 	    android:src="@drawable/button_custom"
 	    android:background="@null"
 	    android:text="@string/take_photo"
-		android:contentDescription="@string/shutter" />
+		android:contentDescription="@string/shutter"
+		android:paddingBottom="15dp" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -36,7 +36,7 @@ class PhotoHandler implements PictureCallback {
 	private File pictureFileDir;
 	private int imageCounter;
 	private int defaultExposureCompensation;
-	private List<String> internaNames = new ArrayList<String>(REQ_IMAGES);
+	private List<String> internalNames = new ArrayList<String>(REQ_IMAGES);
 	private List<String> imagesNames = new ArrayList<String>(REQ_IMAGES);
 
 	public PhotoHandler(Context context) {
@@ -73,14 +73,14 @@ class PhotoHandler implements PictureCallback {
 		String name = createFileName();
 		try {
 			memAccessor.save(data, name);
-			internaNames.add(name);
+			internalNames.add(name);
 		} catch (IOException e) {
 			logException(name, e);
 		}
 	}
 
 	private void copyExternal() {
-		for(String internal : internaNames){
+		for(String internal : internalNames){
 			try {
 				copyExternal(memAccessor.load(internal), internal);
 			} catch (IOException e) {

@@ -16,7 +16,7 @@ import android.content.ContextWrapper;
  * 
  */
 final class InternalMemoryAccessor {
-	private static final String DIR = "/data/data/multishot/app_data/image";
+
 	private final Context context;
 	
 	InternalMemoryAccessor(Context context) {
