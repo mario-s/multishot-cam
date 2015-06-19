@@ -15,7 +15,7 @@ import android.content.ContextWrapper;
  * @author Mario
  * 
  */
-final class InternalMemoryAccessor {
+class InternalMemoryAccessor {
 
 	private final Context context;
 	
@@ -44,7 +44,7 @@ final class InternalMemoryAccessor {
 		return b;
 	}
 
-	private File getDirectory() {
+	File getDirectory() {
 		ContextWrapper cw = new ContextWrapper(context);
 		// path to
 		return cw.getDir("data", Context.MODE_PRIVATE);

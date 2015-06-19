@@ -21,6 +21,10 @@ android {
     }
 }
 
+apply from: 'build.workaround-missing-resource.gradle'
+
 dependencies {
     compile 'com.android.support:support-v4:18.0.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.9.5'
 }
