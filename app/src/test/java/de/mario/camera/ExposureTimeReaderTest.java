@@ -21,11 +21,13 @@ public class ExposureTimeReaderTest {
 
 	private String val;
 
+	private List<String> names;
+
 	@Before
 	public void setUp(){
 		val = "0.1";
-		List<String> names = Collections.singletonList("");
-		classUnderTest = new ExposureTimeReader(names) {
+		names = Collections.singletonList("test");
+		classUnderTest = new ExposureTimeReader() {
 
 			@Override
 			String getExposureTimeFromExif(String pathToImage) throws IOException {
@@ -40,14 +42,14 @@ public class ExposureTimeReaderTest {
 
 	@Test
 	public void testReadExposureTimes_Success() {
-		Map<String, Double> result = classUnderTest.readExposureTimes();
+		Map<String, Double> result = classUnderTest.readExposureTimes(names);
 		assertFalse(result.isEmpty());
 	}
 
 	@Test
 	public void testReadExposureTimes_IllegalArgument() {
 		val = "";
-		Map<String, Double> result = classUnderTest.readExposureTimes();
+		Map<String, Double> result = classUnderTest.readExposureTimes(names);
 		assertTrue(result.isEmpty());
 	}
 

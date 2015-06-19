@@ -13,11 +13,6 @@ import java.util.Map;
  */
 class ExposureTimeReader {
 
-    private final List<String> imagesNames;
-
-    ExposureTimeReader(List<String> imagesNames){
-        this.imagesNames = imagesNames;
-    }
 
     String getExposureTimeFromExif(String pathToImage) throws IOException {
         ExifInterface exifInterface = new ExifInterface(pathToImage);
@@ -34,11 +29,11 @@ class ExposureTimeReader {
         return Double.parseDouble(exposureTime);
     }
 
-    Map<String, Double> readExposureTimes() {
-        Map<String, Double> map = new HashMap<>(imagesNames.size());
-        for (String name : imagesNames){
+    Map<String, Double> readExposureTimes(List<String> images) {
+        Map<String, Double> map = new HashMap<>(images.size());
+        for (String path : images){
             try {
-                map.put(name, getExposureTime(name));
+                map.put(path, getExposureTime(path));
             }catch(IOException | IllegalArgumentException exc){
                 log(exc);
             }
