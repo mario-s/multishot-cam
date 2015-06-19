@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Queue;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -19,7 +20,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 import static android.os.Environment.DIRECTORY_DCIM;
 
 /**
- * Handler to save the image in a file.
+ * this class takes pictures for each given exposure values and saves those photos.
  * 
  * @author Mario
  * 
@@ -29,23 +30,20 @@ class PhotoHandler implements PictureCallback {
 	private static final String JPG = ".jpg";
 	private static final int REQ_IMAGES = 3;
 	private static final String NO_DIR = "No directory to save image.";
+	private static final String PATTERN = "yyyymmddhhmm";
 
 	private final Context context;
 	private final InternalMemoryAccessor memAccessor;
 
 	private File pictureFileDir;
 	private int imageCounter;
-	private int defaultExposureCompensation;
-	private List<String> internalNames = new ArrayList<String>(REQ_IMAGES);
-	private List<String> imagesNames = new ArrayList<String>(REQ_IMAGES);
+	private List<String> internalNames = new ArrayList<>(REQ_IMAGES);
+	private List<String> imagesNames = new ArrayList<>(REQ_IMAGES);
+	private final Queue<Integer> exposureValues;
 
-	public PhotoHandler(Context context) {
-		this(0, context);
-	}
-
-	public PhotoHandler(int imageCounter, Context context) {
-		this.imageCounter = imageCounter;
+	public PhotoHandler(Context context, Queue<Integer> exposureValues) {
 		this.context = context;
+		this.exposureValues = exposureValues;
 		this.memAccessor = new InternalMemoryAccessor(context);
 		pictureFileDir = getExternalStoragePublicDirectory(DIRECTORY_DCIM);
 	}
@@ -60,7 +58,7 @@ class PhotoHandler implements PictureCallback {
 		}
 
 		saveInternal(data);
-		if (imageCounter == REQ_IMAGES - 1) {
+		if (exposureValues.isEmpty()) {
 			copyExternal();
 		}
 
@@ -109,7 +107,7 @@ class PhotoHandler implements PictureCallback {
 	}
 
 	private String createFileName() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmm");
+		DateFormat dateFormat = new SimpleDateFormat(PATTERN);
 		String date = dateFormat.format(new Date());
 
 		StringBuilder builder = new StringBuilder(25);
@@ -120,35 +118,18 @@ class PhotoHandler implements PictureCallback {
 	}
 
 	private void nextPhoto(Camera camera) {
-		Camera.Parameters params = camera.getParameters();
-		// restart preview for next photo
-		camera.startPreview();
+		if (!exposureValues.isEmpty()) {
+			Camera.Parameters params = camera.getParameters();
 
-		boolean next = false;
+			//restart preview for next photo
+			camera.startPreview();
 
-		if (imageCounter == 1) {
-			next = true;
-			params.setExposureCompensation(0);
-		} else if (imageCounter == 2) {
-			next = true;
-			params.setExposureCompensation(params.getMaxExposureCompensation());
-		} else {
-			params.setExposureCompensation(defaultExposureCompensation);
-			if (imagesNames.size() == REQ_IMAGES) {
-				Toast.makeText(context, "New Images saved to: " + pictureFileDir, Toast.LENGTH_LONG)
-						.show();
-			}
-		}
+			int ev = exposureValues.poll();
+			params.setExposureCompensation(ev);
 
-		camera.setParameters(params);
+			camera.setParameters(params);
 
-		if (next) {
 			camera.takePicture(null, null, this);
 		}
 	}
-
-	void setDefaultExposureCompensation(int defaultExposureCompensation) {
-		this.defaultExposureCompensation = defaultExposureCompensation;
-	}
-
 }

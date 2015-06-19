@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Main activity.
  * 
@@ -24,6 +27,12 @@ public class PhotoActivity extends Activity {
 	final static String DEBUG_TAG = "PhotoActivity";
 	private Camera camera;
 	private Preview preview;
+	private final LinkedList<Integer> exposureValues;
+
+	public PhotoActivity() {
+		exposureValues = new LinkedList<>();
+	}
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +52,7 @@ public class PhotoActivity extends Activity {
 				FrameLayout layout = (FrameLayout) findViewById(R.id.preview);
 				layout.addView(preview);
 
+				fillExposuresValues();
 			}
 		}
 	}
@@ -62,6 +72,14 @@ public class PhotoActivity extends Activity {
 		return cameraId;
 	}
 
+	private void fillExposuresValues() {
+		Camera.Parameters params = camera.getParameters();
+		exposureValues.clear();
+		exposureValues.add(params.getExposureCompensation());
+		exposureValues.add(params.getMinExposureCompensation());
+		exposureValues.add(params.getMaxExposureCompensation());
+	}
+
 	@Override
 	protected void onPause() {
 		if (camera != null) {
@@ -79,16 +97,14 @@ public class PhotoActivity extends Activity {
 	}
 
 	public void onClick(View view) {
-		
-		PhotoHandler photoHandler = new PhotoHandler(getApplicationContext());
-		
-		Camera.Parameters params = camera.getParameters();
-		
-		photoHandler.setDefaultExposureCompensation(params.getExposureCompensation());
-		
-		params.setExposureCompensation(params.getMinExposureCompensation());
-		camera.setParameters(params);
-		
+
+		LinkedList<Integer> copy = new LinkedList<>(exposureValues);
+		copy.removeFirst();
+		PhotoHandler photoHandler = new PhotoHandler(getApplicationContext(), copy);
 		camera.takePicture(null, null, photoHandler);
+
+		//reset
+		Camera.Parameters params = camera.getParameters();
+		params.setExposureCompensation(exposureValues.getFirst());
 	}
 }
