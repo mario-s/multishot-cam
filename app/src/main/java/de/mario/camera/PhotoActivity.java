@@ -99,12 +99,7 @@ public class PhotoActivity extends Activity {
 	public void onClick(View view) {
 
 		LinkedList<Integer> copy = new LinkedList<>(exposureValues);
-		copy.removeFirst();
 		PhotoHandler photoHandler = new PhotoHandler(getApplicationContext(), copy);
 		camera.takePicture(null, null, photoHandler);
-
-		//reset
-		Camera.Parameters params = camera.getParameters();
-		params.setExposureCompensation(exposureValues.getFirst());
 	}
 }

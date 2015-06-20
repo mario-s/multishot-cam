@@ -28,7 +28,6 @@ import static android.os.Environment.DIRECTORY_DCIM;
 class PhotoHandler implements PictureCallback {
 
 	private static final String JPG = ".jpg";
-	private static final int REQ_IMAGES = 3;
 	private static final String NO_DIR = "No directory to save image.";
 	private static final String PATTERN = "yyyymmddhhmm";
 
@@ -37,13 +36,15 @@ class PhotoHandler implements PictureCallback {
 
 	private File pictureFileDir;
 	private int imageCounter;
-	private List<String> internalNames = new ArrayList<>(REQ_IMAGES);
-	private List<String> imagesNames = new ArrayList<>(REQ_IMAGES);
+	private List<String> internalNames = new ArrayList<>();
+	private List<String> imagesNames = new ArrayList<>();
 	private final Queue<Integer> exposureValues;
+	private int defaultExposure;
 
 	public PhotoHandler(Context context, Queue<Integer> exposureValues) {
 		this.context = context;
 		this.exposureValues = exposureValues;
+		this.defaultExposure = exposureValues.poll();
 		this.memAccessor = new InternalMemoryAccessor(context);
 		pictureFileDir = getExternalStoragePublicDirectory(DIRECTORY_DCIM);
 	}
@@ -118,18 +119,19 @@ class PhotoHandler implements PictureCallback {
 	}
 
 	private void nextPhoto(Camera camera) {
+		Camera.Parameters params = camera.getParameters();
 		if (!exposureValues.isEmpty()) {
-			Camera.Parameters params = camera.getParameters();
-
-			//restart preview for next photo
-			camera.startPreview();
 
 			int ev = exposureValues.poll();
 			params.setExposureCompensation(ev);
-
 			camera.setParameters(params);
-
 			camera.takePicture(null, null, this);
+		}else{
+			//reset
+			params.setExposureCompensation(defaultExposure);
+
+			//restart preview for next photo
+			camera.startPreview();
 		}
 	}
 }
