@@ -42,6 +42,6 @@ class ExposureTimeReader {
     }
 
     void log(Exception exc) {
-        Log.e(PhotoActivity.DEBUG_TAG, exc.getMessage());
+        Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
     }
 }

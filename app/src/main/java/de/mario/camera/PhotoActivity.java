@@ -19,12 +19,11 @@ import java.util.Queue;
  * @author Mario
  * 
  */
-public class PhotoActivity extends Activity {
+public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private static final String NO_CAM = "No camera on this device";
 	private static final String NO_BACK_CAM = "No back facing camera found.";
 	private static final int NO_CAM_ID = -1;
-	final static String DEBUG_TAG = "PhotoActivity";
 	private Camera camera;
 	private Preview preview;
 	private final LinkedList<Integer> exposureValues;
@@ -98,8 +97,12 @@ public class PhotoActivity extends Activity {
 
 	public void onClick(View view) {
 
-		LinkedList<Integer> copy = new LinkedList<>(exposureValues);
-		PhotoHandler photoHandler = new PhotoHandler(getApplicationContext(), copy);
+		PhotoHandler photoHandler = new PhotoHandler(this);
 		camera.takePicture(null, null, photoHandler);
+	}
+
+	@Override
+	public LinkedList<Integer> getExposureValues() {
+		return new LinkedList<>(exposureValues);
 	}
 }

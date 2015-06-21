@@ -1,7 +1,6 @@
 package de.mario.camera;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,6 +12,7 @@ import java.util.Queue;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,117 +21,125 @@ import static android.os.Environment.DIRECTORY_DCIM;
 
 /**
  * this class takes pictures for each given exposure values and saves those photos.
- * 
+ *
  * @author Mario
- * 
  */
 class PhotoHandler implements PictureCallback {
 
-	private static final String JPG = ".jpg";
-	private static final String NO_DIR = "No directory to save image.";
-	private static final String PATTERN = "yyyymmddhhmm";
+    private static final String JPG = ".jpg";
+    private static final String PATTERN = "yyyymmddhhmm";
 
-	private final Context context;
-	private final InternalMemoryAccessor memAccessor;
+    private final InternalMemoryAccessor memAccessor;
+    private final Queue<Integer> exposureValues;
+    private final int maxImages;
+    private final int defaultExposure;
 
-	private File pictureFileDir;
-	private int imageCounter;
-	private List<String> internalNames = new ArrayList<>();
-	private List<String> imagesNames = new ArrayList<>();
-	private final Queue<Integer> exposureValues;
-	private int defaultExposure;
+    private File pictureFileDir;
+    private int imageCounter;
+    private List<String> imagesNames = new ArrayList<>();
 
-	public PhotoHandler(Context context, Queue<Integer> exposureValues) {
-		this.context = context;
-		this.exposureValues = exposureValues;
-		this.defaultExposure = exposureValues.poll();
-		this.memAccessor = new InternalMemoryAccessor(context);
-		pictureFileDir = getExternalStoragePublicDirectory(DIRECTORY_DCIM);
-	}
+    private final PhotoActivable activity;
 
-	@Override
-	public void onPictureTaken(byte[] data, Camera camera) {
-		if (!pictureFileDir.exists()) {
+    public PhotoHandler(PhotoActivable activity) {
+        this.activity = activity;
+        this.exposureValues = activity.getExposureValues();
+        this.maxImages = exposureValues.size();
+        this.defaultExposure = exposureValues.poll(); //remove the first value and keep it for later
+        this.memAccessor = new InternalMemoryAccessor(activity.getApplicationContext());
+        this.pictureFileDir = getExternalStoragePublicDirectory(DIRECTORY_DCIM);
+    }
 
-			Log.d(PhotoActivity.DEBUG_TAG, NO_DIR);
-			Toast.makeText(context, NO_DIR, Toast.LENGTH_LONG).show();
-			return;
-		}
+    private String getResource(int key) {
+        return getContext().getResources().getString(key);
+    }
 
-		saveInternal(data);
-		if (exposureValues.isEmpty()) {
-			copyExternal();
-		}
+    private Context getContext() {
+        return activity.getApplicationContext();
+    }
 
-		imageCounter++;
+    private void toast(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG)
+                .show();
+    }
 
-		nextPhoto(camera);
-	}
+    @Override
+    public void onPictureTaken(byte[] data, Camera camera) {
+        if (!pictureFileDir.exists()) {
+            String msg = getResource(R.string.no_directory);
+            toast(msg);
+            Log.d(PhotoActivable.DEBUG_TAG, msg);
+            return;
+        }
+        showProcessInfo();
+        saveInternal(data);
+        if (exposureValues.isEmpty()) {
+            copyExternal();
+        }
 
-	private void saveInternal(byte[] data) {
-		String name = createFileName();
-		try {
-			memAccessor.save(data, name);
-			internalNames.add(name);
-		} catch (IOException e) {
-			logException(name, e);
-		}
-	}
+        imageCounter++;
 
-	private void copyExternal() {
-		for(String internal : internalNames){
-			try {
-				copyExternal(memAccessor.load(internal), internal);
-			} catch (IOException e) {
-				logException(internal, e);
-			}
-		}
-	}
+        nextPhoto(camera);
+    }
 
-	private void copyExternal(byte[] data, String name) {
-		try {
-			File pictureFile = new File(pictureFileDir, name);
-			FileOutputStream fos = new FileOutputStream(pictureFile);
-			fos.write(data);
-			fos.close();
-			imagesNames.add(pictureFile.getPath());
-		} catch (Exception exc) {
-			logException(name, exc);
-		}
-	}
+    private void showProcessInfo() {
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                int current = imageCounter + 1;
+                toast(String.format(getResource(R.string.photo_taken), current, maxImages));
+                Looper.loop();
+            }
+        }.start();
+    }
 
-	private void logException(String name, Exception exc) {
-		Log.e(PhotoActivity.DEBUG_TAG,
-				"File" + name + "not saved: " + exc.getMessage());
-		Toast.makeText(context, "Image could not be saved.", Toast.LENGTH_LONG)
-				.show();
-	}
+    private void saveInternal(byte[] data) {
+        String name = createFileName();
+        try {
+            memAccessor.save(data, name);
+        } catch (IOException e) {
+            Log.e(PhotoActivable.DEBUG_TAG,
+                    "File " + name + " not saved: " + e.getMessage());
+            toast(getResource(R.string.save_error));
+        }
+    }
 
-	private String createFileName() {
-		DateFormat dateFormat = new SimpleDateFormat(PATTERN);
-		String date = dateFormat.format(new Date());
+    private void copyExternal() {
 
-		StringBuilder builder = new StringBuilder(25);
-		builder.append("Picture_").append(date).append("_")
-				.append(imageCounter).append(JPG);
+        try {
+            String path = pictureFileDir.getAbsolutePath();
+            imagesNames.addAll(memAccessor.copyAll(path));
+        } catch (IOException exc) {
+            Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
+            toast(getResource(R.string.save_error));
+        }
+    }
 
-		return builder.toString();
-	}
+    private String createFileName() {
+        DateFormat dateFormat = new SimpleDateFormat(PATTERN);
+        String date = dateFormat.format(new Date());
 
-	private void nextPhoto(Camera camera) {
-		Camera.Parameters params = camera.getParameters();
-		if (!exposureValues.isEmpty()) {
+        StringBuilder builder = new StringBuilder(25);
+        builder.append("Picture_").append(date).append("_")
+                .append(imageCounter).append(JPG);
 
-			int ev = exposureValues.poll();
-			params.setExposureCompensation(ev);
-			camera.setParameters(params);
-			camera.takePicture(null, null, this);
-		}else{
-			//reset
-			params.setExposureCompensation(defaultExposure);
+        return builder.toString();
+    }
 
-			//restart preview for next photo
-			camera.startPreview();
-		}
-	}
+    private void nextPhoto(Camera camera) {
+        Camera.Parameters params = camera.getParameters();
+        if (!exposureValues.isEmpty()) {
+
+            int ev = exposureValues.poll();
+            params.setExposureCompensation(ev);
+            camera.setParameters(params);
+            camera.takePicture(null, null, this);
+        } else {
+            //reset
+            params.setExposureCompensation(defaultExposure);
+
+            //restart preview for next photo
+            camera.startPreview();
+        }
+    }
 }

@@ -34,7 +34,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			camera.setPreviewDisplay(holder);
 			camera.startPreview();
 		} catch (IOException e) {
-			Log.e(PhotoActivity.DEBUG_TAG, e.getMessage(), e);
+			Log.e(PhotoActivable.DEBUG_TAG, e.getMessage(), e);
 		}
 	}
 
