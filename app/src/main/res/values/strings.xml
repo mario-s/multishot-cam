@@ -7,6 +7,6 @@
     <string name="shutter">Shutter</string>
     <string name="no_directory">No directory to save image.</string>
     <string name="save_error">"Image could not be saved."</string>
-    <string name="photo_taken" formatted="false">Photo %s of %s taken.</string>
+    <string name="photos_saved" formatted="false">%s photos saved to %s.</string>
 
 </resources>

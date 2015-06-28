@@ -20,19 +20,18 @@ import android.util.Log;
  */
 class InternalMemoryAccessor {
 
-    private final Context context;
+    private final File internalDirectory;
     private final List<String> internalNames;
 
-    InternalMemoryAccessor(Context context) {
-        this.context = context;
+    InternalMemoryAccessor(File internalDirectory) {
+        this.internalDirectory = internalDirectory;
         this.internalNames = new ArrayList<>();
     }
 
     void save(byte[] data, String name)
             throws IOException {
         // Create imageDir
-        File directory = getDirectory();
-        File pictureFile = new File(directory, name);
+        File pictureFile = new File(internalDirectory, name);
         FileOutputStream fos = new FileOutputStream(pictureFile);
         fos.write(data);
         fos.close();
@@ -42,18 +41,12 @@ class InternalMemoryAccessor {
 
     byte[] load(String name) throws IOException {
 
-        File f = new File(getDirectory(), name);
+        File f = new File(internalDirectory, name);
         RandomAccessFile file = new RandomAccessFile(f.getAbsolutePath(), "r");
         byte[] b = new byte[(int) file.length()];
         file.read(b);
         file.close();
         return b;
-    }
-
-    File getDirectory() {
-        ContextWrapper cw = new ContextWrapper(context);
-        // path to
-        return cw.getDir("data", Context.MODE_PRIVATE);
     }
 
     /**

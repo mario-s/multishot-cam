@@ -1,17 +1,24 @@
 package de.mario.camera;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.LinkedList;
-import java.util.Queue;
+
+import static android.os.Environment.DIRECTORY_DCIM;
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 /**
  * Main activity.
@@ -25,13 +32,13 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private static final String NO_BACK_CAM = "No back facing camera found.";
 	private static final int NO_CAM_ID = -1;
 	private Camera camera;
-	private Preview preview;
 	private final LinkedList<Integer> exposureValues;
+	private Handler handler;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
+		handler = new MessageHandler(this);
 	}
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +47,14 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-			Toast.makeText(this, NO_CAM, Toast.LENGTH_LONG).show();
+			toast(NO_CAM);
 		} else {
 			int id = findBackCamera();
 			if (id == NO_CAM_ID) {
-				Toast.makeText(this, NO_BACK_CAM, Toast.LENGTH_LONG).show();
+				toast(NO_BACK_CAM);
 			} else {
 				camera = Camera.open(id);
-				preview = new Preview(this, camera);
+				Preview preview = new Preview(this, camera);
 				FrameLayout layout = (FrameLayout) findViewById(R.id.preview);
 				layout.addView(preview);
 
@@ -69,6 +76,16 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			}
 		}
 		return cameraId;
+	}
+
+	@Override
+	public String getResource(int key) {
+		return getApplicationContext().getResources().getString(key);
+	}
+
+	private void toast(String msg) {
+		Toast.makeText(this, msg, Toast.LENGTH_LONG)
+				.show();
 	}
 
 	private void fillExposuresValues() {
@@ -97,12 +114,44 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	public void onClick(View view) {
 
-		PhotoHandler photoHandler = new PhotoHandler(this);
-		camera.takePicture(null, null, photoHandler);
+		ContinuesCallback callback = new ContinuesCallback(this);
+		camera.takePicture(null, null, callback);
 	}
 
 	@Override
 	public LinkedList<Integer> getExposureValues() {
 		return new LinkedList<>(exposureValues);
 	}
+
+	@Override
+	public Handler getHandler() {
+		return handler;
+	}
+
+	@Override
+	public File getPicturesDirectory() {
+		return getExternalStoragePublicDirectory(DIRECTORY_DCIM);
+	}
+
+	@Override
+	public File getInternalDirectory() {
+		ContextWrapper cw = new ContextWrapper(getApplicationContext());
+		return cw.getDir("data", Context.MODE_PRIVATE);
+	}
+
+	static class MessageHandler extends Handler {
+
+		private final PhotoActivity activity;
+
+		MessageHandler(PhotoActivity activity) {
+			this.activity = activity;
+		}
+
+		@Override
+		public void handleMessage(Message message) {
+			String msg = message.obj.toString();
+			activity.toast(msg);
+		}
+	}
+
 }

@@ -9,29 +9,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Queue;
 
-import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
-import static android.os.Environment.DIRECTORY_DCIM;
 
 /**
- * this class takes pictures for each given exposure values and saves those photos.
+ * This class takes pictures for each given exposure values and saves them.
  *
  * @author Mario
  */
-class PhotoHandler implements PictureCallback {
+class ContinuesCallback implements PictureCallback {
 
     private static final String JPG = ".jpg";
     private static final String PATTERN = "yyyymmddhhmm";
 
     private final InternalMemoryAccessor memAccessor;
     private final Queue<Integer> exposureValues;
-    private final int maxImages;
     private final int defaultExposure;
 
     private File pictureFileDir;
@@ -40,26 +35,27 @@ class PhotoHandler implements PictureCallback {
 
     private final PhotoActivable activity;
 
-    public PhotoHandler(PhotoActivable activity) {
+    public ContinuesCallback(PhotoActivable activity) {
         this.activity = activity;
         this.exposureValues = activity.getExposureValues();
-        this.maxImages = exposureValues.size();
         this.defaultExposure = exposureValues.poll(); //remove the first value and keep it for later
-        this.memAccessor = new InternalMemoryAccessor(activity.getApplicationContext());
-        this.pictureFileDir = getExternalStoragePublicDirectory(DIRECTORY_DCIM);
+        this.memAccessor = new InternalMemoryAccessor(activity.getInternalDirectory());
+        this.pictureFileDir = activity.getPicturesDirectory(); //image path on external storage
     }
 
     private String getResource(int key) {
-        return getContext().getResources().getString(key);
+        return activity.getResource(key);
     }
 
-    private Context getContext() {
-        return activity.getApplicationContext();
-    }
-
-    private void toast(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG)
-                .show();
+    private void toast(final String message) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message msg = Message.obtain();
+                msg.obj = message;
+                activity.getHandler().sendMessage(msg);
+            }
+        }).start();
     }
 
     @Override
@@ -70,7 +66,6 @@ class PhotoHandler implements PictureCallback {
             Log.d(PhotoActivable.DEBUG_TAG, msg);
             return;
         }
-        showProcessInfo();
         saveInternal(data);
         if (exposureValues.isEmpty()) {
             copyExternal();
@@ -79,18 +74,6 @@ class PhotoHandler implements PictureCallback {
         imageCounter++;
 
         nextPhoto(camera);
-    }
-
-    private void showProcessInfo() {
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                int current = imageCounter + 1;
-                toast(String.format(getResource(R.string.photo_taken), current, maxImages));
-                Looper.loop();
-            }
-        }.start();
     }
 
     private void saveInternal(byte[] data) {
@@ -109,10 +92,16 @@ class PhotoHandler implements PictureCallback {
         try {
             String path = pictureFileDir.getAbsolutePath();
             imagesNames.addAll(memAccessor.copyAll(path));
+            showSuccessInfo();
         } catch (IOException exc) {
             Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
             toast(getResource(R.string.save_error));
         }
+    }
+
+    private void showSuccessInfo() {
+        int current = imageCounter + 1;
+        toast(String.format(getResource(R.string.photos_saved), current, pictureFileDir));
     }
 
     private String createFileName() {
@@ -128,11 +117,12 @@ class PhotoHandler implements PictureCallback {
 
     private void nextPhoto(Camera camera) {
         Camera.Parameters params = camera.getParameters();
+        camera.setParameters(params);
         if (!exposureValues.isEmpty()) {
 
             int ev = exposureValues.poll();
             params.setExposureCompensation(ev);
-            camera.setParameters(params);
+
             camera.takePicture(null, null, this);
         } else {
             //reset

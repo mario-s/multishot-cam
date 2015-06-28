@@ -49,9 +49,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 
 		if (mHolder.getSurface() != null) {
-
 			camera.stopPreview();
-			
 			surfaceCreated(mHolder);
 		}
 	}

@@ -1,7 +1,10 @@
 package de.mario.camera;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.ResultReceiver;
 
+import java.io.File;
 import java.util.Queue;
 
 /**
@@ -11,7 +14,20 @@ public interface PhotoActivable {
 
     String DEBUG_TAG = "PhotoActivity";
 
+    @Deprecated
     Context getApplicationContext();
 
+    String getResource(int key);
+
+    Handler getHandler();
+
     Queue<Integer> getExposureValues();
+
+    /**
+     * Directory where to save the images.
+     * @return
+     */
+    File getPicturesDirectory();
+
+    File getInternalDirectory();
 }
