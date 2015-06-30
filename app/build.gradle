@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "de.mario.camera"
         minSdkVersion 10
-        targetSdkVersion 19
+        targetSdkVersion 10
     }
 
     buildTypes {
@@ -33,4 +33,5 @@ dependencies {
     //compile 'com.android.support:support-v4:18.0.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.5'
+    compile 'com.android.support:support-v4:22.2.0'
 }

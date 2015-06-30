@@ -1,0 +1,10 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference     android:title="@string/settings_countdown_title"
+                        android:summary="@string/settings_countdown_description"
+                        android:key="shutterDelay"
+                        android:defaultValue="1"
+                        android:entries="@array/listArray"
+                        android:entryValues="@array/listValues" />
+
+</PreferenceScreen>

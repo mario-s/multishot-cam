@@ -2,6 +2,7 @@ package de.mario.camera;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -110,6 +112,17 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.photo, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id == R.id.action_settings){
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void onClick(View view) {
