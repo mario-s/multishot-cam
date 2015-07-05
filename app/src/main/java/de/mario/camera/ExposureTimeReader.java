@@ -10,6 +10,8 @@ import java.util.Map;
 
 /**
  * Processes images after they are stored.
+ *
+ * @author Mario
  */
 class ExposureTimeReader {
 

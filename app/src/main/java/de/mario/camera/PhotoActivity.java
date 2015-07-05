@@ -3,6 +3,7 @@ package de.mario.camera;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +20,12 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static android.os.Environment.DIRECTORY_DCIM;
 import static android.os.Environment.getExternalStoragePublicDirectory;
+import static java.lang.Integer.parseInt;
 
 /**
  * Main activity.
@@ -33,9 +38,13 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private static final String NO_CAM = "No camera on this device";
 	private static final String NO_BACK_CAM = "No back facing camera found.";
 	private static final int NO_CAM_ID = -1;
+	public static final int MIN = 0;
 	private Camera camera;
+	private Preview preview;
 	private final LinkedList<Integer> exposureValues;
 	private Handler handler;
+	private final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(3);
+	private int camId = NO_CAM_ID;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -51,25 +60,33 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 			toast(NO_CAM);
 		} else {
-			int id = findBackCamera();
-			if (id == NO_CAM_ID) {
-				toast(NO_BACK_CAM);
-			} else {
-				camera = Camera.open(id);
-				Preview preview = new Preview(this, camera);
-				FrameLayout layout = (FrameLayout) findViewById(R.id.preview);
-				layout.addView(preview);
-
-				fillExposuresValues();
-			}
+			camId = findBackCamera();
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (camId == NO_CAM_ID) {
+			toast(NO_BACK_CAM);
+		} else {
+			camera = Camera.open(camId);
+			preview = new Preview(this, camera);
+			getFrameLayout().addView(preview);
+
+			fillExposuresValues();
+		}
+	}
+
+	private FrameLayout getFrameLayout() {
+		return (FrameLayout) findViewById(R.id.preview);
 	}
 
 	private int findBackCamera() {
 		int cameraId = NO_CAM_ID;
 		// Search for the back facing camera
 		int numberOfCameras = Camera.getNumberOfCameras();
-		for (int i = 0; i < numberOfCameras; i++) {
+		for (int i = MIN; i < numberOfCameras; i++) {
 			CameraInfo info = new CameraInfo();
 			Camera.getCameraInfo(i, info);
 			if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
@@ -100,11 +117,19 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	@Override
 	protected void onPause() {
+		getFrameLayout().removeView(preview);
+		preview = null;
+		releaseCamera();
+		super.onPause();
+	}
+
+	private void releaseCamera() {
 		if (camera != null) {
+			camera.stopPreview();
+			camera.setPreviewCallback(null);
 			camera.release();
 			camera = null;
 		}
-		super.onPause();
 	}
 
 	@Override
@@ -126,9 +151,18 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	public void onClick(View view) {
+		PhotoCommand command = new PhotoCommand(this, camera);
+		int delay = getDelay();
+		if(delay > MIN){
+			executor.schedule(command, delay, TimeUnit.SECONDS);
+		}else {
+			executor.execute(command);
+		}
+	}
 
-		ContinuesCallback callback = new ContinuesCallback(this);
-		camera.takePicture(null, null, callback);
+	private int getDelay() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		return parseInt(prefs.getString("shutterDelayTime", "0"));
 	}
 
 	@Override
@@ -164,6 +198,22 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		public void handleMessage(Message message) {
 			String msg = message.obj.toString();
 			activity.toast(msg);
+		}
+	}
+
+	class PhotoCommand implements Runnable {
+		private final PhotoActivity activity;
+		private final Camera camera;
+
+		PhotoCommand(PhotoActivity activity, Camera camera){
+			this.activity = activity;
+			this.camera = camera;
+		}
+
+		@Override
+		public void run() {
+			ContinuesCallback callback = new ContinuesCallback(activity);
+			camera.takePicture(null, null, callback);
 		}
 	}
 
