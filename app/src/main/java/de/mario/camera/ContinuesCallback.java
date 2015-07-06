@@ -91,7 +91,7 @@ class ContinuesCallback implements PictureCallback {
 
         try {
             String path = pictureFileDir.getAbsolutePath();
-            imagesNames.addAll(memAccessor.copyAll(path));
+            imagesNames.addAll(memAccessor.moveAll(path));
             showSuccessInfo();
         } catch (IOException exc) {
             Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
