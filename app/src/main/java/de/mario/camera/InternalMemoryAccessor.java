@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.util.Log;
-
 
 /**
  * This class helps to write and read images to internal memory of the device.
