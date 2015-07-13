@@ -4,6 +4,7 @@ import android.media.ExifInterface;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,10 @@ class ExposureTimeReader {
         }
 
         return Double.parseDouble(exposureTime);
+    }
+
+    Map<String, Double> readExposureTimes(String [] images) {
+        return readExposureTimes(Arrays.asList(images));
     }
 
     Map<String, Double> readExposureTimes(List<String> images) {

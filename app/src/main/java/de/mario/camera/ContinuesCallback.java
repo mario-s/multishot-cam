@@ -122,20 +122,23 @@ class ContinuesCallback implements PictureCallback {
     }
 
     private void nextPhoto(Camera camera) {
-        Camera.Parameters params = camera.getParameters();
-        camera.setParameters(params);
+
+
         if (!exposureValues.isEmpty()) {
-
             int ev = exposureValues.poll();
-            params.setExposureCompensation(ev);
-
+            setExposureCompensation(camera, ev);
             camera.takePicture(null, null, this);
         } else {
             //reset
-            params.setExposureCompensation(defaultExposure);
-
+            setExposureCompensation(camera, defaultExposure);
             //restart preview for next photo
             camera.startPreview();
         }
+    }
+
+    private void setExposureCompensation(Camera camera, int ev) {
+        Camera.Parameters params = camera.getParameters();
+        params.setExposureCompensation(ev);
+        camera.setParameters(params);
     }
 }

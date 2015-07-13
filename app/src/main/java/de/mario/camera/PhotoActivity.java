@@ -186,6 +186,10 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return cw.getDir("data", Context.MODE_PRIVATE);
 	}
 
+	private void processHdr(String [] pictures){
+		ProcessHdrService.startProcessing(getApplicationContext(), pictures);
+	}
+
 	static class MessageHandler extends Handler {
 
 		private final PhotoActivity activity;
@@ -203,6 +207,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			}else{
 				String[] pictures = bundle.getStringArray(
 						PICTURES);
+				activity.processHdr(pictures);
+
 				int len = pictures.length;
 				File dir = activity.getPicturesDirectory();
 				activity.toast(String.format(activity.getResource(R.string.photos_saved), len, dir));
