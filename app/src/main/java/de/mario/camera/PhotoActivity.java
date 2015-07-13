@@ -196,8 +196,17 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		@Override
 		public void handleMessage(Message message) {
-			String msg = message.obj.toString();
-			activity.toast(msg);
+			Bundle bundle = message.getData();
+			if(bundle.isEmpty()) {
+				String msg = message.obj.toString();
+				activity.toast(msg);
+			}else{
+				String[] pictures = bundle.getStringArray(
+						PICTURES);
+				int len = pictures.length;
+				File dir = activity.getPicturesDirectory();
+				activity.toast(String.format(activity.getResource(R.string.photos_saved), len, dir));
+			}
 		}
 	}
 

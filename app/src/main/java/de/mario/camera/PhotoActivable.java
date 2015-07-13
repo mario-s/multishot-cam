@@ -13,6 +13,7 @@ import java.util.Queue;
 public interface PhotoActivable {
 
     String DEBUG_TAG = "PhotoActivity";
+    String PICTURES = "pictures";
 
     @Deprecated
     Context getApplicationContext();

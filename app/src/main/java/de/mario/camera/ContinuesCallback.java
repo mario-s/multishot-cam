@@ -68,7 +68,7 @@ class ContinuesCallback implements PictureCallback {
         }
         saveInternal(data);
         if (exposureValues.isEmpty()) {
-            copyExternal();
+            moveExternal();
         }
 
         imageCounter++;
@@ -87,21 +87,27 @@ class ContinuesCallback implements PictureCallback {
         }
     }
 
-    private void copyExternal() {
+    private void moveExternal() {
 
         try {
             String path = pictureFileDir.getAbsolutePath();
             imagesNames.addAll(memAccessor.moveAll(path));
-            showSuccessInfo();
+            sendFinishedInfo();
         } catch (IOException exc) {
             Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
             toast(getResource(R.string.save_error));
         }
     }
 
-    private void showSuccessInfo() {
-        int current = imageCounter + 1;
-        toast(String.format(getResource(R.string.photos_saved), current, pictureFileDir));
+    private void sendFinishedInfo() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message msg = Message.obtain();
+                msg.getData().putStringArray(PhotoActivable.PICTURES, imagesNames.toArray(new String[imagesNames.size()]));
+                activity.getHandler().sendMessage(msg);
+            }
+        }).start();
     }
 
     private String createFileName() {
