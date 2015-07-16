@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -43,12 +44,13 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private Preview preview;
 	private final LinkedList<Integer> exposureValues;
 	private Handler handler;
-	private final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(3);
+	private ScheduledExecutorService executor;
 	private int camId = NO_CAM_ID;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
 		handler = new MessageHandler(this);
+		executor = new ScheduledThreadPoolExecutor(1);
 	}
 
 	@Override
@@ -184,6 +186,10 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	public File getInternalDirectory() {
 		ContextWrapper cw = new ContextWrapper(getApplicationContext());
 		return cw.getDir("data", Context.MODE_PRIVATE);
+	}
+
+	void setExecutor(ScheduledExecutorService executor) {
+		this.executor = executor;
 	}
 
 	private void processHdr(String [] pictures){

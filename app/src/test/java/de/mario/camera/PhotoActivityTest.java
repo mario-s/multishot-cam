@@ -10,6 +10,10 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.*;
+
 /**
  */
 @RunWith(RobolectricGradleTestRunner.class)
@@ -25,7 +29,10 @@ public class PhotoActivityTest {
 
     @Test
     public void testShutter() {
+        ScheduledExecutorService mock = mock(ScheduledExecutorService.class);
+        classUnderTest.setExecutor(mock);
         ImageButton btn = (ImageButton)classUnderTest.findViewById(R.id.shutter);
         btn.performClick();
+        verify(mock).execute(any(PhotoActivity.PhotoCommand.class));
     }
 }
