@@ -25,6 +25,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
 }
 
 apply from: 'build.workaround-missing-resource.gradle'

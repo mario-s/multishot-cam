@@ -48,14 +48,14 @@ class ContinuesCallback implements PictureCallback {
     }
 
     private void toast(final String message) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Message msg = Message.obtain();
-                msg.obj = message;
-                activity.getHandler().sendMessage(msg);
-            }
-        }).start();
+        Message msg = createMessage(message);
+        activity.getHandler().sendMessage(msg);
+    }
+
+    Message createMessage(String message) {
+        Message msg = Message.obtain();
+        msg.obj = message;
+        return msg;
     }
 
     @Override
