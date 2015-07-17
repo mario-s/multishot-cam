@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/red_button"
+    <item android:drawable="@drawable/metalknob2orangeyellow"
           android:state_pressed="true" />
-    <item android:drawable="@drawable/yellow_button"
+    <item android:drawable="@drawable/metalknob2green"
           android:state_focused="true" />
-    <item android:drawable="@drawable/gray_button" />
+    <item android:drawable="@drawable/metalknob2blue" />
 </selector>
