@@ -14,5 +14,8 @@
     <string name="prefs_shutter_delay_enabled_description">Enable shutter delay.</string>
     <string name="prefs_shutter_delay_time_title">Delay Time</string>
     <string name="prefs_shutter_delay_time_description">Time for the shutter delay in seconds.</string>
+    <string name="prefs_process_hdr_title">HDR Processing</string>
+    <string name="prefs_process_hdr_enabled_title">Enable HDR processing</string>
+    <string name="prefs_process_hdr_enabled_description">If enabled the software will try to create a HDR image.</string>
 
 </resources>

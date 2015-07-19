@@ -3,20 +3,26 @@
     <PreferenceCategory
         android:key="shutterDelay"
         android:title="@string/prefs_shutter_title">
-        <!--CheckBoxPreference
-            android:key="shutterDelayEnabled"
-            android:title="@string/prefs_shutter_delay_enabled_title"
-            android:summary="@string/prefs_shutter_delay_enabled_description"
-            android:defaultValue="false" /-->
+
         <ListPreference
-            android:title="@string/prefs_shutter_delay_time_title"
-            android:summary="@string/prefs_shutter_delay_time_description"
-            android:key="shutterDelayTime"
-            android:defaultValue="1"
+            android:defaultValue="0"
+            android:enabled="true"
             android:entries="@array/listArray"
             android:entryValues="@array/listValues"
-            android:enabled="true"/>
+            android:key="shutterDelayTime"
+            android:summary="@string/prefs_shutter_delay_time_description"
+            android:title="@string/prefs_shutter_delay_time_title"/>
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="hdr"
+        android:title="@string/prefs_process_hdr_title">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="processHdr"
+            android:summary="@string/prefs_process_hdr_enabled_description"
+            android:title="@string/prefs_process_hdr_enabled_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

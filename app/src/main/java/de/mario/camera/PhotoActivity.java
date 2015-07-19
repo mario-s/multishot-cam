@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import static android.os.Environment.DIRECTORY_DCIM;
 import static android.os.Environment.getExternalStoragePublicDirectory;
+import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -163,8 +164,15 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private int getDelay() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		return parseInt(prefs.getString("shutterDelayTime", "0"));
+		return parseInt(getPreferences().getString("shutterDelayTime", "0"));
+	}
+
+	private boolean isProcessingEnabled() {
+		return getPreferences().getBoolean("processHdr", false);
+	}
+
+	private SharedPreferences getPreferences() {
+		return PreferenceManager.getDefaultSharedPreferences(this);
 	}
 
 	@Override
@@ -193,7 +201,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private void processHdr(String [] pictures){
-		ProcessHdrService.startProcessing(getApplicationContext(), pictures);
+		if(isProcessingEnabled()) {
+			ProcessHdrService.startProcessing(getApplicationContext(), pictures);
+		}
 	}
 
 	static class MessageHandler extends Handler {
@@ -215,10 +225,14 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 						PICTURES);
 				activity.processHdr(pictures);
 
-				int len = pictures.length;
-				File dir = activity.getPicturesDirectory();
-				activity.toast(String.format(activity.getResource(R.string.photos_saved), len, dir));
+				informAboutPictures(pictures);
 			}
+		}
+
+		private void informAboutPictures(String[] pictures) {
+			int len = pictures.length;
+			File dir = activity.getPicturesDirectory();
+			activity.toast(String.format(activity.getResource(R.string.photos_saved), len, dir));
 		}
 	}
 
