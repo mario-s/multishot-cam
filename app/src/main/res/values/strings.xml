@@ -17,5 +17,6 @@
     <string name="prefs_process_hdr_title">HDR Processing</string>
     <string name="prefs_process_hdr_enabled_title">Enable HDR processing</string>
     <string name="prefs_process_hdr_enabled_description">If enabled the software will try to create a HDR image.</string>
+    <string name="photo_progress">Taking photo please wait.</string>
 
 </resources>

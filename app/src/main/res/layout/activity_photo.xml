@@ -6,10 +6,18 @@
 	android:id="@+id/layout">
 
 	<FrameLayout android:id="@+id/preview"
-		android:layout_weight="1" 
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 	</FrameLayout>
+
+	<ProgressBar
+		android:id="@+id/progress_bar"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		style="@android:style/Widget.ProgressBar.Large"
+		android:indeterminate="true"
+		android:visibility="invisible" />
 
 	<ImageButton
 	    android:id="@+id/shutter"

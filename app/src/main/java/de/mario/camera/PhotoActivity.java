@@ -16,7 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -43,6 +48,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	public static final int MIN = 0;
 	private Camera camera;
 	private Preview preview;
+	private ProgressBar progressBar;
 	private final LinkedList<Integer> exposureValues;
 	private Handler handler;
 	private ScheduledExecutorService executor;
@@ -58,6 +64,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo);
+		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -202,7 +210,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void processHdr(String [] pictures){
 		if(isProcessingEnabled()) {
-			ProcessHdrService.startProcessing(getApplicationContext(), pictures);
+			progressBar.setVisibility(View.VISIBLE);
+			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, pictures);
+			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
 		}
 	}
 
@@ -236,7 +246,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
-	class PhotoCommand implements Runnable {
+	private class PhotoCommand implements Runnable{
+
 		private final PhotoActivity activity;
 		private final Camera camera;
 
@@ -249,6 +260,24 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		public void run() {
 			ContinuesCallback callback = new ContinuesCallback(activity);
 			camera.takePicture(null, null, callback);
+		}
+	}
+
+	private class OpenCvLoaderCallback extends BaseLoaderCallback {
+		private String [] pictures;
+
+		OpenCvLoaderCallback(PhotoActivity activity, String [] pictures){
+			super(activity);
+			this.pictures = pictures;
+		}
+
+		@Override
+		public void onManagerConnected(int status) {
+			if (status  == LoaderCallbackInterface.SUCCESS) {
+				ProcessHdrService.startProcessing(getApplicationContext(), pictures);
+			}else{
+				super.onManagerConnected(status);
+			}
 		}
 	}
 

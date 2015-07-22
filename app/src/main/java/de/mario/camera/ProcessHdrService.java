@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
+import org.opencv.android.OpenCVLoader;
+
 import java.util.Map;
 
 /**
