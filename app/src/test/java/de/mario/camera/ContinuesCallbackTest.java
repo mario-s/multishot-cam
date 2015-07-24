@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
+import java.lang.System;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -35,7 +36,15 @@ public class ContinuesCallbackTest {
     @Mock
     private Camera camera;
 
+    @Mock
+    private Camera.Parameters params;
+
+    @Mock
+    private Message message;
+
     private ContinuesCallback classUnderTest;
+
+    private byte [] testData;
 
     @Before
     public void setUp() {
@@ -47,21 +56,37 @@ public class ContinuesCallbackTest {
 
         when(activity.getHandler()).thenReturn(handler);
         when(activity.getResource(anyInt())).thenReturn(TEST);
+
+        when(camera.getParameters()).thenReturn(params);
+
+        testData = TEST.getBytes();
+    }
+
+    @Test
+    public void testOnPictureTaken() {
+        String folder = getClass().getResource(".").getFile();
+        when(activity.getPicturesDirectory()).thenReturn(new File(folder));
+        classUnderTest = new ContinuesCallback(activity){
+            @Override
+            Message createMessage(String msg) {
+                return message;
+            }
+        };
+        classUnderTest.onPictureTaken(testData, camera);
+        verify(camera).setParameters(params);
     }
 
     @Test
     public void testOnPictureTaken_MissingPictureFile() {
         when(activity.getPicturesDirectory()).thenReturn(new File("foo.bar"));
-
         classUnderTest = new ContinuesCallback(activity){
             @Override
-            Message createMessage(String message) {
-                return mock(Message.class);
+            Message createMessage(String msg) {
+                return message;
             }
         };
-
-        byte [] testData = TEST.getBytes();
         classUnderTest.onPictureTaken(testData, camera);
         verify(handler).sendMessage(any(Message.class));
     }
+
 }
