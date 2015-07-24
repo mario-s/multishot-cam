@@ -246,7 +246,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
-	private class PhotoCommand implements Runnable{
+	class PhotoCommand implements Runnable{
 
 		private final PhotoActivity activity;
 		private final Camera camera;
