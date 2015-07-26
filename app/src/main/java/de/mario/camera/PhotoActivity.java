@@ -29,9 +29,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import de.mario.camera.service.ProcessHdrService;
+
 import static android.os.Environment.DIRECTORY_DCIM;
 import static android.os.Environment.getExternalStoragePublicDirectory;
-import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 
 /**

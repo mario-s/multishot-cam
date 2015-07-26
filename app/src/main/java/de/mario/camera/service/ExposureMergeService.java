@@ -1,10 +1,8 @@
-package de.mario.camera;
+package de.mario.camera.service;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
-
-import org.opencv.android.OpenCVLoader;
+import android.content.Intent;
 
 import java.util.Map;
 
@@ -14,11 +12,10 @@ import java.util.Map;
  * <p>
  * helper methods.
  */
-public class ProcessHdrService extends IntentService {
+public class ExposureMergeService extends IntentService {
 
     private static final String PARAM_PICS = "de.mario.camera.extra.PICS";
 
-    private final ExposureTimeReader expTimeReader;
 
     /**
      * Starts this service to perform action Foo with the given parameters. If
@@ -27,14 +24,13 @@ public class ProcessHdrService extends IntentService {
      * @see IntentService
      */
     public static void startProcessing(Context context, String [] pictures) {
-        Intent intent = new Intent(context, ProcessHdrService.class);
+        Intent intent = new Intent(context, ExposureMergeService.class);
         intent.putExtra(PARAM_PICS, pictures);
         context.startService(intent);
     }
 
-    public ProcessHdrService() {
-        super("ProcessHdrService");
-        expTimeReader = new ExposureTimeReader();
+    public ExposureMergeService() {
+        super("ExposureMergeService");
     }
 
     @Override
@@ -49,9 +45,8 @@ public class ProcessHdrService extends IntentService {
      * parameters.
      */
     private void handleProcessing(String [] pictures) {
-        Map<String, Double> exposures = expTimeReader.readExposureTimes(pictures);
 
-//        throw new UnsupportedOperationException("Not yet implemented");
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }
