@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.service;
 
 import android.content.Context;
 

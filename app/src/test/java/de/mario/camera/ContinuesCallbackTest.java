@@ -46,17 +46,21 @@ public class ContinuesCallbackTest {
 
     private byte [] testData;
 
+    private File folder;
+
     @Before
     public void setUp() {
+        folder = new File(getClass().getResource(".").getFile());
+
         Queue<Integer> exVals = new LinkedList<>();
         exVals.add(0);
         exVals.add(-1);
         exVals.add(1);
         when(activity.getExposureValues()).thenReturn(exVals);
 
+        when(activity.getInternalDirectory()).thenReturn(folder);
         when(activity.getHandler()).thenReturn(handler);
         when(activity.getResource(anyInt())).thenReturn(TEST);
-
         when(camera.getParameters()).thenReturn(params);
 
         testData = TEST.getBytes();
@@ -64,8 +68,7 @@ public class ContinuesCallbackTest {
 
     @Test
     public void testOnPictureTaken() {
-        String folder = getClass().getResource(".").getFile();
-        when(activity.getPicturesDirectory()).thenReturn(new File(folder));
+        when(activity.getPicturesDirectory()).thenReturn(folder);
         classUnderTest = new ContinuesCallback(activity){
             @Override
             Message createMessage(String msg) {

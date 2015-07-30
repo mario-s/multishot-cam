@@ -39,7 +39,11 @@
         </activity>
 
         <service
-            android:name=".ProcessHdrService"
+            android:name=".service.ProcessHdrService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".service.ExposureMergeService"
             android:exported="false" >
         </service>
     </application>

@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.service;
 
 import android.media.ExifInterface;
 import android.util.Log;
@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.mario.camera.PhotoActivable;
 
 /**
  * Processes images after they are stored.
