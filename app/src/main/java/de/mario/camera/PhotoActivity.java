@@ -29,6 +29,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.ProcessHdrService;
 
 import static android.os.Environment.DIRECTORY_DCIM;
@@ -275,7 +276,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		@Override
 		public void onManagerConnected(int status) {
 			if (status  == LoaderCallbackInterface.SUCCESS) {
-				ProcessHdrService.startProcessing(getApplicationContext(), pictures);
+				ExposureMergeService.startProcessing(getApplicationContext(), pictures);
 			}else{
 				super.onManagerConnected(status);
 			}
