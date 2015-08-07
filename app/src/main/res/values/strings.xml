@@ -5,6 +5,8 @@
     <string name="action_settings">Settings</string>
     <string name="take_photo">Take!</string>
     <string name="shutter">Shutter</string>
+    <string name="no_cam">No camera on this device.</string>
+    <string name="no_back_cam">No back facing camera found.</string>
     <string name="no_directory">No directory to save image.</string>
     <string name="save_error">"Image could not be saved."</string>
     <string name="photos_saved" formatted="false">%s photos saved to %s.</string>

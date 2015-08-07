@@ -43,8 +43,6 @@ import static java.lang.Integer.parseInt;
  */
 public class PhotoActivity extends Activity implements PhotoActivable{
 
-	private static final String NO_CAM = "No camera on this device";
-	private static final String NO_BACK_CAM = "No back facing camera found.";
 	private static final int NO_CAM_ID = -1;
 	public static final int MIN = 0;
 	private Camera camera;
@@ -70,7 +68,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-			toast(NO_CAM);
+			toast(getResource(R.string.no_cam));
 		} else {
 			camId = findBackCamera();
 		}
@@ -80,7 +78,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	protected void onStart() {
 		super.onStart();
 		if (camId == NO_CAM_ID) {
-			toast(NO_BACK_CAM);
+			toast(getResource(R.string.no_back_cam));
 		} else {
 			camera = Camera.open(camId);
 			preview = new Preview(this, camera);
@@ -211,7 +209,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void processHdr(String [] pictures){
 		if(isProcessingEnabled()) {
-			progressBar.setVisibility(View.VISIBLE);
 			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, pictures);
 			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
 		}
@@ -227,6 +224,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		@Override
 		public void handleMessage(Message message) {
+			activity.progressBar.setVisibility(View.INVISIBLE);
 			Bundle bundle = message.getData();
 			if(bundle.isEmpty()) {
 				String msg = message.obj.toString();
@@ -259,6 +257,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		@Override
 		public void run() {
+			progressBar.setVisibility(View.VISIBLE);
 			ContinuesCallback callback = new ContinuesCallback(activity);
 			camera.takePicture(null, null, callback);
 		}
