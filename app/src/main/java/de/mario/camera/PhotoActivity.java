@@ -1,8 +1,10 @@
 package de.mario.camera;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
@@ -29,6 +31,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.ProcessHdrService;
 
 import static android.os.Environment.DIRECTORY_DCIM;
@@ -50,12 +53,14 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ProgressBar progressBar;
 	private final LinkedList<Integer> exposureValues;
 	private Handler handler;
+	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
 	private int camId = NO_CAM_ID;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
 		handler = new MessageHandler(this);
+		receiver = new ProcessReceiver();
 		executor = new ScheduledThreadPoolExecutor(1);
 	}
 
@@ -86,6 +91,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 			fillExposuresValues();
 		}
+
+		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
 	}
 
 	private FrameLayout getFrameLayout() {
@@ -130,6 +137,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		getFrameLayout().removeView(preview);
 		preview = null;
 		releaseCamera();
+		unregisterReceiver(receiver);
 		super.onPause();
 	}
 
@@ -245,6 +253,17 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
+	private class ProcessReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent.getAction().equals(EXPOSURE_MERGE)){
+				String result = intent.getStringExtra("merged");
+				toast(result);
+			}
+		}
+	}
+
 	class PhotoCommand implements Runnable{
 
 		private final PhotoActivity activity;
@@ -274,7 +293,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		@Override
 		public void onManagerConnected(int status) {
 			if (status  == LoaderCallbackInterface.SUCCESS) {
-				ProcessHdrService.startProcessing(getApplicationContext(), pictures);
+				ExposureMergeService.startProcessing(getApplicationContext(), pictures);
 			}else{
 				super.onManagerConnected(status);
 			}

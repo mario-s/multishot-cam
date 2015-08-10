@@ -23,7 +23,7 @@ import android.util.Log;
 class ContinuesCallback implements PictureCallback {
 
     private static final String JPG = ".jpg";
-    private static final String PATTERN = "yyyymmddhhmm";
+    private static final String PATTERN = "yyyymmddHHmm";
 
     private final InternalMemoryAccessor memAccessor;
     private final Queue<Integer> exposureValues;

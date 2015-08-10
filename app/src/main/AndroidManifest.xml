@@ -44,7 +44,7 @@
         </service>
         <service
             android:name=".service.ExposureMergeService"
-            android:exported="false" >
+            android:exported="false">
         </service>
     </application>
 
