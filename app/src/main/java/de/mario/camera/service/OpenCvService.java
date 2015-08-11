@@ -12,34 +12,32 @@ import org.opencv.android.OpenCVLoader;
  */
 public abstract class OpenCvService extends IntentService {
 
-    protected static final String PARAM_PICS = "de.mario.camera.extra.PICS";
+    public static final String PARAM_PICS = "de.mario.camera.extra.PICS";
 
     public OpenCvService(String name) {
         super(name);
     }
 
-    public void startProcessing(Context context, String [] pictures) {
-        Intent intent = new Intent(context, getClass());
-        intent.putExtra(PARAM_PICS, pictures);
-
-        OpenCvLoaderCallback callback = new OpenCvLoaderCallback(context, intent);
-        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, context, callback);
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
+        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
     }
 
+    protected abstract void process(Intent intent);
+
     private class OpenCvLoaderCallback extends BaseLoaderCallback {
-        private final Context context;
         private final Intent intent;
 
         OpenCvLoaderCallback(Context context, Intent intent){
             super(context);
-            this.context = context;
             this.intent = intent;
         }
 
         @Override
         public void onManagerConnected(int status) {
             if (status  == LoaderCallbackInterface.SUCCESS) {
-                context.startService(intent);
+                process(intent);
             }else{
                 super.onManagerConnected(status);
             }

@@ -10,14 +10,14 @@
 		android:layout_height="fill_parent">
 	</FrameLayout>
 
-	<ProgressBar
+	<!--ProgressBar
 		android:id="@+id/progress_bar"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
 		style="@android:style/Widget.ProgressBar.Large"
 		android:indeterminate="true"
-		android:visibility="invisible" />
+		android:visibility="invisible" /-->
 
 	<ImageButton
 	    android:id="@+id/shutter"
@@ -30,6 +30,7 @@
 	    android:background="@null"
 	    android:text="@string/take_photo"
 		android:contentDescription="@string/shutter"
-		android:paddingBottom="15dp"/>
+		android:paddingBottom="15dp"
+		android:focusableInTouchMode="false"/>
 
 </RelativeLayout>

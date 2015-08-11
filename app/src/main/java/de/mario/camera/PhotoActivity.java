@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	public static final int MIN = 0;
 	private Camera camera;
 	private Preview preview;
-	private ProgressBar progressBar;
+	//private ProgressBar progressBar;
 	private final LinkedList<Integer> exposureValues;
 	private Handler handler;
 	private ProcessReceiver receiver;
@@ -68,7 +69,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo);
-		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+		//registerFocusListener();
+		//progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -76,6 +78,17 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		} else {
 			camId = findBackCamera();
 		}
+	}
+
+	private void registerFocusListener() {
+		ImageButton btn = (ImageButton) findViewById(R.id.shutter);
+		btn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					v.performClick();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -216,8 +229,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void processHdr(String [] pictures){
 		if(isProcessingEnabled()) {
-			ExposureMergeService service = new ExposureMergeService();
-			service.startProcessing(this, pictures);
+			Intent intent = new Intent(this, ExposureMergeService.class);
+			intent.putExtra(ExposureMergeService.PARAM_PICS, pictures);
+			startService(intent);
 		}
 	}
 
@@ -231,7 +245,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		@Override
 		public void handleMessage(Message message) {
-			activity.progressBar.setVisibility(View.INVISIBLE);
+			//activity.progressBar.setVisibility(View.INVISIBLE);
 			Bundle bundle = message.getData();
 			if(bundle.isEmpty()) {
 				String msg = message.obj.toString();
@@ -275,7 +289,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		@Override
 		public void run() {
-			progressBar.setVisibility(View.VISIBLE);
+			//progressBar.setVisibility(View.VISIBLE);
 			ContinuesCallback callback = new ContinuesCallback(activity);
 			camera.takePicture(null, null, callback);
 		}
