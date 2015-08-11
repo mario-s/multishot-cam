@@ -36,7 +36,7 @@ public class ExposureMergeService extends OpenCvService {
     }
 
     @Override
-    protected void process(Intent intent) {
+    protected void onHandleIntent(Intent intent) {
         handleProcessing(intent.getStringArrayExtra(PARAM_PICS));
     }
 

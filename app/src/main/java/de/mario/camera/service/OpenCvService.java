@@ -18,29 +18,4 @@ public abstract class OpenCvService extends IntentService {
         super(name);
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
-        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
-    }
-
-    protected abstract void process(Intent intent);
-
-    private class OpenCvLoaderCallback extends BaseLoaderCallback {
-        private final Intent intent;
-
-        OpenCvLoaderCallback(Context context, Intent intent){
-            super(context);
-            this.intent = intent;
-        }
-
-        @Override
-        public void onManagerConnected(int status) {
-            if (status  == LoaderCallbackInterface.SUCCESS) {
-                process(intent);
-            }else{
-                super.onManagerConnected(status);
-            }
-        }
-    }
 }

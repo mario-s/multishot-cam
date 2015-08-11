@@ -33,6 +33,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.mario.camera.service.ExposureMergeService;
+import de.mario.camera.service.OpenCvService;
 import de.mario.camera.service.ProcessHdrService;
 
 import static android.os.Environment.DIRECTORY_DCIM;
@@ -230,8 +231,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private void processHdr(String [] pictures){
 		if(isProcessingEnabled()) {
 			Intent intent = new Intent(this, ExposureMergeService.class);
-			intent.putExtra(ExposureMergeService.PARAM_PICS, pictures);
-			startService(intent);
+			intent.putExtra(OpenCvService.PARAM_PICS, pictures);
+			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
+			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
 		}
 	}
 
@@ -292,6 +294,24 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			//progressBar.setVisibility(View.VISIBLE);
 			ContinuesCallback callback = new ContinuesCallback(activity);
 			camera.takePicture(null, null, callback);
+		}
+	}
+
+	private class OpenCvLoaderCallback extends BaseLoaderCallback {
+		private final Intent intent;
+
+		OpenCvLoaderCallback(Context context, Intent intent){
+			super(context);
+			this.intent = intent;
+		}
+
+		@Override
+		public void onManagerConnected(int status) {
+			if (status  == LoaderCallbackInterface.SUCCESS) {
+				startService(intent);
+			}else{
+				super.onManagerConnected(status);
+			}
 		}
 	}
 
