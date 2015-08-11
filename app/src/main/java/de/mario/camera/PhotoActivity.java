@@ -70,7 +70,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		setContentView(R.layout.activity_photo);
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 			toast(getResource(R.string.no_cam));
@@ -217,8 +216,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void processHdr(String [] pictures){
 		if(isProcessingEnabled()) {
-			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, pictures);
-			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
+			ExposureMergeService service = new ExposureMergeService();
+			service.startProcessing(this, pictures);
 		}
 	}
 
@@ -279,24 +278,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			progressBar.setVisibility(View.VISIBLE);
 			ContinuesCallback callback = new ContinuesCallback(activity);
 			camera.takePicture(null, null, callback);
-		}
-	}
-
-	private class OpenCvLoaderCallback extends BaseLoaderCallback {
-		private String [] pictures;
-
-		OpenCvLoaderCallback(PhotoActivity activity, String [] pictures){
-			super(activity);
-			this.pictures = pictures;
-		}
-
-		@Override
-		public void onManagerConnected(int status) {
-			if (status  == LoaderCallbackInterface.SUCCESS) {
-				ExposureMergeService.startProcessing(getApplicationContext(), pictures);
-			}else{
-				super.onManagerConnected(status);
-			}
 		}
 	}
 

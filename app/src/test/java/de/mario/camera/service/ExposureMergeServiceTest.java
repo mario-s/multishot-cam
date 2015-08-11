@@ -1,56 +1,60 @@
 package de.mario.camera.service;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.Override;
+import java.lang.System;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.runner.RunWith;
 import org.junit.*;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.opencv.core.Core;
+
+import de.mario.camera.service.ExposureMergeService;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
+public class ExposureMergeServiceTest {
 
-public class ExposureTimeReaderTest {
+	private ExposureMergeService classUnderTest;
 
-	private ExposureTimeReader classUnderTest;
+	@Mock
+	private Intent intent;
 
-	private String val;
-
-	private List<String> names;
+	@BeforeClass
+	public static void init() {
+		String arch = System.getProperty("sun.arch.data.model");
+		String lib = ExposureMergeService.class.getResource("../native/x"+arch).getPath();
+		File f = new File(lib);
+		String libpath = System.getProperty("java.library.path");
+		System.setProperty("java.library.path", libpath + ";" + f.getAbsolutePath());
+		//System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
 
 	@Before
 	public void setUp(){
-		val = "0.1";
-		names = Collections.singletonList("test");
-		classUnderTest = new ExposureTimeReader() {
+		classUnderTest = new ExposureMergeService();
+	}
 
-			@Override
-			String getExposureTimeFromExif(String pathToImage) throws IOException {
-				return val;
-			}
-
-			@Override
-			void log(Exception exc) {
-			}
-		};
+	private String getPath(String name){
+		return getClass().getResource(name).getFile();
 	}
 
 	@Test
-	public void testReadExposureTimes_Success() {
-		Map<String, Double> result = classUnderTest.readExposureTimes(names);
-		assertFalse(result.isEmpty());
-	}
-
-	@Test
-	public void testReadExposureTimes_IllegalArgument() {
-		val = "";
-		Map<String, Double> result = classUnderTest.readExposureTimes(names);
-		assertTrue(result.isEmpty());
+	public void testOnHandleIntent() {
+		String [] files = new String[]{getPath("../memorial61.png"), getPath("../memorial64.png"), getPath("../memorial67.png")};
+		when(intent.getStringArrayExtra(ExposureMergeService.PARAM_PICS)).thenReturn(files);
+		classUnderTest.onHandleIntent(intent);
 	}
 
 }

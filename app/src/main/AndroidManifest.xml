@@ -43,8 +43,7 @@
             android:exported="false" >
         </service>
         <service
-            android:name=".service.ExposureMergeService"
-            android:exported="false">
+            android:name=".service.ExposureMergeService">
         </service>
     </application>
 

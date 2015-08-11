@@ -27,23 +27,9 @@ import de.mario.camera.PhotoActivable;
  * <p>
  * helper methods.
  */
-public class ExposureMergeService extends IntentService {
+public class ExposureMergeService extends OpenCvService {
 
-    static final String PARAM_PICS = "de.mario.camera.extra.PICS";
     static final String MERGED = "merged";
-
-
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    public static void startProcessing(Context context, String [] pictures) {
-        Intent intent = new Intent(context, ExposureMergeService.class);
-        intent.putExtra(PARAM_PICS, pictures);
-        context.startService(intent);
-    }
 
     public ExposureMergeService() {
         super("ExposureMergeService");
