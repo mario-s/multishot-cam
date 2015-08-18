@@ -52,7 +52,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	public static final int MIN = 0;
 	private Camera camera;
 	private Preview preview;
-	//private ProgressBar progressBar;
+	private ProgressBar progressBar;
 	private final LinkedList<Integer> exposureValues;
 	private Handler handler;
 	private ProcessReceiver receiver;
@@ -70,8 +70,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo);
-		//registerFocusListener();
-		//progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -81,16 +80,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
-	private void registerFocusListener() {
-		ImageButton btn = (ImageButton) findViewById(R.id.shutter);
-		btn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus) {
-					v.performClick();
-				}
-			}
-		});
-	}
 
 	@Override
 	protected void onStart() {
@@ -191,6 +180,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
+
 	private int getDelay() {
 		return parseInt(getPreferences().getString("shutterDelayTime", "0"));
 	}
@@ -230,11 +220,20 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void processHdr(String [] pictures){
 		if(isProcessingEnabled()) {
+			showProgress();
 			Intent intent = new Intent(this, ExposureMergeService.class);
 			intent.putExtra(OpenCvService.PARAM_PICS, pictures);
 			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
 			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
 		}
+	}
+
+	private void showProgress() {
+		progressBar.setVisibility(View.VISIBLE);
+	}
+
+	private void hideProgress() {
+		progressBar.setVisibility(View.GONE);
 	}
 
 	static class MessageHandler extends Handler {
@@ -247,7 +246,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		@Override
 		public void handleMessage(Message message) {
-			//activity.progressBar.setVisibility(View.INVISIBLE);
 			Bundle bundle = message.getData();
 			if(bundle.isEmpty()) {
 				String msg = message.obj.toString();
@@ -273,6 +271,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals(EXPOSURE_MERGE)){
+				hideProgress();
 				String result = intent.getStringExtra("merged");
 				toast(result);
 			}
@@ -291,7 +290,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		@Override
 		public void run() {
-			//progressBar.setVisibility(View.VISIBLE);
 			ContinuesCallback callback = new ContinuesCallback(activity);
 			camera.takePicture(null, null, callback);
 		}
