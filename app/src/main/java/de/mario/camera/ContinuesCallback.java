@@ -21,7 +21,7 @@ import android.util.Log;
  * @author Mario
  */
 class ContinuesCallback implements PictureCallback {
-    
+
     private static final String PATTERN = "yyyymmddHHmm";
 
     private final InternalMemoryAccessor memAccessor;
