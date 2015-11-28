@@ -21,8 +21,7 @@ import android.util.Log;
  * @author Mario
  */
 class ContinuesCallback implements PictureCallback {
-
-    private static final String JPG = ".jpg";
+    
     private static final String PATTERN = "yyyymmddHHmm";
 
     private final InternalMemoryAccessor memAccessor;
@@ -113,12 +112,7 @@ class ContinuesCallback implements PictureCallback {
     private String createFileName() {
         DateFormat dateFormat = new SimpleDateFormat(PATTERN);
         String date = dateFormat.format(new Date());
-
-        StringBuilder builder = new StringBuilder(25);
-        builder.append("Picture_").append(date).append("_")
-                .append(imageCounter).append(JPG);
-
-        return builder.toString();
+        return String.format("Picture_%s_%s.jpg", date, imageCounter);
     }
 
     private void nextPhoto(Camera camera) {
