@@ -204,6 +204,11 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	@Override
+	public Preview getPreview() {
+		return preview;
+	}
+
+	@Override
 	public File getPicturesDirectory() {
 		return getExternalStoragePublicDirectory(DIRECTORY_DCIM);
 	}

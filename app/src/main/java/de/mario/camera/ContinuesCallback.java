@@ -123,10 +123,10 @@ class ContinuesCallback implements PictureCallback {
 
     private void nextPhoto(Camera camera) {
 
-
         if (!exposureValues.isEmpty()) {
             int ev = exposureValues.poll();
             setExposureCompensation(camera, ev);
+            activity.getPreview().setEnabled(true);
             camera.takePicture(null, null, this);
         } else {
             //reset

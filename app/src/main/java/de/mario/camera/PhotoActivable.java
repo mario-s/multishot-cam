@@ -33,4 +33,6 @@ public interface PhotoActivable {
     File getPicturesDirectory();
 
     File getInternalDirectory();
+
+    Preview getPreview();
 }
