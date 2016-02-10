@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
@@ -14,11 +15,11 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -34,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
-import de.mario.camera.service.ProcessHdrService;
 
 import static android.os.Environment.DIRECTORY_DCIM;
 import static android.os.Environment.getExternalStoragePublicDirectory;
@@ -49,7 +49,9 @@ import static java.lang.Integer.parseInt;
 public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private static final int NO_CAM_ID = -1;
-	public static final int MIN = 0;
+	private static final int MIN = 0;
+	private static final String VERS = "version";
+	private static final String PREFS = "PREFERENCE";
 	private Camera camera;
 	private Preview preview;
 	private ProgressBar progressBar;
@@ -76,6 +78,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 			toast(getResource(R.string.no_cam));
 		} else {
+			showDialogWhenFirstRun();
 			camId = findBackCamera();
 		}
 	}
@@ -96,6 +99,21 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
 	}
+
+	private void showDialogWhenFirstRun() {
+		String current = getVersion();
+		String stored = getSharedPreferences(PREFS, MODE_PRIVATE).getString(VERS, "");
+		if (!stored.equals(current)){
+			new StartupDialog(this).show();
+			//TODO enable this
+			//getSharedPreferences(PREFS, MODE_PRIVATE).edit().putString(VERS, current).apply();
+		}
+	}
+
+	private String getVersion() {
+		return BuildConfig.VERSION_NAME + BuildConfig.VERSION_CODE;
+	}
+
 
 	private FrameLayout getFrameLayout() {
 		return (FrameLayout) findViewById(R.id.preview);
@@ -118,7 +136,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	@Override
 	public String getResource(int key) {
-		return getApplicationContext().getResources().getString(key);
+		return getString(key);
 	}
 
 	private void toast(String msg) {

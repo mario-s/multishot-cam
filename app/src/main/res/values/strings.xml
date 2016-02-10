@@ -20,5 +20,7 @@
     <string name="prefs_process_hdr_enabled_title">Enable HDR processing</string>
     <string name="prefs_process_hdr_enabled_description">If enabled the software will try to create a HDR image.</string>
     <string name="photo_progress">Taking photo please wait.</string>
+    <string name="ok">Ok</string>
+    <string name="startup_text">This App requires OpenCvManager 3.0.0 to create a merged HDR photo. To enabled HDR processing go to the settings menu.</string>
 
 </resources>

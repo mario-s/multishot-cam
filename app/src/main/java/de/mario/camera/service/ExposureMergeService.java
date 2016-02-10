@@ -69,9 +69,9 @@ public class ExposureMergeService extends OpenCvService {
 
     private String createFileName(String src) {
         int pos = src.lastIndexOf(".") ;
-        String preffix = src.substring(0, pos - 1);
+        String prefix = src.substring(0, pos - 1);
         String suffix = src.substring(pos);
-        return preffix + MERGED + suffix;
+        return prefix + MERGED + suffix;
     }
 
     private void write(Mat fusion, File out) {
