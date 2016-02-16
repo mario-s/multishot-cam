@@ -105,8 +105,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		String stored = getSharedPreferences(PREFS, MODE_PRIVATE).getString(VERS, "");
 		if (!stored.equals(current)){
 			new StartupDialog(this).show();
-			//TODO enable this
-			//getSharedPreferences(PREFS, MODE_PRIVATE).edit().putString(VERS, current).apply();
+			getSharedPreferences(PREFS, MODE_PRIVATE).edit().putString(VERS, current).apply();
 		}
 	}
 
@@ -285,7 +284,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		private void informAboutPictures(String[] pictures) {
 			int len = pictures.length;
 			File dir = activity.getPicturesDirectory();
-			activity.toast(String.format(activity.getResource(R.string.photos_saved), len, dir));
+			activity.toast(String.format(activity.getString(R.string.photos_saved), len, dir));
 		}
 	}
 
