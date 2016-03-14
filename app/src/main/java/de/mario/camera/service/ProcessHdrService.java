@@ -47,9 +47,8 @@ public class ProcessHdrService extends IntentService {
      * parameters.
      */
     private void handleProcessing(String [] pictures) {
+        //TODO
         Map<String, Double> exposures = expTimeReader.readExposureTimes(pictures);
-
-//        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

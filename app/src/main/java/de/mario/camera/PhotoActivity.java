@@ -1,9 +1,12 @@
 package de.mario.camera;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +34,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.mario.camera.service.ExposureMergeService;
-import de.mario.camera.service.ProcessHdrService;
+import de.mario.camera.service.OpenCvService;
 
 import static android.os.Environment.DIRECTORY_DCIM;
 import static android.os.Environment.getExternalStoragePublicDirectory;
@@ -44,21 +48,23 @@ import static java.lang.Integer.parseInt;
  */
 public class PhotoActivity extends Activity implements PhotoActivable{
 
-	private static final String NO_CAM = "No camera on this device";
-	private static final String NO_BACK_CAM = "No back facing camera found.";
 	private static final int NO_CAM_ID = -1;
-	public static final int MIN = 0;
+	private static final int MIN = 0;
+	private static final String VERS = "version";
+	private static final String PREFS = "PREFERENCE";
 	private Camera camera;
 	private Preview preview;
 	private ProgressBar progressBar;
 	private final LinkedList<Integer> exposureValues;
 	private Handler handler;
+	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
 	private int camId = NO_CAM_ID;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
 		handler = new MessageHandler(this);
+		receiver = new ProcessReceiver();
 		executor = new ScheduledThreadPoolExecutor(1);
 	}
 
@@ -68,20 +74,21 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		setContentView(R.layout.activity_photo);
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-			toast(NO_CAM);
+			toast(getResource(R.string.no_cam));
 		} else {
+			showDialogWhenFirstRun();
 			camId = findBackCamera();
 		}
 	}
+
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		if (camId == NO_CAM_ID) {
-			toast(NO_BACK_CAM);
+			toast(getResource(R.string.no_back_cam));
 		} else {
 			camera = Camera.open(camId);
 			preview = new Preview(this, camera);
@@ -89,7 +96,23 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 			fillExposuresValues();
 		}
+
+		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
 	}
+
+	private void showDialogWhenFirstRun() {
+		String current = getVersion();
+		String stored = getSharedPreferences(PREFS, MODE_PRIVATE).getString(VERS, "");
+		if (!stored.equals(current)){
+			new StartupDialog(this).show();
+			getSharedPreferences(PREFS, MODE_PRIVATE).edit().putString(VERS, current).apply();
+		}
+	}
+
+	private String getVersion() {
+		return BuildConfig.VERSION_NAME + BuildConfig.VERSION_CODE;
+	}
+
 
 	private FrameLayout getFrameLayout() {
 		return (FrameLayout) findViewById(R.id.preview);
@@ -112,7 +135,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	@Override
 	public String getResource(int key) {
-		return getApplicationContext().getResources().getString(key);
+		return getString(key);
 	}
 
 	private void toast(String msg) {
@@ -133,6 +156,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		getFrameLayout().removeView(preview);
 		preview = null;
 		releaseCamera();
+		unregisterReceiver(receiver);
 		super.onPause();
 	}
 
@@ -173,6 +197,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
+
 	private int getDelay() {
 		return parseInt(getPreferences().getString("shutterDelayTime", "0"));
 	}
@@ -196,6 +221,11 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	@Override
+	public Preview getPreview() {
+		return preview;
+	}
+
+	@Override
 	public File getPicturesDirectory() {
 		return getExternalStoragePublicDirectory(DIRECTORY_DCIM);
 	}
@@ -212,10 +242,20 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void processHdr(String [] pictures){
 		if(isProcessingEnabled()) {
-			progressBar.setVisibility(View.VISIBLE);
-			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, pictures);
+			showProgress();
+			Intent intent = new Intent(this, ExposureMergeService.class);
+			intent.putExtra(OpenCvService.PARAM_PICS, pictures);
+			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
 			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
 		}
+	}
+
+	private void showProgress() {
+		progressBar.setVisibility(View.VISIBLE);
+	}
+
+	private void hideProgress() {
+		progressBar.setVisibility(View.GONE);
 	}
 
 	static class MessageHandler extends Handler {
@@ -244,7 +284,19 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		private void informAboutPictures(String[] pictures) {
 			int len = pictures.length;
 			File dir = activity.getPicturesDirectory();
-			activity.toast(String.format(activity.getResource(R.string.photos_saved), len, dir));
+			activity.toast(String.format(activity.getString(R.string.photos_saved), len, dir));
+		}
+	}
+
+	private class ProcessReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent.getAction().equals(EXPOSURE_MERGE)){
+				hideProgress();
+				String result = intent.getStringExtra("merged");
+				toast(result);
+			}
 		}
 	}
 
@@ -266,17 +318,17 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private class OpenCvLoaderCallback extends BaseLoaderCallback {
-		private String [] pictures;
+		private final Intent intent;
 
-		OpenCvLoaderCallback(PhotoActivity activity, String [] pictures){
-			super(activity);
-			this.pictures = pictures;
+		OpenCvLoaderCallback(Context context, Intent intent){
+			super(context);
+			this.intent = intent;
 		}
 
 		@Override
 		public void onManagerConnected(int status) {
 			if (status  == LoaderCallbackInterface.SUCCESS) {
-				ExposureMergeService.startProcessing(getApplicationContext(), pictures);
+				startService(intent);
 			}else{
 				super.onManagerConnected(status);
 			}

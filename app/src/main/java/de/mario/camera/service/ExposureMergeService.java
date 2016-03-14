@@ -3,6 +3,7 @@ package de.mario.camera.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -18,28 +19,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.mario.camera.PhotoActivable;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p>
  * helper methods.
  */
-public class ExposureMergeService extends IntentService {
+public class ExposureMergeService extends OpenCvService {
 
-    static final String PARAM_PICS = "de.mario.camera.extra.PICS";
-
-
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    public static void startProcessing(Context context, String [] pictures) {
-        Intent intent = new Intent(context, ExposureMergeService.class);
-        intent.putExtra(PARAM_PICS, pictures);
-        context.startService(intent);
-    }
+    static final String MERGED = "merged";
 
     public ExposureMergeService() {
         super("ExposureMergeService");
@@ -47,9 +37,7 @@ public class ExposureMergeService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            handleProcessing(intent.getStringArrayExtra(PARAM_PICS));
-        }
+        handleProcessing(intent.getStringArrayExtra(PARAM_PICS));
     }
 
     /**
@@ -58,7 +46,7 @@ public class ExposureMergeService extends IntentService {
      */
     private void handleProcessing(String [] pictures) {
 
-        List<Mat> images = loadImages(pictures);
+       List<Mat> images = loadImages(pictures);
 
         Mat fusion = new Mat();
         MergeMertens mergeMertens = Photo.createMergeMertens();
@@ -67,20 +55,35 @@ public class ExposureMergeService extends IntentService {
         File out = new File(createFileName(pictures[0]));
         write(fusion, out);
 
+        sendNotification(out);
+    }
+
+    private void sendNotification(File file) {
+        Intent intent = new Intent(PhotoActivable.EXPOSURE_MERGE);
+        String path = file.getAbsolutePath();
+        intent.putExtra(MERGED, path);
+        sendBroadcast(intent);
+        NotificationSender sender = new NotificationSender(this);
+        sender.send(path);
     }
 
     private String createFileName(String src) {
         int pos = src.lastIndexOf(".") ;
-        String preffix = src.substring(0, pos - 1);
+        String prefix = src.substring(0, pos - 1);
         String suffix = src.substring(pos);
-        return preffix + "merged" + suffix;
+        return prefix + MERGED + suffix;
     }
 
     private void write(Mat fusion, File out) {
+        Mat result = multiply(fusion);
+        Imgcodecs.imwrite(out.getPath(), result);
+    }
+
+    private Mat multiply(Mat fusion) {
         Mat result = new Mat();
         Scalar scalar = new Scalar(255, 255, 255);
         Core.multiply(fusion, scalar, result);
-        Imgcodecs.imwrite(out.getPath(), result);
+        return result;
     }
 
     private List<Mat> loadImages(String[] pics) {

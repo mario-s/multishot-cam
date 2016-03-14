@@ -22,8 +22,7 @@ import android.util.Log;
  */
 class ContinuesCallback implements PictureCallback {
 
-    private static final String JPG = ".jpg";
-    private static final String PATTERN = "yyyymmddhhmm";
+    private static final String PATTERN = "yyyymmddHHmm";
 
     private final InternalMemoryAccessor memAccessor;
     private final Queue<Integer> exposureValues;
@@ -113,20 +112,15 @@ class ContinuesCallback implements PictureCallback {
     private String createFileName() {
         DateFormat dateFormat = new SimpleDateFormat(PATTERN);
         String date = dateFormat.format(new Date());
-
-        StringBuilder builder = new StringBuilder(25);
-        builder.append("Picture_").append(date).append("_")
-                .append(imageCounter).append(JPG);
-
-        return builder.toString();
+        return String.format("Picture_%s_%s.jpg", date, imageCounter);
     }
 
     private void nextPhoto(Camera camera) {
 
-
         if (!exposureValues.isEmpty()) {
             int ev = exposureValues.poll();
             setExposureCompensation(camera, ev);
+            activity.getPreview().setEnabled(true);
             camera.takePicture(null, null, this);
         } else {
             //reset

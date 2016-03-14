@@ -5,6 +5,8 @@
     <string name="action_settings">Settings</string>
     <string name="take_photo">Take!</string>
     <string name="shutter">Shutter</string>
+    <string name="no_cam">No camera on this device.</string>
+    <string name="no_back_cam">No back facing camera found.</string>
     <string name="no_directory">No directory to save image.</string>
     <string name="save_error">"Image could not be saved."</string>
     <string name="photos_saved" formatted="false">%s photos saved to %s.</string>
@@ -18,5 +20,7 @@
     <string name="prefs_process_hdr_enabled_title">Enable HDR processing</string>
     <string name="prefs_process_hdr_enabled_description">If enabled the software will try to create a HDR image.</string>
     <string name="photo_progress">Taking photo please wait.</string>
+    <string name="ok">Ok</string>
+    <string name="startup_text">This App requires OpenCvManager 3.0.0 to create a merged HDR photo. To enabled HDR processing go to the settings menu.</string>
 
 </resources>

@@ -15,6 +15,8 @@ public interface PhotoActivable {
     String DEBUG_TAG = "PhotoActivity";
     String PICTURES = "pictures";
 
+    String EXPOSURE_MERGE = "exposureMerge";
+
     @Deprecated
     Context getApplicationContext();
 
@@ -31,4 +33,6 @@ public interface PhotoActivable {
     File getPicturesDirectory();
 
     File getInternalDirectory();
+
+    Preview getPreview();
 }
