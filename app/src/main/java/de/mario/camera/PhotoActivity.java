@@ -176,18 +176,11 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if(id == R.id.action_settings){
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	public void onClick(View view) {
+	/**
+	 * Action handler for shutter button.
+	 * @param view the {@link View} for this action.
+	 */
+	public void onShutter(View view) {
 		PhotoCommand command = new PhotoCommand(this, camera);
 		int delay = getDelay();
 		if(delay > MIN){
@@ -197,6 +190,24 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
+	/**
+	 * Action handler for settings button.
+	 * @param view the {@link View} for this action.
+	 */
+	public void onSettings(View view) {
+		startActivity(new Intent(this, SettingsActivity.class));
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id == R.id.action_settings){
+			onSettings(null);
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
 
 	private int getDelay() {
 		return parseInt(getPreferences().getString("shutterDelayTime", "0"));

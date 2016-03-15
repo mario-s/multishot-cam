@@ -1,7 +1,6 @@
 package de.mario.camera;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 
