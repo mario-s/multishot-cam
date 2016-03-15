@@ -48,7 +48,6 @@ import static java.lang.Integer.parseInt;
  */
 public class PhotoActivity extends Activity implements PhotoActivable{
 
-	private static final int NO_CAM_ID = -1;
 	private static final int MIN = 0;
 	private static final String VERS = "version";
 	private static final String PREFS = "PREFERENCE";
@@ -59,7 +58,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private Handler handler;
 	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
-	private int camId = NO_CAM_ID;
+	private int camId = CameraLookup.NO_CAM_ID;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -79,15 +78,15 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			toast(getResource(R.string.no_cam));
 		} else {
 			showDialogWhenFirstRun();
-			camId = findBackCamera();
+			CameraLookup lookup = new CameraLookup();
+			camId = lookup.findBackCamera();
 		}
 	}
-
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (camId == NO_CAM_ID) {
+		if (camId == CameraLookup.NO_CAM_ID) {
 			toast(getResource(R.string.no_back_cam));
 		} else {
 			camera = Camera.open(camId);
@@ -116,21 +115,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private FrameLayout getFrameLayout() {
 		return (FrameLayout) findViewById(R.id.preview);
-	}
-
-	private int findBackCamera() {
-		int cameraId = NO_CAM_ID;
-		// Search for the back facing camera
-		int numberOfCameras = Camera.getNumberOfCameras();
-		for (int i = MIN; i < numberOfCameras; i++) {
-			CameraInfo info = new CameraInfo();
-			Camera.getCameraInfo(i, info);
-			if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
-				cameraId = i;
-				break;
-			}
-		}
-		return cameraId;
 	}
 
 	@Override
