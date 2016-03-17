@@ -1,21 +1,18 @@
 package de.mario.camera;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.hardware.Camera;
-import android.hardware.Camera.CameraInfo;
-import android.os.Bundle;
-import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
