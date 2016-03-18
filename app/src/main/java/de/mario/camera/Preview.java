@@ -12,7 +12,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 	private static final int HOR = 90;
 	private SurfaceHolder mHolder;
-	public Camera camera;
+	private Camera camera;
 
 	Preview(Context context, Camera camera) {
 		super(context);
