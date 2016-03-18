@@ -17,9 +17,8 @@ import java.util.Queue;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 /**
  */
@@ -27,6 +26,7 @@ import static org.mockito.Mockito.when;
 public class ContinuesCallbackTest {
 
     public static final String TEST = "test";
+
     @Mock
     private PhotoActivable activity;
 
@@ -42,7 +42,8 @@ public class ContinuesCallbackTest {
     @Mock
     private Message message;
 
-    private ContinuesCallback classUnderTest;
+    @Mock
+    private Preview preview;
 
     private byte [] testData;
 
@@ -56,38 +57,42 @@ public class ContinuesCallbackTest {
         exVals.add(0);
         exVals.add(-1);
         exVals.add(1);
-        when(activity.getExposureValues()).thenReturn(exVals);
-
-        when(activity.getInternalDirectory()).thenReturn(folder);
-        when(activity.getHandler()).thenReturn(handler);
-        when(activity.getResource(anyInt())).thenReturn(TEST);
-        when(camera.getParameters()).thenReturn(params);
+        given(activity.getExposureValues()).willReturn(exVals);
+        given(activity.getInternalDirectory()).willReturn(folder);
+        given(activity.getHandler()).willReturn(handler);
+        given(activity.getResource(anyInt())).willReturn(TEST);
+        given(activity.getPreview()).willReturn(preview);
+        given(camera.getParameters()).willReturn(params);
 
         testData = TEST.getBytes();
     }
 
     @Test
     public void testOnPictureTaken() {
-        when(activity.getPicturesDirectory()).thenReturn(folder);
-        classUnderTest = new ContinuesCallback(activity){
+        given(activity.getPicturesDirectory()).willReturn(folder);
+
+        ContinuesCallback classUnderTest = new ContinuesCallback(activity){
             @Override
             Message createMessage(String msg) {
                 return message;
             }
         };
+
         classUnderTest.onPictureTaken(testData, camera);
         verify(camera).setParameters(params);
     }
 
     @Test
     public void testOnPictureTaken_MissingPictureFile() {
-        when(activity.getPicturesDirectory()).thenReturn(new File("foo.bar"));
-        classUnderTest = new ContinuesCallback(activity){
+        given(activity.getPicturesDirectory()).willReturn(new File("foo.bar"));
+
+        ContinuesCallback classUnderTest = new ContinuesCallback(activity){
             @Override
             Message createMessage(String msg) {
                 return message;
             }
         };
+
         classUnderTest.onPictureTaken(testData, camera);
         verify(handler).sendMessage(any(Message.class));
     }
