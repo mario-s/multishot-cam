@@ -1,23 +1,16 @@
 package de.mario.camera.service;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.photo.MergeMertens;
-import org.opencv.photo.Photo;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import de.mario.camera.PhotoActivable;
 
@@ -31,9 +24,17 @@ public class ExposureMergeService extends OpenCvService {
 
     static final String MERGED = "merged";
 
+    private Merger merger;
+
     public ExposureMergeService() {
-        super("ExposureMergeService");
+        this(new MertensMerger());
     }
+
+    public ExposureMergeService(Merger merger) {
+        super("ExposureMergeService");
+        this.merger = merger;
+    }
+
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -48,9 +49,7 @@ public class ExposureMergeService extends OpenCvService {
 
        List<Mat> images = loadImages(pictures);
 
-        Mat fusion = new Mat();
-        MergeMertens mergeMertens = Photo.createMergeMertens();
-        mergeMertens.process(images, fusion);
+        Mat fusion = merger.merge(images);
 
         File out = new File(createFileName(pictures[0]));
         write(fusion, out);
@@ -74,7 +73,7 @@ public class ExposureMergeService extends OpenCvService {
         return prefix + MERGED + suffix;
     }
 
-    private void write(Mat fusion, File out) {
+    void write(Mat fusion, File out) {
         Mat result = multiply(fusion);
         Imgcodecs.imwrite(out.getPath(), result);
     }
@@ -91,10 +90,14 @@ public class ExposureMergeService extends OpenCvService {
 
         for(String pic : pics){
             File f = new File(pic);
-            Mat read = Imgcodecs.imread(f.getPath());
-            imgs.add(read);
+            imgs.add(read(f.getPath()));
         }
 
         return imgs;
     }
+
+    Mat read(String path) {
+        return Imgcodecs.imread(path);
+    }
+
 }
