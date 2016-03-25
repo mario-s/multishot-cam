@@ -1,8 +1,6 @@
 package de.mario.camera;
 
-import android.content.Context;
 import android.os.Handler;
-import android.os.ResultReceiver;
 
 import java.io.File;
 import java.util.Queue;
@@ -21,11 +19,15 @@ public interface PhotoActivable {
 
     Handler getHandler();
 
+    /**
+     * The exposure values used for the photos.
+     * @return a queue with exposure values.
+     */
     Queue<Integer> getExposureValues();
 
     /**
-     * Directory where to save the images.
-     * @return
+     * Directory where to save the images on a mounted storage.
+     * @return the directory
      */
     File getPicturesDirectory();
 
