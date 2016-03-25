@@ -1,6 +1,5 @@
 package de.mario.camera;
 
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.junit.Before;
@@ -12,7 +11,9 @@ import org.robolectric.annotation.Config;
 
 import java.util.concurrent.ScheduledExecutorService;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  */
@@ -33,6 +34,6 @@ public class PhotoActivityTest {
         classUnderTest.setExecutor(mock);
         ImageButton btn = (ImageButton)classUnderTest.findViewById(R.id.shutter);
         btn.performClick();
-        verify(mock).execute(any(PhotoActivity.PhotoCommand.class));
+        verify(mock).execute(any(PhotoCommand.class));
     }
 }
