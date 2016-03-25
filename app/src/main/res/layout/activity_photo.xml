@@ -1,21 +1,25 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
 	android:id="@+id/layout">
 
-	<FrameLayout android:id="@+id/preview"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+	<FrameLayout
+		android:id="@+id/preview"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		/>
 
-		<ImageButton
+	<ImageButton
 			android:id="@+id/shutter"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="bottom|center"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:padding="15dp"
+			android:scaleType="fitCenter"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
 			android:onClick="onShutter"
-			android:layout_alignBottom="@+id/preview"
 			android:src="@drawable/shutter"
 			android:background="@null"
 			android:text="@string/take_photo"
@@ -27,17 +31,17 @@
 
 		<ImageButton
 			android:id="@+id/settings"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="bottom|right"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:padding="10dp"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentBottom="true"
 			android:onClick="onSettings"
 			android:layout_alignBottom="@+id/preview"
 			android:src="@drawable/settings"
 			android:background="@null"
 			android:text="@string/take_photo"
 			android:contentDescription="@string/action_settings"
-			android:paddingBottom="15dp"
-			android:paddingRight="15dp"
 			android:focusableInTouchMode="false">
 		</ImageButton>
 
@@ -49,10 +53,6 @@
 			android:layout_alignTop="@+id/preview"
 			android:indeterminate="true"
 			android:visibility="gone"/>
-
-
-	</FrameLayout>
-
 
 
 </RelativeLayout>
