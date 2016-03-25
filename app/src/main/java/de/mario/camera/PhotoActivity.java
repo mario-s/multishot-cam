@@ -292,23 +292,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
-	class PhotoCommand implements Runnable{
-
-		private final PhotoActivity activity;
-		private final Camera camera;
-
-		PhotoCommand(PhotoActivity activity, Camera camera){
-			this.activity = activity;
-			this.camera = camera;
-		}
-
-		@Override
-		public void run() {
-			ContinuesCallback callback = new ContinuesCallback(activity);
-			camera.takePicture(null, null, callback);
-		}
-	}
-
 	private class OpenCvLoaderCallback extends BaseLoaderCallback {
 		private final Intent intent;
 
