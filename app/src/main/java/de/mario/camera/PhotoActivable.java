@@ -17,9 +17,6 @@ public interface PhotoActivable {
 
     String EXPOSURE_MERGE = "exposureMerge";
 
-    @Deprecated
-    Context getApplicationContext();
-
     String getResource(int key);
 
     Handler getHandler();
