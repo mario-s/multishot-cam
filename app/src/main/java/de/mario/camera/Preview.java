@@ -1,12 +1,12 @@
 package de.mario.camera;
 
-import java.io.IOException;
-
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.io.IOException;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -17,6 +17,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	Preview(Context context, Camera camera) {
 		super(context);
 		this.camera = camera;
+
+		this.camera.setDisplayOrientation(HOR);
 
 		// Install a SurfaceHolder.Callback so we get notified when the
 		// underlying surface is created and destroyed.
@@ -30,7 +32,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		// The Surface has been created, acquire the camera and tell it where
 		// to draw.
 		try {
-			camera.setDisplayOrientation(HOR);
 			camera.setPreviewDisplay(holder);
 			camera.startPreview();
 		} catch (IOException e) {
