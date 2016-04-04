@@ -14,28 +14,34 @@ import android.widget.RelativeLayout;
 import java.io.IOException;
 import java.util.List;
 
-public class Preview extends SurfaceView implements SurfaceHolder.Callback {
+class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
-    private SurfaceHolder mHolder;
+    private SurfaceHolder surfaceHolder;
     private Camera camera;
     private List<Camera.Size> previewSizeList;
     private List<Camera.Size> pictureSizeList;
-    protected Camera.Size previewSize;
-    protected Camera.Size pictureSize;
+    private Camera.Size previewSize;
+    private Camera.Size pictureSize;
     private boolean surfaceConfiguring = false;
 
     Preview(Context context, Camera camera) {
         super(context);
         this.camera = camera;
 
+        initHolder();
+        initSupportedSizes();
+    }
 
-        // Install a SurfaceHolder.Callback so we get notified when the
-        // underlying surface is created and destroyed.
-        mHolder = getHolder();
-        mHolder.addCallback(this);
-        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    // Install a SurfaceHolder.Callback so we get notified when the
+    // underlying surface is created and destroyed.
+    private void initHolder() {
+        surfaceHolder = getHolder();
+        surfaceHolder.addCallback(this);
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
 
-        Camera.Parameters cameraParams = this.camera.getParameters();
+    private void initSupportedSizes() {
+        Camera.Parameters cameraParams = camera.getParameters();
         previewSizeList = cameraParams.getSupportedPreviewSizes();
         pictureSizeList = cameraParams.getSupportedPictureSizes();
     }
