@@ -70,9 +70,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
             surfaceConfiguring = adjustSurfaceLayoutSize(previewSize, portrait, width, height);
         }
 
-
-        int angle = getAngle();
-        camera.setDisplayOrientation(angle);
+        Camera.Parameters cameraParams = camera.getParameters();
+        configureCameraParameters(cameraParams, portrait);
+        surfaceConfiguring = false;
 
         camera.startPreview();
     }
@@ -102,9 +102,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private Camera.Size determinePreviewSize(boolean portrait, int reqWidth, int reqHeight) {
-        // Meaning of width and height is switched for preview when portrait,
-        // while it is the same as user's view for surface and metrics.
-        // That is, width must always be larger than height for setPreviewSize.
+
         int reqPreviewWidth; // requested width in terms of camera hardware
         int reqPreviewHeight; // requested height in terms of camera hardware
         if (portrait) {
@@ -167,14 +165,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
             tmpLayoutWidth = previewSize.width;
         }
 
-        float factH, factW, fact;
-        factH = availableHeight / tmpLayoutHeight;
-        factW = availableWidth / tmpLayoutWidth;
-        if (factH < factW) {
-            fact = factH;
-        } else {
-            fact = factW;
-        }
+        float fact = getFactor(availableWidth, availableHeight, tmpLayoutHeight, tmpLayoutWidth);
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) getLayoutParams();
 
@@ -189,7 +180,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
                 layoutParams.topMargin = centerPosY - (layoutHeight / 2);
                 layoutParams.leftMargin = centerPosX - (layoutWidth / 2);
             }
-            this.setLayoutParams(layoutParams); // this will trigger another surfaceChanged invocation.
+            setLayoutParams(layoutParams);
             layoutChanged = true;
         } else {
             layoutChanged = false;
@@ -198,8 +189,31 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         return layoutChanged;
     }
 
+    private float getFactor(int availableWidth, int availableHeight, float tmpLayoutHeight, float tmpLayoutWidth) {
+        float factH, factW, fact;
+        factH = availableHeight / tmpLayoutHeight;
+        factW = availableWidth / tmpLayoutWidth;
+        if (factH < factW) {
+            fact = factH;
+        } else {
+            fact = factW;
+        }
+        return fact;
+    }
+
     private boolean isPortrait() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    private void configureCameraParameters(Camera.Parameters cameraParams, boolean portrait) {
+
+        int angle = getAngle();
+        camera.setDisplayOrientation(angle);
+
+        cameraParams.setPreviewSize(previewSize.width, previewSize.height);
+        cameraParams.setPictureSize(pictureSize.width, pictureSize.height);
+
+        camera.setParameters(cameraParams);
     }
 
 }
