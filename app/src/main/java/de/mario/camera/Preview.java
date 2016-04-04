@@ -1,8 +1,11 @@
 package de.mario.camera;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -10,7 +13,6 @@ import java.io.IOException;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
-	private static final int HOR = 90;
 	private SurfaceHolder mHolder;
 	private Camera camera;
 
@@ -18,7 +20,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		super(context);
 		this.camera = camera;
 
-		this.camera.setDisplayOrientation(HOR);
 
 		// Install a SurfaceHolder.Callback so we get notified when the
 		// underlying surface is created and destroyed.
@@ -52,7 +53,29 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		if (mHolder.getSurface() != null) {
 			camera.stopPreview();
 			surfaceCreated(mHolder);
+			int angle = getAngle();
+			camera.setDisplayOrientation(angle);
 		}
+	}
+
+	private int getAngle() {
+		int angle;
+		Display display = ((Activity)getContext()).getWindowManager().getDefaultDisplay();
+		switch (display.getRotation()) {
+			case Surface.ROTATION_90:
+				angle = 0;
+				break;
+			case Surface.ROTATION_180:
+				angle = 270;
+				break;
+			case Surface.ROTATION_270:
+				angle = 180;
+				break;
+			default:
+				angle = 90;
+				break;
+		}
+		return angle;
 	}
 
 }
