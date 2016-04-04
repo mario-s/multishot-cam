@@ -23,8 +23,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     protected Camera.Size previewSize;
     protected Camera.Size pictureSize;
     private boolean surfaceConfiguring = false;
-    private int centerPosX = -1;
-    private int centerPosY;
 
     Preview(Context context, Camera camera) {
         super(context);
@@ -62,16 +60,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     private void doSurfaceChanged(int width, int height) {
         camera.stopPreview();
 
-        boolean portrait = isPortrait();
         if(!surfaceConfiguring) {
+            boolean portrait = isPortrait();
+
             previewSize = determinePreviewSize(portrait, width, height);
             pictureSize = determinePictureSize(previewSize);
 
             surfaceConfiguring = adjustSurfaceLayoutSize(previewSize, portrait, width, height);
         }
 
-        Camera.Parameters cameraParams = camera.getParameters();
-        configureCameraParameters(cameraParams, portrait);
+        configureCamera();
         surfaceConfiguring = false;
 
         camera.startPreview();
@@ -176,10 +174,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         if ((layoutWidth != this.getWidth()) || (layoutHeight != this.getHeight())) {
             layoutParams.height = layoutHeight;
             layoutParams.width = layoutWidth;
-            if (centerPosX >= 0) {
-                layoutParams.topMargin = centerPosY - (layoutHeight / 2);
-                layoutParams.leftMargin = centerPosX - (layoutWidth / 2);
-            }
             setLayoutParams(layoutParams);
             layoutChanged = true;
         } else {
@@ -205,7 +199,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
-    private void configureCameraParameters(Camera.Parameters cameraParams, boolean portrait) {
+    private void configureCamera() {
+
+        Camera.Parameters cameraParams = camera.getParameters();
 
         int angle = getAngle();
         camera.setDisplayOrientation(angle);
