@@ -16,7 +16,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -88,7 +88,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		} else {
 			camera = Camera.open(camId);
 			preview = new Preview(this, camera);
-			getFrameLayout().addView(preview);
+			getPreviewLayout().addView(preview);
 
 			fillExposuresValues();
 		}
@@ -110,8 +110,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 
-	private FrameLayout getFrameLayout() {
-		return (FrameLayout) findViewById(R.id.preview);
+	private ViewGroup getPreviewLayout() {
+		return (ViewGroup) findViewById(R.id.preview);
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	@Override
 	protected void onPause() {
-		getFrameLayout().removeView(preview);
+		getPreviewLayout().removeView(preview);
 		preview = null;
 		releaseCamera();
 		unregisterReceiver(receiver);
