@@ -70,9 +70,11 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
             boolean portrait = isPortrait();
 
             previewSize = determinePreviewSize(portrait, width, height);
-            pictureSize = determinePictureSize(previewSize);
 
-            surfaceConfiguring = adjustSurfaceLayoutSize(previewSize, portrait, width, height);
+            if(previewSize != null) {
+                pictureSize = determinePictureSize(previewSize);
+                surfaceConfiguring = adjustSurfaceLayoutSize(previewSize, portrait, width, height);
+            }
         }
 
         configureCamera();
@@ -83,7 +85,7 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
     private int getAngle() {
         int angle;
-        Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
+        Display display = getDefaultDisplay();
         switch (display.getRotation()) {
             case Surface.ROTATION_90:
                 angle = 0;
@@ -99,6 +101,10 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
                 break;
         }
         return angle;
+    }
+
+    Display getDefaultDisplay() {
+        return ((Activity) getContext()).getWindowManager().getDefaultDisplay();
     }
 
     @Override
@@ -212,8 +218,12 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
         int angle = getAngle();
         camera.setDisplayOrientation(angle);
 
-        cameraParams.setPreviewSize(previewSize.width, previewSize.height);
-        cameraParams.setPictureSize(pictureSize.width, pictureSize.height);
+        if(previewSize != null) {
+            cameraParams.setPreviewSize(previewSize.width, previewSize.height);
+        }
+        if(pictureSize != null) {
+            cameraParams.setPictureSize(pictureSize.width, pictureSize.height);
+        }
 
         camera.setParameters(cameraParams);
     }

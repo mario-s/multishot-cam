@@ -1,7 +1,11 @@
 package de.mario.camera;
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
+import android.view.Display;
 import android.view.SurfaceHolder;
 
 import org.junit.Before;
@@ -12,7 +16,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
+import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.inOrder;
 
@@ -34,16 +40,44 @@ public class PreviewTest {
     @Mock
     private Camera.Parameters cameraParameters;
 
+    @Mock
+    private Resources resources;
+
+    @Mock
+    private Configuration configuration;
+
+    @Mock
+    private Display display;
+
+    private List<Size> sizes;
+
     private Preview classUnderTest;
 
     @Before
     public void setUp() {
+
+        Size size = camera.new Size(720, 1280);
+        sizes = singletonList(size);
+
         given(camera.getParameters()).willReturn(cameraParameters);
+        given(resources.getConfiguration()).willReturn(configuration);
+        given(cameraParameters.getSupportedPreviewSizes()).willReturn(sizes);
+        given(cameraParameters.getSupportedPictureSizes()).willReturn(sizes);
 
         classUnderTest = new Preview(activity, camera) {
             @Override
             public SurfaceHolder getHolder() {
                 return surfaceHolder;
+            }
+
+            @Override
+            public Resources getResources() {
+                return resources;
+            }
+
+            @Override
+            Display getDefaultDisplay() {
+                return display;
             }
         };
     }
@@ -53,6 +87,15 @@ public class PreviewTest {
         classUnderTest.surfaceCreated(surfaceHolder);
         InOrder inOrder =  inOrder(camera, camera);
         inOrder.verify(camera).setPreviewDisplay(surfaceHolder);
+        inOrder.verify(camera).startPreview();
+    }
+
+    @Test
+    public void testSurfaceChanged() {
+        classUnderTest.surfaceChanged(surfaceHolder, 0, 720, 1280);
+
+        InOrder inOrder =  inOrder(camera, camera);
+        inOrder.verify(camera).stopPreview();
         inOrder.verify(camera).startPreview();
     }
 }
