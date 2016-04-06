@@ -16,9 +16,8 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -69,10 +68,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 		setContentView(R.layout.activity_photo);
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -94,7 +89,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		} else {
 			camera = Camera.open(camId);
 			preview = new Preview(this, camera);
-			getFrameLayout().addView(preview);
+			getPreviewLayout().addView(preview);
 
 			fillExposuresValues();
 		}
@@ -116,8 +111,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 
-	private FrameLayout getFrameLayout() {
-		return (FrameLayout) findViewById(R.id.preview);
+	private ViewGroup getPreviewLayout() {
+		return (ViewGroup) findViewById(R.id.preview);
 	}
 
 	@Override
@@ -140,7 +135,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	@Override
 	protected void onPause() {
-		getFrameLayout().removeView(preview);
+		getPreviewLayout().removeView(preview);
 		preview = null;
 		releaseCamera();
 		unregisterReceiver(receiver);
@@ -295,23 +290,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 				String result = intent.getStringExtra("merged");
 				toast(result);
 			}
-		}
-	}
-
-	class PhotoCommand implements Runnable{
-
-		private final PhotoActivity activity;
-		private final Camera camera;
-
-		PhotoCommand(PhotoActivity activity, Camera camera){
-			this.activity = activity;
-			this.camera = camera;
-		}
-
-		@Override
-		public void run() {
-			ContinuesCallback callback = new ContinuesCallback(activity);
-			camera.takePicture(null, null, callback);
 		}
 	}
 

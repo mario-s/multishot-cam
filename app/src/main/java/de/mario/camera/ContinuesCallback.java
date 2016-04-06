@@ -1,5 +1,10 @@
 package de.mario.camera;
 
+import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
+import android.os.Message;
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -8,11 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Queue;
-
-import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
-import android.os.Message;
-import android.util.Log;
 
 
 /**
@@ -117,16 +117,16 @@ class ContinuesCallback implements PictureCallback {
 
     private void nextPhoto(Camera camera) {
 
+        activity.getPreview().setEnabled(true);
+        camera.startPreview();
+
         if (!exposureValues.isEmpty()) {
             int ev = exposureValues.poll();
             setExposureCompensation(camera, ev);
-            activity.getPreview().setEnabled(true);
             camera.takePicture(null, null, this);
         } else {
             //reset
             setExposureCompensation(camera, defaultExposure);
-            //restart preview for next photo
-            camera.startPreview();
         }
     }
 
