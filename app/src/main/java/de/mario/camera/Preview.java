@@ -125,23 +125,11 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
         // Adjust surface size with the closest aspect-ratio
         float reqRatio = ((float) reqPreviewWidth) / reqPreviewHeight;
-        float curRatio, deltaRatio;
-        float deltaRatioMin = Float.MAX_VALUE;
-        Camera.Size retSize = null;
-        for (Camera.Size size : previewSizeList) {
-            curRatio = ((float) size.width) / size.height;
-            deltaRatio = Math.abs(reqRatio - curRatio);
-            if (deltaRatio < deltaRatioMin) {
-                deltaRatioMin = deltaRatio;
-                retSize = size;
-            }
-        }
-
-        return retSize;
+        return findSize(reqRatio, previewSizeList);
     }
 
     private Camera.Size determinePictureSize(Camera.Size previewSize) {
-        Camera.Size retSize = null;
+
         for (Camera.Size size : pictureSizeList) {
             if (size.equals(previewSize)) {
                 return size;
@@ -150,9 +138,14 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
         // if the preview size is not supported as a picture size
         float reqRatio = ((float) previewSize.width) / previewSize.height;
+        return findSize(reqRatio, pictureSizeList);
+    }
+
+    private Camera.Size findSize(float reqRatio, List<Camera.Size> sizeList) {
+        Camera.Size retSize = null;
         float curRatio, deltaRatio;
         float deltaRatioMin = Float.MAX_VALUE;
-        for (Camera.Size size : pictureSizeList) {
+        for (Camera.Size size : sizeList) {
             curRatio = ((float) size.width) / size.height;
             deltaRatio = Math.abs(reqRatio - curRatio);
             if (deltaRatio < deltaRatioMin) {
@@ -227,5 +220,4 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
         camera.setParameters(cameraParams);
     }
-
 }
