@@ -5,6 +5,8 @@ import android.os.Handler;
 import java.io.File;
 import java.util.Queue;
 
+import de.mario.camera.preview.Preview;
+
 /**
  * Interface for coupling between the activity and sub classes.
  */
