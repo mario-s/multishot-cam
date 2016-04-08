@@ -124,7 +124,12 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         // Adjust surface size with the closest aspect-ratio
-        float reqRatio = ((float) reqPreviewWidth) / reqPreviewHeight;
+        return getPreviewSize(reqPreviewWidth, reqPreviewHeight);
+    }
+
+
+    private Camera.Size getPreviewSize(float reqPreviewWidth, int reqPreviewHeight) {
+        float reqRatio = reqPreviewWidth / reqPreviewHeight;
         float curRatio, deltaRatio;
         float deltaRatioMin = Float.MAX_VALUE;
         Camera.Size retSize = null;
