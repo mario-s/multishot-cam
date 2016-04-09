@@ -129,18 +129,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
     private Dim determinePreviewSize(boolean portrait, int reqWidth, int reqHeight) {
 
-        int reqPreviewWidth; // requested width in terms of camera hardware
-        int reqPreviewHeight; // requested height in terms of camera hardware
+        float reqRatio;
         if (portrait) {
-            reqPreviewWidth = reqHeight;
-            reqPreviewHeight = reqWidth;
+            reqRatio = ((float) reqHeight) / reqWidth;
         } else {
-            reqPreviewWidth = reqWidth;
-            reqPreviewHeight = reqHeight;
+            reqRatio = ((float) reqWidth) / reqHeight;
         }
 
         // Adjust surface size with the closest aspect-ratio
-        float reqRatio = ((float) reqPreviewWidth) / reqPreviewHeight;
         return findSize(reqRatio, previewSizeList);
     }
 

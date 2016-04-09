@@ -40,7 +40,7 @@
 			android:layout_alignBottom="@+id/preview"
 			android:src="@drawable/settings"
 			android:background="@null"
-			android:text="@string/take_photo"
+			android:text="@string/action_settings"
 			android:contentDescription="@string/action_settings"
 			android:focusableInTouchMode="false">
 		</ImageButton>
