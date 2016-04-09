@@ -87,14 +87,27 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		if (camId == CameraLookup.NO_CAM_ID) {
 			toast(getResource(R.string.no_back_cam));
 		} else {
-			camera = Camera.open(camId);
-			preview = new Preview(this, camera);
-			getPreviewLayout().addView(preview);
+			initCamera();
 
 			fillExposuresValues();
 		}
 
 		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
+	}
+
+	private void initCamera() {
+		camera = CameraFactory.getCamera(camId);
+		preview = new Preview(this, camera);
+		getPreviewLayout().addView(preview);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		if(camera == null) {
+			initCamera();
+		}
 	}
 
 	private void showDialogWhenFirstRun() {
@@ -126,11 +139,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private void fillExposuresValues() {
-		Camera.Parameters params = camera.getParameters();
+		ExposureValuesFactory factory = new ExposureValuesFactory(camera);
 		exposureValues.clear();
-		exposureValues.add(params.getExposureCompensation());
-		exposureValues.add(params.getMinExposureCompensation());
-		exposureValues.add(params.getMaxExposureCompensation());
+		exposureValues.addAll(factory.getMinMaxValues());
 	}
 
 	@Override
