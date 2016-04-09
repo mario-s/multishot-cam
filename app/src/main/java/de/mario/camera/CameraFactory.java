@@ -7,7 +7,7 @@ import android.util.Log;
 /**
  * Class to open the camera.
  */
-final class CameraFactory {
+class CameraFactory {
 
     Camera getCamera(int id) {
         Camera cam = null;
