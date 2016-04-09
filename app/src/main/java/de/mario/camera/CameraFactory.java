@@ -9,15 +9,20 @@ import android.util.Log;
  */
 final class CameraFactory {
 
-    private CameraFactory(){}
-
-    public static Camera getCamera(int id) {
-        Camera c = null;
+    Camera getCamera(int id) {
+        Camera cam = null;
         try {
-            c = Camera.open(id);
+            cam = open(id);
+
+            Camera.Parameters params = cam.getParameters();
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         }catch (Exception e){
             Log.w(PhotoActivable.DEBUG_TAG, e);
         }
-        return c;
+        return cam;
+    }
+
+    Camera open(int id) {
+        return Camera.open(id);
     }
 }

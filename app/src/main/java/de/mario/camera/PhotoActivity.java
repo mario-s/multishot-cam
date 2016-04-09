@@ -57,6 +57,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
+	private View shutter;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -70,6 +71,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo);
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+		shutter = findViewById(R.id.shutter);
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -96,7 +98,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private void initCamera() {
-		camera = CameraFactory.getCamera(camId);
+		CameraFactory factory = new CameraFactory();
+		camera = factory.getCamera(camId);
 		preview = new Preview(this, camera);
 		getPreviewLayout().addView(preview);
 	}
@@ -174,6 +177,14 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onShutter(View view) {
+		shutter.setEnabled(false);
+		camera.autoFocus(new Camera.AutoFocusCallback() {
+			@Override
+			public void onAutoFocus(boolean success, Camera camera) {
+				shutter.setEnabled(true);
+			}
+		});
+
 		PhotoCommand command = new PhotoCommand(this, camera);
 		int delay = getDelay();
 		if(delay > MIN){
