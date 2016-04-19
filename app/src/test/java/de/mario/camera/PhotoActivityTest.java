@@ -1,5 +1,6 @@
 package de.mario.camera;
 
+import android.hardware.Camera;
 import android.widget.ImageButton;
 
 import org.junit.Before;
@@ -8,8 +9,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.util.concurrent.ScheduledExecutorService;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
@@ -30,10 +29,10 @@ public class PhotoActivityTest {
 
     @Test
     public void testShutter() {
-        ScheduledExecutorService mock = mock(ScheduledExecutorService.class);
-        classUnderTest.setExecutor(mock);
+        Camera mock = mock(Camera.class);
+        classUnderTest.setCamera(mock);
         ImageButton btn = (ImageButton)classUnderTest.findViewById(R.id.shutter);
         btn.performClick();
-        verify(mock).execute(any(PhotoCommand.class));
+        verify(mock).autoFocus(any(Camera.AutoFocusCallback.class));
     }
 }

@@ -265,8 +265,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return cw.getDir("data", Context.MODE_PRIVATE);
 	}
 
-	void setExecutor(ScheduledExecutorService executor) {
-		this.executor = executor;
+	void setCamera(Camera camera) {
+		this.camera = camera;
 	}
 
 	private void processHdr(String [] pictures){
