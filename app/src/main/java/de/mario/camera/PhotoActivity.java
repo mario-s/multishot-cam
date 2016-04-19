@@ -30,6 +30,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import de.mario.camera.preview.FocusView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
@@ -58,6 +59,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
 	private View shutter;
+	private FocusView focusView;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -101,7 +103,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		CameraFactory factory = new CameraFactory();
 		camera = factory.getCamera(camId);
 		preview = new Preview(this, camera);
-		getPreviewLayout().addView(preview);
+		focusView = new FocusView(this);
+		getPreviewLayout().addView(preview, 0);
+		getPreviewLayout().addView(focusView, 1);
 	}
 
 	@Override
@@ -181,17 +185,27 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		camera.autoFocus(new Camera.AutoFocusCallback() {
 			@Override
 			public void onAutoFocus(boolean success, Camera camera) {
-				shutter.setEnabled(true);
+				focusView.focused(success);
+				if(success) {
+					PhotoCommand command = new PhotoCommand(PhotoActivity.this, camera);
+					int delay = getDelay();
+					if (delay > MIN) {
+						executor.schedule(command, delay, TimeUnit.SECONDS);
+					} else {
+						executor.execute(command);
+					}
+				}else{
+					prepareForNextShot();
+				}
 			}
 		});
 
-		PhotoCommand command = new PhotoCommand(this, camera);
-		int delay = getDelay();
-		if(delay > MIN){
-			executor.schedule(command, delay, TimeUnit.SECONDS);
-		}else {
-			executor.execute(command);
-		}
+
+	}
+
+	private void prepareForNextShot() {
+		shutter.setEnabled(true);
+		focusView.reset();
 	}
 
 	/**
@@ -273,7 +287,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		progressBar.setVisibility(View.GONE);
 	}
 
-	static class MessageHandler extends Handler {
+	class MessageHandler extends Handler {
 
 		private final PhotoActivity activity;
 
@@ -292,6 +306,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 						PICTURES);
 				activity.processHdr(pictures);
 
+				prepareForNextShot();
 				informAboutPictures(pictures);
 			}
 		}
