@@ -1,10 +1,9 @@
 package de.mario.camera;
 
 import android.hardware.Camera;
-import android.support.annotation.NonNull;
 
 /**
- * This class helps to look for available Camera on the device.
+ * This class helps to look for available Cameras and their features on the device.
  */
 class CameraLookup {
     private static final int MIN = 0;
@@ -33,7 +32,10 @@ class CameraLookup {
         return cameraId;
     }
 
-    @NonNull
+    boolean canDisableShutterSound(int id) {
+        return getCameraInfo(id).canDisableShutterSound;
+    }
+
     private Camera.CameraInfo getCameraInfo(int id) {
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(id, info);

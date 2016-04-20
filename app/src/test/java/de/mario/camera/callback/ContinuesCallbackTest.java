@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.callback;
 
 import android.hardware.Camera;
 import android.os.Handler;
@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import de.mario.camera.PhotoActivable;
 import de.mario.camera.preview.Preview;
 
 import static org.mockito.BDDMockito.given;

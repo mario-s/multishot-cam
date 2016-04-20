@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.callback;
 
 import java.io.File;
 import java.io.FileOutputStream;

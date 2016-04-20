@@ -22,5 +22,8 @@
     <string name="photo_progress">Taking photo please wait.</string>
     <string name="ok">Ok</string>
     <string name="startup_text">This App requires OpenCvManager 3.0.0 to create a merged HDR photo. To enabled HDR processing go to the settings menu.</string>
+    <string name="prefs_shutter_sound_title">Shutter Sound</string>
+    <string name="prefs_shutter_sound_disabled_description">When selected, there will be no sound when a photo is taken. It Requires at least Android 4.2.</string>
+    <string name="prefs_shutter_sound_disable_title">Disabled Shutter Sound</string>
 
 </resources>

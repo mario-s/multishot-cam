@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import de.mario.camera.callback.PhotoCommand;
 import de.mario.camera.preview.FocusView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
@@ -59,6 +61,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
 	private FocusView focusView;
+	private boolean canDisableShutterSound;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -80,6 +83,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			showDialogWhenFirstRun();
 			CameraLookup lookup = new CameraLookup();
 			camId = lookup.findBackCamera();
+			canDisableShutterSound = lookup.canDisableShutterSound(camId);
 		}
 	}
 
@@ -179,14 +183,23 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onShutter(View view) {
+		if(isShutterSoundDisabled()){
+			camera.enableShutterSound(false);
+		}else{
+			camera.enableShutterSound(true);
+		}
+
 		toggleInputs(false);
 		camera.autoFocus(new Camera.AutoFocusCallback() {
 			@Override
 			public void onAutoFocus(boolean success, Camera camera) {
 				focusView.focused(success);
 				if (success) {
-					PhotoCommand command = new PhotoCommand(PhotoActivity.this, camera);
+					Runnable command = new PhotoCommand(PhotoActivity.this, camera);
 					int delay = getDelay();
+
+					Log.d(DEBUG_TAG, "delay for photo: " + delay);
+
 					if (delay > MIN) {
 						executor.schedule(command, delay, TimeUnit.SECONDS);
 					} else {
@@ -197,8 +210,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 				}
 			}
 		});
-
-
 	}
 
 	private void prepareForNextShot() {
@@ -207,7 +218,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	/**
-	 * Enables / disables all input elements seen on the preview
+	 * Enables / disables all input elements, seen on the preview.
 	 * @param enabled <code>true</code>: enables the elements.
 	 */
 	private void toggleInputs(boolean enabled) {
@@ -241,6 +252,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private boolean isProcessingEnabled() {
 		return getPreferences().getBoolean("processHdr", false);
 	}
+
+	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getPreferences().getBoolean("shutterSoundDisabled", false);}
 
 	private SharedPreferences getPreferences() {
 		return PreferenceManager.getDefaultSharedPreferences(this);
@@ -315,6 +328,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 				prepareForNextShot();
 				informAboutPictures(pictures);
+				Log.d(DEBUG_TAG, "ready for next photo session");
 			}
 		}
 
