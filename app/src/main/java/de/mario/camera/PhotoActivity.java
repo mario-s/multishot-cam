@@ -58,7 +58,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
-	private View shutter;
 	private FocusView focusView;
 
 	public PhotoActivity() {
@@ -73,7 +72,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo);
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-		shutter = findViewById(R.id.shutter);
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -181,12 +179,12 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onShutter(View view) {
-		shutter.setEnabled(false);
+		toggleInputs(false);
 		camera.autoFocus(new Camera.AutoFocusCallback() {
 			@Override
 			public void onAutoFocus(boolean success, Camera camera) {
 				focusView.focused(success);
-				if(success) {
+				if (success) {
 					PhotoCommand command = new PhotoCommand(PhotoActivity.this, camera);
 					int delay = getDelay();
 					if (delay > MIN) {
@@ -194,7 +192,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 					} else {
 						executor.execute(command);
 					}
-				}else{
+				} else {
 					prepareForNextShot();
 				}
 			}
@@ -204,8 +202,17 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private void prepareForNextShot() {
-		shutter.setEnabled(true);
+		toggleInputs(true);
 		focusView.reset();
+	}
+
+	/**
+	 * Enables / disables all input elements seen on the preview
+	 * @param enabled <code>true</code>: enables the elements.
+	 */
+	private void toggleInputs(boolean enabled) {
+		findViewById(R.id.shutter).setEnabled(enabled);
+		findViewById(R.id.settings).setEnabled(enabled);
 	}
 
 	/**
