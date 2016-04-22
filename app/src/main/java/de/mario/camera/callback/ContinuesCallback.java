@@ -141,7 +141,7 @@ class ContinuesCallback implements PictureCallback {
         if (!exposureValues.isEmpty()) {
             int ev = exposureValues.poll();
             setExposureCompensation(camera, ev);
-            camera.takePicture(null, null, this);
+            camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), this);
         } else {
             //reset
             setExposureCompensation(camera, defaultExposure);
