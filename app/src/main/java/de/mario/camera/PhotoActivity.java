@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -62,12 +64,15 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private int camId = CameraLookup.NO_CAM_ID;
 	private FocusView focusView;
 	private boolean canDisableShutterSound;
+	private MyLocationListener locationListener;
+	private LocationManager locationManager;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
 		handler = new MessageHandler(this);
 		receiver = new ProcessReceiver();
 		executor = new ScheduledThreadPoolExecutor(1);
+		locationListener = new MyLocationListener();
 	}
 
 	@Override
@@ -84,6 +89,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			CameraLookup lookup = new CameraLookup();
 			camId = lookup.findBackCamera();
 			canDisableShutterSound = lookup.canDisableShutterSound(camId);
+			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		}
 	}
 
@@ -111,8 +117,29 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	@Override
+	public void toogleLocationListener(boolean enabled) {
+		if(enabled) {
+			registerLocationListener();
+		}else{
+			unregisterLocationListener();
+		}
+	}
+
+	private void registerLocationListener() {
+		if(isGeoTaggingEnabled()) {
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		}
+	}
+
+	private void unregisterLocationListener() {
+		locationManager.removeUpdates(locationListener);
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
+
+		registerLocationListener();
 
 		if(camera == null) {
 			initCamera();
@@ -131,7 +158,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private String getVersion() {
 		return BuildConfig.VERSION_NAME + BuildConfig.VERSION_CODE;
 	}
-
 
 	private ViewGroup getPreviewLayout() {
 		return (ViewGroup) findViewById(R.id.preview);
@@ -159,6 +185,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		preview = null;
 		releaseCamera();
 		unregisterReceiver(receiver);
+		unregisterLocationListener();
 		super.onPause();
 	}
 
@@ -246,17 +273,24 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private int getDelay() {
-		return parseInt(getPreferences().getString("shutterDelayTime", "0"));
+		return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0"));
 	}
 
 	private boolean isProcessingEnabled() {
-		return getPreferences().getBoolean("processHdr", false);
+		return getPreferences().getBoolean(SettingsValue.PROCESS_HDR.getValue(), false);
 	}
 
-	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getPreferences().getBoolean("shutterSoundDisabled", false);}
+	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getPreferences().getBoolean(SettingsValue.SHUTTER_SOUND.getValue(), false);}
 
-	private SharedPreferences getPreferences() {
-		return PreferenceManager.getDefaultSharedPreferences(this);
+	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && getPreferences().getBoolean(SettingsValue.GEO_TAGGING.getValue(), false);}
+
+	private boolean isGpsEnabled() { return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}
+
+	private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(this);	}
+
+	@Override
+	public Location getCurrentLocation() {
+		return locationListener.getCurrentLocation();
 	}
 
 	@Override

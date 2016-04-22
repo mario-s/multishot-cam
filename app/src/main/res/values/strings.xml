@@ -26,5 +26,7 @@
     <string name="prefs_shutter_sound_title">Shutter Sound</string>
     <string name="prefs_shutter_sound_disabled_description">When selected, there will be no sound when a photo is taken. It requires at least Android 4.2.</string>
     <string name="prefs_shutter_sound_disable_title">Disabled Shutter Sound</string>
+    <string name="prefs_geo_tagging_enabled_description">When selected, and GPS is enabled, the current Location will be saved in the EXIF data of the pictures.</string>
+    <string name="prefs_geo_tagging_enabled_title">Geotagging</string>
 
 </resources>

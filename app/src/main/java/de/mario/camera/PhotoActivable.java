@@ -1,5 +1,6 @@
 package de.mario.camera;
 
+import android.location.Location;
 import android.os.Handler;
 
 import java.io.File;
@@ -36,4 +37,16 @@ public interface PhotoActivable {
     File getInternalDirectory();
 
     Preview getPreview();
+
+    /**
+     * Enables or disables the location listener.
+     * @param enabled: if <code>true</code> the listener is enabled. Otherwise disabled.
+     */
+    void toogleLocationListener(boolean enabled);
+
+    /**
+     * This method returns the current location of the device. The location might be null.
+     * @return the current location
+     */
+    Location getCurrentLocation();
 }
