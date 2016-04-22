@@ -1,8 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:key="shutterDelay"
-        android:title="@string/prefs_shutter_title">
+        android:key="camera"
+        android:title="@string/camera">
 
         <ListPreference
             android:defaultValue="0"
@@ -12,6 +12,12 @@
             android:key="shutterDelayTime"
             android:summary="@string/prefs_shutter_delay_time_description"
             android:title="@string/prefs_shutter_delay_time_title"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="shutterSoundDisabled"
+            android:summary="@string/prefs_shutter_sound_disabled_description"
+            android:title="@string/prefs_shutter_sound_disable_title" />
 
     </PreferenceCategory>
 
@@ -23,18 +29,6 @@
             android:key="processHdr"
             android:summary="@string/prefs_process_hdr_enabled_description"
             android:title="@string/prefs_process_hdr_enabled_title" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="shutter_sound"
-        android:title="@string/prefs_shutter_sound_title">
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="shutterSoundDisabled"
-            android:summary="@string/prefs_shutter_sound_disabled_description"
-            android:title="@string/prefs_shutter_sound_disable_title" />
-
     </PreferenceCategory>
 
 
