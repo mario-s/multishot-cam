@@ -12,7 +12,12 @@ import de.mario.camera.PhotoActivable;
 /**
  * Writes some exif data to the image.
  */
-final class GeoTagWriter implements ExifTagWriteable{
+class GeoTagWriter implements ExifTagWriteable{
+    static final String N = "N";
+    static final String S = "S";
+    static final String E = "E";
+    static final String W = "W";
+
     private Location location;
 
     GeoTagWriter(Location location){
@@ -23,7 +28,7 @@ final class GeoTagWriter implements ExifTagWriteable{
     public void setTag(File file) {
 
             try {
-                ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+                ExifInterface exif = getExifInterface(file);
 
                 double latitude = Math.abs(location.getLatitude());
                 double longitude = Math.abs(location.getLongitude());
@@ -40,15 +45,15 @@ final class GeoTagWriter implements ExifTagWriteable{
                 String lon = num1Lon + "/1," + num2Lon + "/1," + num3Lon + "/1000";
 
                 if (location.getLatitude() > 0) {
-                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "N");
+                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, N);
                 } else {
-                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "S");
+                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, S);
                 }
 
                 if (location.getLongitude() > 0) {
-                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "E");
+                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, E);
                 } else {
-                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "W");
+                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, W);
                 }
 
                 exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, lat);
@@ -58,5 +63,9 @@ final class GeoTagWriter implements ExifTagWriteable{
             }catch(IOException ex) {
                 Log.w(PhotoActivable.DEBUG_TAG, ex);
             }
+    }
+
+    ExifInterface getExifInterface(File file) throws IOException {
+        return new ExifInterface(file.getAbsolutePath());
     }
 }
