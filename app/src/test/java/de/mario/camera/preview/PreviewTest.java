@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.preview;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -7,6 +7,8 @@ import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.view.Display;
 import android.view.SurfaceHolder;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +51,8 @@ public class PreviewTest {
     @Mock
     private Display display;
 
-    private List<Size> sizes;
+    @Mock
+    private RelativeLayout.LayoutParams layoutParams;
 
     private Preview classUnderTest;
 
@@ -57,7 +60,7 @@ public class PreviewTest {
     public void setUp() {
 
         Size size = camera.new Size(720, 1280);
-        sizes = singletonList(size);
+        List<Size> sizes = singletonList(size);
 
         given(camera.getParameters()).willReturn(cameraParameters);
         given(resources.getConfiguration()).willReturn(configuration);
@@ -79,7 +82,16 @@ public class PreviewTest {
             Display getDefaultDisplay() {
                 return display;
             }
+
+            @Override
+            public ViewGroup.LayoutParams getLayoutParams() {
+                return layoutParams;
+            }
         };
+
+        List<Dim> dims = singletonList(new Dim(720,1280));
+        classUnderTest.setPictureSizeList(dims);
+        classUnderTest.setPreviewSizeList(dims);
     }
 
     @Test

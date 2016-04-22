@@ -13,11 +13,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -31,6 +31,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import de.mario.camera.callback.PhotoCommand;
+import de.mario.camera.preview.FocusView;
+import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
 
@@ -57,6 +60,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
+	private FocusView focusView;
+	private boolean canDisableShutterSound;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -78,6 +83,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			showDialogWhenFirstRun();
 			CameraLookup lookup = new CameraLookup();
 			camId = lookup.findBackCamera();
+			canDisableShutterSound = lookup.canDisableShutterSound(camId);
 		}
 	}
 
@@ -87,14 +93,30 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		if (camId == CameraLookup.NO_CAM_ID) {
 			toast(getResource(R.string.no_back_cam));
 		} else {
-			camera = Camera.open(camId);
-			preview = new Preview(this, camera);
-			getPreviewLayout().addView(preview);
+			initCamera();
 
 			fillExposuresValues();
 		}
 
 		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
+	}
+
+	private void initCamera() {
+		CameraFactory factory = new CameraFactory();
+		camera = factory.getCamera(camId);
+		preview = new Preview(this, camera);
+		focusView = new FocusView(this);
+		getPreviewLayout().addView(preview, 0);
+		getPreviewLayout().addView(focusView, 1);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		if(camera == null) {
+			initCamera();
+		}
 	}
 
 	private void showDialogWhenFirstRun() {
@@ -126,11 +148,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	private void fillExposuresValues() {
-		Camera.Parameters params = camera.getParameters();
+		ExposureValuesFactory factory = new ExposureValuesFactory(camera);
 		exposureValues.clear();
-		exposureValues.add(params.getExposureCompensation());
-		exposureValues.add(params.getMinExposureCompensation());
-		exposureValues.add(params.getMaxExposureCompensation());
+		exposureValues.addAll(factory.getMinMaxValues());
 	}
 
 	@Override
@@ -163,13 +183,47 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onShutter(View view) {
-		PhotoCommand command = new PhotoCommand(this, camera);
-		int delay = getDelay();
-		if(delay > MIN){
-			executor.schedule(command, delay, TimeUnit.SECONDS);
-		}else {
-			executor.execute(command);
+		if(isShutterSoundDisabled()){
+			camera.enableShutterSound(false);
+		}else{
+			camera.enableShutterSound(true);
 		}
+
+		toggleInputs(false);
+		camera.autoFocus(new Camera.AutoFocusCallback() {
+			@Override
+			public void onAutoFocus(boolean success, Camera camera) {
+				focusView.focused(success);
+				if (success) {
+					Runnable command = new PhotoCommand(PhotoActivity.this, camera);
+					int delay = getDelay();
+
+					Log.d(DEBUG_TAG, "delay for photo: " + delay);
+
+					if (delay > MIN) {
+						executor.schedule(command, delay, TimeUnit.SECONDS);
+					} else {
+						executor.execute(command);
+					}
+				} else {
+					prepareForNextShot();
+				}
+			}
+		});
+	}
+
+	private void prepareForNextShot() {
+		toggleInputs(true);
+		focusView.reset();
+	}
+
+	/**
+	 * Enables / disables all input elements, seen on the preview.
+	 * @param enabled <code>true</code>: enables the elements.
+	 */
+	private void toggleInputs(boolean enabled) {
+		findViewById(R.id.shutter).setEnabled(enabled);
+		findViewById(R.id.settings).setEnabled(enabled);
 	}
 
 	/**
@@ -198,6 +252,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private boolean isProcessingEnabled() {
 		return getPreferences().getBoolean("processHdr", false);
 	}
+
+	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getPreferences().getBoolean("shutterSoundDisabled", false);}
 
 	private SharedPreferences getPreferences() {
 		return PreferenceManager.getDefaultSharedPreferences(this);
@@ -229,8 +285,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return cw.getDir("data", Context.MODE_PRIVATE);
 	}
 
-	void setExecutor(ScheduledExecutorService executor) {
-		this.executor = executor;
+	void setCamera(Camera camera) {
+		this.camera = camera;
 	}
 
 	private void processHdr(String [] pictures){
@@ -251,7 +307,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		progressBar.setVisibility(View.GONE);
 	}
 
-	static class MessageHandler extends Handler {
+	class MessageHandler extends Handler {
 
 		private final PhotoActivity activity;
 
@@ -270,7 +326,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 						PICTURES);
 				activity.processHdr(pictures);
 
+				prepareForNextShot();
 				informAboutPictures(pictures);
+				Log.d(DEBUG_TAG, "ready for next photo session");
 			}
 		}
 

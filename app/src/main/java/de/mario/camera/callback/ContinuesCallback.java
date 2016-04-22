@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.callback;
 
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Queue;
+
+import de.mario.camera.PhotoActivable;
+import de.mario.camera.R;
 
 
 /**
@@ -34,7 +37,7 @@ class ContinuesCallback implements PictureCallback {
 
     private final PhotoActivable activity;
 
-    public ContinuesCallback(PhotoActivable activity) {
+    ContinuesCallback(PhotoActivable activity) {
         this.activity = activity;
         this.exposureValues = activity.getExposureValues();
         this.defaultExposure = exposureValues.poll(); //remove the first value and keep it for later
@@ -123,7 +126,7 @@ class ContinuesCallback implements PictureCallback {
         if (!exposureValues.isEmpty()) {
             int ev = exposureValues.poll();
             setExposureCompensation(camera, ev);
-            camera.takePicture(null, null, this);
+            camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), this);
         } else {
             //reset
             setExposureCompensation(camera, defaultExposure);

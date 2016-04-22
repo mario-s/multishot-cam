@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "de.mario.camera"
-        minSdkVersion 10
-        targetSdkVersion 10
+        minSdkVersion 17
+        targetSdkVersion 19
         versionCode 1
         versionName "frodo"
     }
@@ -36,7 +36,7 @@ android {
 apply from: 'build.workaround-missing-resource.gradle'
 
 dependencies {
-    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:support-v4:19.0.0'
     compile files('libs/opencv-3.0.0.jar')
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.5'

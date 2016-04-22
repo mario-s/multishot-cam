@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.preview;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,19 +12,22 @@ import android.view.SurfaceView;
 import android.widget.RelativeLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-class Preview extends SurfaceView implements SurfaceHolder.Callback {
+import de.mario.camera.PhotoActivable;
+
+public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
     private SurfaceHolder surfaceHolder;
     private Camera camera;
-    private List<Camera.Size> previewSizeList;
-    private List<Camera.Size> pictureSizeList;
-    private Camera.Size previewSize;
-    private Camera.Size pictureSize;
+    private List<Dim> previewSizeList;
+    private List<Dim> pictureSizeList;
+    private Dim previewSize;
+    private Dim pictureSize;
     private boolean surfaceConfiguring = false;
 
-    Preview(Context context, Camera camera) {
+    public Preview(Context context, Camera camera) {
         super(context);
         this.camera = camera;
 
@@ -42,8 +45,24 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
     private void initSupportedSizes() {
         Camera.Parameters cameraParams = camera.getParameters();
-        previewSizeList = cameraParams.getSupportedPreviewSizes();
-        pictureSizeList = cameraParams.getSupportedPictureSizes();
+        previewSizeList = toDimension(cameraParams.getSupportedPreviewSizes());
+        pictureSizeList = toDimension(cameraParams.getSupportedPictureSizes());
+    }
+
+    final void setPictureSizeList(List<Dim> pictureSizeList) {
+        this.pictureSizeList = pictureSizeList;
+    }
+
+    final void setPreviewSizeList(List<Dim> previewSizeList) {
+        this.previewSizeList = previewSizeList;
+    }
+
+    private List<Dim> toDimension(List<Camera.Size> sizes) {
+        List<Dim> dimensions = new ArrayList<>(sizes.size());
+        for (Camera.Size size : sizes) {
+            dimensions.add(new Dim(size));
+        }
+        return dimensions;
     }
 
     @Override
@@ -66,15 +85,12 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
     private void doSurfaceChanged(int width, int height) {
         camera.stopPreview();
 
-        if(!surfaceConfiguring) {
+        if (!surfaceConfiguring) {
             boolean portrait = isPortrait();
 
             previewSize = determinePreviewSize(portrait, width, height);
-
-            if(previewSize != null) {
-                pictureSize = determinePictureSize(previewSize);
-                surfaceConfiguring = adjustSurfaceLayoutSize(previewSize, portrait, width, height);
-            }
+            pictureSize = determinePictureSize(previewSize);
+            surfaceConfiguring = adjustSurfaceLayoutSize(previewSize, portrait, width, height);
         }
 
         configureCamera();
@@ -111,42 +127,37 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
-    private Camera.Size determinePreviewSize(boolean portrait, int reqWidth, int reqHeight) {
+    private Dim determinePreviewSize(boolean portrait, int reqWidth, int reqHeight) {
 
-        int reqPreviewWidth; // requested width in terms of camera hardware
-        int reqPreviewHeight; // requested height in terms of camera hardware
+        float reqRatio;
         if (portrait) {
-            reqPreviewWidth = reqHeight;
-            reqPreviewHeight = reqWidth;
+            reqRatio = ((float) reqHeight) / reqWidth;
         } else {
-            reqPreviewWidth = reqWidth;
-            reqPreviewHeight = reqHeight;
+            reqRatio = ((float) reqWidth) / reqHeight;
         }
 
         // Adjust surface size with the closest aspect-ratio
-        float reqRatio = ((float) reqPreviewWidth) / reqPreviewHeight;
         return findSize(reqRatio, previewSizeList);
     }
 
-    private Camera.Size determinePictureSize(Camera.Size previewSize) {
-
-        for (Camera.Size size : pictureSizeList) {
+    private Dim determinePictureSize(Dim previewSize) {
+        for (Dim size : pictureSizeList) {
             if (size.equals(previewSize)) {
                 return size;
             }
         }
 
         // if the preview size is not supported as a picture size
-        float reqRatio = ((float) previewSize.width) / previewSize.height;
+        float reqRatio = ((float) previewSize.getWidth()) / previewSize.getHeight();
         return findSize(reqRatio, pictureSizeList);
     }
 
-    private Camera.Size findSize(float reqRatio, List<Camera.Size> sizeList) {
-        Camera.Size retSize = null;
+    private Dim findSize(float reqRatio, List<Dim> sizeList) {
+        Dim retSize = null;
         float curRatio, deltaRatio;
         float deltaRatioMin = Float.MAX_VALUE;
-        for (Camera.Size size : sizeList) {
-            curRatio = ((float) size.width) / size.height;
+        for (Dim size : sizeList) {
+            curRatio = ((float) size.getWidth()) / size.getHeight();
             deltaRatio = Math.abs(reqRatio - curRatio);
             if (deltaRatio < deltaRatioMin) {
                 deltaRatioMin = deltaRatio;
@@ -157,15 +168,15 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
         return retSize;
     }
 
-    private boolean adjustSurfaceLayoutSize(Camera.Size previewSize, boolean portrait,
+    private boolean adjustSurfaceLayoutSize(Dim previewSize, boolean portrait,
                                             int availableWidth, int availableHeight) {
         float tmpLayoutHeight, tmpLayoutWidth;
         if (portrait) {
-            tmpLayoutHeight = previewSize.width;
-            tmpLayoutWidth = previewSize.height;
+            tmpLayoutHeight = previewSize.getWidth();
+            tmpLayoutWidth = previewSize.getHeight();
         } else {
-            tmpLayoutHeight = previewSize.height;
-            tmpLayoutWidth = previewSize.width;
+            tmpLayoutHeight = previewSize.getHeight();
+            tmpLayoutWidth = previewSize.getWidth();
         }
 
         float fact = getFactor(availableWidth, availableHeight, tmpLayoutHeight, tmpLayoutWidth);
@@ -211,13 +222,10 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
         int angle = getAngle();
         camera.setDisplayOrientation(angle);
 
-        if(previewSize != null) {
-            cameraParams.setPreviewSize(previewSize.width, previewSize.height);
-        }
-        if(pictureSize != null) {
-            cameraParams.setPictureSize(pictureSize.width, pictureSize.height);
-        }
+        cameraParams.setPreviewSize(previewSize.getWidth(), previewSize.getHeight());
+        cameraParams.setPictureSize(pictureSize.getWidth(), pictureSize.getHeight());
 
         camera.setParameters(cameraParams);
     }
+
 }

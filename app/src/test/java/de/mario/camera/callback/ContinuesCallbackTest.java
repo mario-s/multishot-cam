@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.callback;
 
 import android.hardware.Camera;
 import android.os.Handler;
@@ -11,14 +11,16 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
-import java.lang.System;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import de.mario.camera.PhotoActivable;
+import de.mario.camera.preview.Preview;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
-import static org.mockito.BDDMockito.given;
 
 /**
  */
