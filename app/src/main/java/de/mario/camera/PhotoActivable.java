@@ -39,12 +39,6 @@ public interface PhotoActivable {
     Preview getPreview();
 
     /**
-     * Enables or disables the location listener.
-     * @param enabled: if <code>true</code> the listener is enabled. Otherwise disabled.
-     */
-    void toogleLocationListener(boolean enabled);
-
-    /**
      * This method returns the current location of the device. The location might be null.
      * @return the current location
      */

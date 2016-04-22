@@ -2,6 +2,7 @@ package de.mario.camera.callback;
 
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.location.Location;
 import android.os.Message;
 import android.util.Log;
 
@@ -94,10 +95,24 @@ class ContinuesCallback implements PictureCallback {
         try {
             String path = pictureFileDir.getAbsolutePath();
             imagesNames.addAll(memAccessor.moveAll(path));
+            updateExif();
             sendFinishedInfo();
         } catch (IOException exc) {
             Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
             toast(getResource(R.string.save_error));
+        }
+    }
+
+    private void updateExif(){
+        Location location = activity.getCurrentLocation();
+        if(location != null) {
+            Log.d(PhotoActivable.DEBUG_TAG, "location: " + location);
+
+            ExifTagWriteable tagWriter = new GeoTagWriter(location);
+            for (String name : imagesNames) {
+                File f = new File(name);
+                tagWriter.setTag(f);
+            }
         }
     }
 

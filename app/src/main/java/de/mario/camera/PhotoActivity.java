@@ -116,15 +116,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		getPreviewLayout().addView(focusView, 1);
 	}
 
-	@Override
-	public void toogleLocationListener(boolean enabled) {
-		if(enabled) {
-			registerLocationListener();
-		}else{
-			unregisterLocationListener();
-		}
-	}
-
 	private void registerLocationListener() {
 		if(isGeoTaggingEnabled()) {
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
