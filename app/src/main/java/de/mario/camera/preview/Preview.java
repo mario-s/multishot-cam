@@ -85,16 +85,15 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     private void doSurfaceChanged(int width, int height) {
         camera.stopPreview();
 
-        boolean portrait = isPortrait();
-
         if (!surfaceConfiguring) {
+            boolean portrait = isPortrait();
 
             previewSize = determinePreviewSize(portrait, width, height);
             pictureSize = determinePictureSize(previewSize);
             surfaceConfiguring = adjustSurfaceLayoutSize(previewSize, portrait, width, height);
         }
 
-        configureCamera(portrait);
+        configureCamera();
         surfaceConfiguring = false;
 
         camera.startPreview();
@@ -216,14 +215,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
-    private void configureCamera(boolean portrait) {
+    private void configureCamera() {
 
         Camera.Parameters cameraParams = camera.getParameters();
-        if(portrait) {
-            cameraParams.setRotation(90);
-        }else{
-            cameraParams.setRotation(0);
-        }
 
         cameraParams.setPreviewSize(previewSize.getWidth(), previewSize.getHeight());
         cameraParams.setPictureSize(pictureSize.getWidth(), pictureSize.getHeight());

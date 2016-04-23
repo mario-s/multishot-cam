@@ -4,16 +4,15 @@ import android.location.Location;
 import android.media.ExifInterface;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import static org.mockito.Mockito.verify;
-
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.mockito.Mockito.verify;
 
 /**
  */
@@ -44,7 +43,6 @@ public class GeoTagWriterTest {
     }
 
     @Test
-    @Ignore
     public void setGeoTag() throws IOException {
         classUnderTest.setTag(file);
 

@@ -66,6 +66,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private boolean canDisableShutterSound;
 	private MyLocationListener locationListener;
 	private LocationManager locationManager;
+	private OrientationListener orientationListener;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -90,6 +91,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			camId = lookup.findBackCamera();
 			canDisableShutterSound = lookup.canDisableShutterSound(camId);
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			orientationListener = new OrientationListener(this);
 		}
 	}
 
@@ -114,6 +116,11 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		focusView = new FocusView(this);
 		getPreviewLayout().addView(preview, 0);
 		getPreviewLayout().addView(focusView, 1);
+
+		if(orientationListener.canDetectOrientation()){
+			orientationListener.setCamera(camera);
+			orientationListener.enable();
+		}
 	}
 
 	private void registerLocationListener() {
@@ -177,6 +184,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		releaseCamera();
 		unregisterReceiver(receiver);
 		unregisterLocationListener();
+		orientationListener.disable();
 		super.onPause();
 	}
 
