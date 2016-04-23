@@ -13,10 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
+import de.mario.camera.exif.ExifTag;
+import de.mario.camera.exif.ExifWriter;
+import de.mario.camera.exif.GeoTagFactory;
 
 
 /**
@@ -94,10 +98,14 @@ class ContinuesCallback implements PictureCallback {
     private void updateExif(){
         Location location = activity.getCurrentLocation();
         Log.d(PhotoActivable.DEBUG_TAG, "location: " + location);
-        if(location != null && !imagesNames.isEmpty()) {
-            GeoTagWriter tagWriter = new GeoTagWriter(location);
-            File file = new File(imagesNames.get(0));
-            tagWriter.setTag(file);
+        if(location != null) {
+            GeoTagFactory tagFactory = new GeoTagFactory();
+            Map<ExifTag, String> tags = tagFactory.create(location);
+            ExifWriter writer = new ExifWriter();
+            for (String name : imagesNames) {
+                File file = new File(imagesNames.get(0));
+                writer.addTags(file, tags);
+            }
         }
     }
 

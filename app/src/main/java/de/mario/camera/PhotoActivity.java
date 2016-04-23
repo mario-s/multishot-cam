@@ -112,15 +112,16 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private void initCamera() {
 		CameraFactory factory = new CameraFactory();
 		camera = factory.getCamera(camId);
-		preview = new Preview(this, camera);
-		focusView = new FocusView(this);
-		getPreviewLayout().addView(preview, 0);
-		getPreviewLayout().addView(focusView, 1);
 
 		if(orientationListener.canDetectOrientation()){
 			orientationListener.setCamera(camera);
 			orientationListener.enable();
 		}
+
+		preview = new Preview(this, camera);
+		focusView = new FocusView(this);
+		getPreviewLayout().addView(preview, 0);
+		getPreviewLayout().addView(focusView, 1);
 	}
 
 	private void registerLocationListener() {

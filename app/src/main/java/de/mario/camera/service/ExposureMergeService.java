@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mario.camera.PhotoActivable;
+import de.mario.camera.exif.ExifWriter;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -26,7 +27,7 @@ public class ExposureMergeService extends OpenCvService {
 
     private Merger merger;
 
-    private ExifCopy exifCopy;
+    private ExifWriter exifWriter;
 
     public ExposureMergeService() {
         this(new MertensMerger());
@@ -34,7 +35,7 @@ public class ExposureMergeService extends OpenCvService {
 
     public ExposureMergeService(Merger merger) {
         super("ExposureMergeService");
-        exifCopy = new ExifCopy();
+        exifWriter = new ExifWriter();
         this.merger = merger;
     }
 
@@ -64,7 +65,7 @@ public class ExposureMergeService extends OpenCvService {
 
     private void copyExif(String src, File target) {
         File srcFile = new File(src);
-        exifCopy.copy(srcFile, target);
+        exifWriter.copy(srcFile, target);
     }
 
     private void sendNotification(File file) {
