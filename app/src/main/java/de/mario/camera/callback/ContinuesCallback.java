@@ -52,31 +52,18 @@ class ContinuesCallback implements PictureCallback {
     }
 
     private void toast(final String message) {
-        Message msg = createMessage(message);
-        activity.getHandler().sendMessage(msg);
-    }
-
-    Message createMessage(String message) {
-        Message msg = Message.obtain();
-        msg.obj = message;
-        return msg;
+        MessageSender sender = new MessageSender(activity);
+        sender.toast(message);
     }
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
-        if (!pictureFileDir.exists()) {
-            String msg = getResource(R.string.no_directory);
-            toast(msg);
-            Log.d(PhotoActivable.DEBUG_TAG, msg);
-            return;
-        }
         saveInternal(data);
         if (exposureValues.isEmpty()) {
             moveExternal();
         }
 
         imageCounter++;
-
         nextPhoto(camera);
     }
 

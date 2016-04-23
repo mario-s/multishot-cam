@@ -35,7 +35,7 @@ class InternalMemoryAccessor {
     }
 
     /**
-     * Loads the content ifrom the internal storage an returns it as a byte array.
+     * Loads the content from the internal storage an returns it as a byte array.
      * @param name name of the File.
      * @return content as a byte array.
      * @throws IOException
