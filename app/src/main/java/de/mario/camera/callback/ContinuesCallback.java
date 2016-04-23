@@ -26,17 +26,17 @@ import de.mario.camera.R;
  */
 class ContinuesCallback implements PictureCallback {
 
-    private static final String PATTERN = "yyyymmddHHmm";
+    private static final String PATTERN = "yyyy-MM-dd_HH:mm:ss";
 
     private final InternalMemoryAccessor memAccessor;
     private final Queue<Integer> exposureValues;
     private final int defaultExposure;
+    private final PhotoActivable activity;
+    private final Date date;
 
     private File pictureFileDir;
     private int imageCounter;
     private List<String> imagesNames = new ArrayList<>();
-
-    private final PhotoActivable activity;
 
     ContinuesCallback(PhotoActivable activity) {
         this.activity = activity;
@@ -44,6 +44,7 @@ class ContinuesCallback implements PictureCallback {
         this.defaultExposure = exposureValues.poll(); //remove the first value and keep it for later
         this.memAccessor = new InternalMemoryAccessor(activity.getInternalDirectory());
         this.pictureFileDir = activity.getPicturesDirectory(); //image path on external storage
+        this.date = new Date();
     }
 
     private String getResource(int key) {
@@ -128,8 +129,7 @@ class ContinuesCallback implements PictureCallback {
 
     private String createFileName() {
         DateFormat dateFormat = new SimpleDateFormat(PATTERN);
-        String date = dateFormat.format(new Date());
-        return String.format("Picture_%s_%s.jpg", date, imageCounter);
+        return String.format("IMG_%s_%s.jpg", dateFormat.format(date), imageCounter);
     }
 
     private void nextPhoto(Camera camera) {
