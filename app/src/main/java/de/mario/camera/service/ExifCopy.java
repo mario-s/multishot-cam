@@ -29,7 +29,9 @@ class ExifCopy {
             ExifInterface targetExif = getExifInterface(target);
             for (String tag : TAGS){
                 String attr = sourceExif.getAttribute(tag);
-                targetExif.setAttribute(tag, attr);
+                if(attr != null) {
+                    targetExif.setAttribute(tag, attr);
+                }
             }
 
             targetExif.saveAttributes();
