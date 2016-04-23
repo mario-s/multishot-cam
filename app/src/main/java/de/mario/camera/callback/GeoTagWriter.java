@@ -10,9 +10,9 @@ import java.io.IOException;
 import de.mario.camera.PhotoActivable;
 
 /**
- * Writes some exif data to the image.
+ * Writes some geolocation exif data to the image.
  */
-class GeoTagWriter implements ExifTagWriteable{
+class GeoTagWriter {
     static final String N = "N";
     static final String S = "S";
     static final String E = "E";
@@ -24,7 +24,6 @@ class GeoTagWriter implements ExifTagWriteable{
         this.location = location;
     }
 
-    @Override
     public void setTag(File file) {
 
             try {

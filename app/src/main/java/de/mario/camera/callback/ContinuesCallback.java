@@ -107,12 +107,10 @@ class ContinuesCallback implements PictureCallback {
     private void updateExif(){
         Location location = activity.getCurrentLocation();
         Log.d(PhotoActivable.DEBUG_TAG, "location: " + location);
-        if(location != null) {
-            ExifTagWriteable tagWriter = new GeoTagWriter(location);
-            for (String name : imagesNames) {
-                File f = new File(name);
-                tagWriter.setTag(f);
-            }
+        if(location != null && !imagesNames.isEmpty()) {
+            GeoTagWriter tagWriter = new GeoTagWriter(location);
+            File file = new File(imagesNames.get(0));
+            tagWriter.setTag(file);
         }
     }
 
