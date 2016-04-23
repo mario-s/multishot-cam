@@ -26,12 +26,15 @@ public class ExposureMergeService extends OpenCvService {
 
     private Merger merger;
 
+    private ExifCopy exifCopy;
+
     public ExposureMergeService() {
         this(new MertensMerger());
     }
 
     public ExposureMergeService(Merger merger) {
         super("ExposureMergeService");
+        exifCopy = new ExifCopy();
         this.merger = merger;
     }
 
@@ -51,10 +54,17 @@ public class ExposureMergeService extends OpenCvService {
 
         Mat fusion = merger.merge(images);
 
-        File out = new File(createFileName(pictures[0]));
+        String firstPic = pictures[0];
+        File out = new File(createFileName(firstPic));
         write(fusion, out);
+        copyExif(firstPic, out);
 
         sendNotification(out);
+    }
+
+    private void copyExif(String src, File target) {
+        File srcFile = new File(src);
+        exifCopy.copy(srcFile, target);
     }
 
     private void sendNotification(File file) {
