@@ -33,6 +33,8 @@ class ContinuesCallback implements PictureCallback {
     private int imageCounter;
     private int max;
 
+    private long start;
+
     ContinuesCallback(PhotoParams params) {
         this.params = params;
         this.exposureValues = params.getExposureEntries();
@@ -41,6 +43,8 @@ class ContinuesCallback implements PictureCallback {
 
         imageCounter = 0;
         max = exposureValues.length;
+
+        start = System.currentTimeMillis();
     }
 
     private String getResource(int key) {
@@ -64,6 +68,10 @@ class ContinuesCallback implements PictureCallback {
             moveExternal();
             //reset
             resetExposure(camera);
+
+            long end = System.currentTimeMillis();
+            long duration = end - start;
+            Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
         }
     }
 
