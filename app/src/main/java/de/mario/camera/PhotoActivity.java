@@ -23,8 +23,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
@@ -384,23 +382,4 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			}
 		}
 	}
-
-	private class OpenCvLoaderCallback extends BaseLoaderCallback {
-		private final Intent intent;
-
-		OpenCvLoaderCallback(Context context, Intent intent){
-			super(context);
-			this.intent = intent;
-		}
-
-		@Override
-		public void onManagerConnected(int status) {
-			if (status  == LoaderCallbackInterface.SUCCESS) {
-				startService(intent);
-			}else{
-				super.onManagerConnected(status);
-			}
-		}
-	}
-
 }

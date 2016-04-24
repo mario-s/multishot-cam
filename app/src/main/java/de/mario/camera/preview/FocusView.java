@@ -12,7 +12,7 @@ import android.view.View;
  */
 public class FocusView extends View {
 
-    private static final int WIDTH = 2;
+    private static final int WIDTH = 1;
     private static final int RADIUS = 50;
 
     private Paint drawPaint;
