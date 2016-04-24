@@ -1,5 +1,6 @@
 package de.mario.camera.callback;
 
+import android.content.Context;
 import android.os.Handler;
 import android.view.View;
 
@@ -38,6 +39,10 @@ final class ShotParams {
             exposures[i] = shots[i].getExposure();
         }
         return exposures;
+    }
+
+    Context getContext() {
+        return (Context) activity;
     }
 
     /**

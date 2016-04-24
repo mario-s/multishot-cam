@@ -1,9 +1,12 @@
 package de.mario.camera.callback;
 
+import android.content.Context;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,18 +19,20 @@ import java.util.List;
  */
 class InternalMemoryAccessor {
 
-    private final File internalDirectory;
-    private final List<String> internalNames;
+    private static final String KEY = InternalMemoryAccessor.class.getName();
 
-    InternalMemoryAccessor(File internalDirectory) {
-        this.internalDirectory = internalDirectory;
+    private final List<String> internalNames;
+    private final Context context;
+
+    InternalMemoryAccessor(Context context) {
+        this.context = context;
         this.internalNames = new ArrayList<>();
     }
 
     void save(byte[] data, String name)
             throws IOException {
         // Create imageDir
-        FileOutputStream fos = new FileOutputStream(createInternalFile(name));
+        FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
         fos.write(data);
         fos.close();
 
@@ -42,15 +47,12 @@ class InternalMemoryAccessor {
      */
     byte[] load(String name) throws IOException {
 
-        RandomAccessFile file = new RandomAccessFile(createInternalFile(name).getAbsolutePath(), "r");
-        byte[] b = new byte[(int) file.length()];
-        file.read(b);
-        file.close();
-        return b;
-    }
-
-    private File createInternalFile(String name) {
-        return new File(internalDirectory, name);
+        FileInputStream inputStream = context.openFileInput(name);
+        ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
+        byte[] read = new byte[1024]; //buffer size.
+        for (int i; -1 != (i = inputStream.read(read)); os.write(read, 0, i));
+        inputStream.close();
+        return os.toByteArray();
     }
 
     /**
@@ -65,7 +67,7 @@ class InternalMemoryAccessor {
             File target = write(targetDirectory, name);
             if (target != null) {
                 imageNames.add(target.getPath());
-                createInternalFile(name).delete();
+                context.deleteFile(name);
             }
         }
         return imageNames;

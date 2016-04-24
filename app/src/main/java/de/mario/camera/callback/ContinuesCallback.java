@@ -4,6 +4,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +33,7 @@ class ContinuesCallback implements PictureCallback {
     private final ShotParams params;
     private int imageCounter;
     private int max;
+    private View preview;
 
     private long start;
 
@@ -40,7 +42,8 @@ class ContinuesCallback implements PictureCallback {
         this.names = params.getNames();
         this.exposures = params.getExposures();
         this.pictureFileDir = params.getPictureFileDir();
-        this.memAccessor = new InternalMemoryAccessor(params.getInternalDirectory());
+        this.memAccessor = new InternalMemoryAccessor(params.getContext());
+        this.preview = params.getPreview();
 
         imageCounter = 0;
         max = exposures.length;
@@ -114,7 +117,7 @@ class ContinuesCallback implements PictureCallback {
 
     private void nextPhoto(Camera camera) {
 
-        params.getPreview().setEnabled(true);
+        preview.setEnabled(true);
         camera.startPreview();
 
         imageCounter++;
