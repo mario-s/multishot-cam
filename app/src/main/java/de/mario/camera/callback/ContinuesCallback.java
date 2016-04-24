@@ -42,6 +42,8 @@ class ContinuesCallback implements PictureCallback {
     private int imageCounter;
     private List<String> imagesNames = new ArrayList<>();
 
+    private long start;
+
     ContinuesCallback(PhotoActivable activity) {
         this.activity = activity;
         this.exposureValues = activity.getExposureValues();
@@ -49,6 +51,7 @@ class ContinuesCallback implements PictureCallback {
         this.memAccessor = new InternalMemoryAccessor(activity.getInternalDirectory());
         this.pictureFileDir = activity.getPicturesDirectory(); //image path on external storage
         this.date = new Date();
+        start = System.currentTimeMillis();
     }
 
     private String getResource(int key) {
@@ -65,6 +68,9 @@ class ContinuesCallback implements PictureCallback {
         saveInternal(data);
         if (exposureValues.isEmpty()) {
             moveExternal();
+            long end = System.currentTimeMillis();
+            long duration = end - start;
+            Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
         }
 
         imageCounter++;
