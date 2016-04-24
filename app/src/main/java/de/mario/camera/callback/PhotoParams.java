@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.view.View;
 
 import java.io.File;
-import java.util.Map.Entry;
 
 import de.mario.camera.PhotoActivable;
 
@@ -12,7 +11,7 @@ import de.mario.camera.PhotoActivable;
  */
 final class PhotoParams {
 
-    private Entry<String, Integer>[] photosWithEv;
+    private Shot[] photosWithEv;
 
     private final PhotoActivable activity;
 
@@ -22,11 +21,11 @@ final class PhotoParams {
         this.activity = activity;
     }
 
-    Entry<String, Integer>[] getExposureEntries() {
+    Shot[] getExposureEntries() {
         return photosWithEv;
     }
 
-    void setPhotosWithEv(Entry<String, Integer>[] photosWithEv) {
+    void setPhotosWithEv(Shot[] photosWithEv) {
         this.photosWithEv = photosWithEv;
     }
 

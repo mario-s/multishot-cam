@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
@@ -25,7 +24,7 @@ import static de.mario.camera.callback.ExposureUpdater.setExposureCompensation;
 class ContinuesCallback implements PictureCallback {
 
     private final InternalMemoryAccessor memAccessor;
-    private final Entry<String, Integer> [] exposureValues;
+    private final Shot [] shots;
     private final int defaultExposure = 0;
     private File pictureFileDir;
     private List<String> imagesNames = new ArrayList<>();
@@ -37,12 +36,12 @@ class ContinuesCallback implements PictureCallback {
 
     ContinuesCallback(PhotoParams params) {
         this.params = params;
-        this.exposureValues = params.getExposureEntries();
+        this.shots = params.getExposureEntries();
         this.pictureFileDir = params.getPictureFileDir();
         this.memAccessor = new InternalMemoryAccessor(params.getInternalDirectory());
 
         imageCounter = 0;
-        max = exposureValues.length;
+        max = shots.length;
 
         start = System.currentTimeMillis();
     }
@@ -65,19 +64,19 @@ class ContinuesCallback implements PictureCallback {
         }
 
         if(imageCounter == max){
-            moveExternal();
-            //reset
-            resetExposure(camera);
-
             long end = System.currentTimeMillis();
             long duration = end - start;
             Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
+
+            moveExternal();
+            //reset
+            resetExposure(camera);
         }
     }
 
     private void saveInternal(byte[] data) {
 
-        String name = exposureValues[imageCounter].getKey();
+        String name = shots[imageCounter].getName();
         try {
             memAccessor.save(data, name);
         } catch (IOException e) {
@@ -118,7 +117,7 @@ class ContinuesCallback implements PictureCallback {
         camera.startPreview();
 
         if(imageCounter < max) {
-            int ev = exposureValues[imageCounter].getValue();
+            int ev = shots[imageCounter].getExposure();
             setExposureCompensation(camera, ev);
             camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), this);
         }

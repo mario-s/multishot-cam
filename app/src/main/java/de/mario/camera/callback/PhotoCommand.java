@@ -5,9 +5,7 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Date;
-import java.util.Map.Entry;
 import java.util.Queue;
 
 import de.mario.camera.PhotoActivable;
@@ -39,14 +37,14 @@ public class PhotoCommand implements Runnable{
             return;
         }
 
-        Entry<String, Integer>[] entries = createEntries(activity.getExposureValues());
+        Shot[] shots = createEntries(activity.getExposureValues());
         //prepare the camera for the first exposure value
-        if(entries.length > 0) {
-            setExposureCompensation(camera, entries[0].getValue());
+        if(shots.length > 0) {
+            setExposureCompensation(camera, shots[0].getExposure());
         }else{
             resetExposure(camera);
         }
-        photoParams.setPhotosWithEv(entries);
+        photoParams.setPhotosWithEv(shots);
         ContinuesCallback callback = new ContinuesCallback(photoParams);
         camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), callback);
     }
@@ -57,13 +55,13 @@ public class PhotoCommand implements Runnable{
         Log.d(PhotoActivable.DEBUG_TAG, msg);
     }
 
-    private Entry<String, Integer>[] createEntries(Queue<Integer> els) {
+    private Shot[] createEntries(Queue<Integer> els) {
         Date date = new Date();
-        Entry<String, Integer>[] entries = new Entry[els.size()];
-        for (int i = 0; i < entries.length; i++) {
-            entries[i] = new SimpleEntry<>(createFileName(date, i), els.poll());
+        Shot[] shots = new Shot[els.size()];
+        for (int i = 0; i < shots.length; i++) {
+            shots[i] = new Shot(createFileName(date, i), els.poll());
         }
-        return entries;
+        return shots;
     }
 
     private String createFileName(Date date, int index) {
