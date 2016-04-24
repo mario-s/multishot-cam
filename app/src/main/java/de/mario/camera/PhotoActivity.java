@@ -27,11 +27,15 @@ import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.mario.camera.callback.PhotoCommand;
+import de.mario.camera.exif.ExifTag;
+import de.mario.camera.exif.ExifWriter;
+import de.mario.camera.exif.GeoTagFactory;
 import de.mario.camera.preview.FocusView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
@@ -286,8 +290,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(this);	}
 
-	@Override
-	public Location getCurrentLocation() {
+	private Location getCurrentLocation() {
 		return locationListener.getCurrentLocation();
 	}
 
@@ -356,6 +359,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			}else{
 				String[] pictures = bundle.getStringArray(
 						PICTURES);
+				updateExif(pictures);
 				activity.processHdr(pictures);
 
 				prepareForNextShot();
@@ -368,6 +372,20 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			int len = pictures.length;
 			File dir = activity.getPicturesDirectory();
 			activity.toast(String.format(activity.getString(R.string.photos_saved), len, dir));
+		}
+
+		private void updateExif(String [] pictures){
+			Location location = activity.getCurrentLocation();
+			Log.d(PhotoActivable.DEBUG_TAG, "location: " + location);
+			if(location != null) {
+				GeoTagFactory tagFactory = new GeoTagFactory();
+				Map<ExifTag, String> tags = tagFactory.create(location);
+				ExifWriter writer = new ExifWriter();
+				for (String name : pictures) {
+					File file = new File(name);
+					writer.addTags(file, tags);
+				}
+			}
 		}
 	}
 

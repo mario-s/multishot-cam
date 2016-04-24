@@ -1,23 +1,22 @@
 package de.mario.camera.callback;
 
+import android.os.Handler;
 import android.os.Message;
-
-import de.mario.camera.PhotoActivable;
 
 /**
  *
  */
 class MessageSender {
 
-    private final PhotoActivable activity;
+    private final Handler handler;
 
-    MessageSender(PhotoActivable activity) {
-        this.activity = activity;
+    MessageSender(Handler handler) {
+        this.handler = handler;
     }
 
     void toast(final String message) {
         Message msg = createMessage(message);
-        activity.getHandler().sendMessage(msg);
+        handler.sendMessage(msg);
     }
 
     Message createMessage(String message) {
