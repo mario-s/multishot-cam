@@ -9,24 +9,35 @@ import de.mario.camera.PhotoActivable;
 
 /**
  */
-final class PhotoParams {
+final class ShotParams {
 
-    private Shot[] photosWithEv;
+    private Shot[] shots;
 
     private final PhotoActivable activity;
 
 
-    PhotoParams(PhotoActivable activity) {
-        this.photosWithEv = photosWithEv;
+    ShotParams(PhotoActivable activity) {
         this.activity = activity;
     }
 
-    Shot[] getExposureEntries() {
-        return photosWithEv;
+    void setShots(Shot[] shots) {
+        this.shots = shots;
     }
 
-    void setPhotosWithEv(Shot[] photosWithEv) {
-        this.photosWithEv = photosWithEv;
+    String [] getNames(){
+        String[] names = new String[shots.length];
+        for (int i = 0; i < names.length; i++){
+            names[i] = shots[i].getName();
+        }
+        return names;
+    }
+
+    int [] getExposures() {
+        int[] exposures = new int[shots.length];
+        for (int i = 0; i < exposures.length; i++){
+            exposures[i] = shots[i].getExposure();
+        }
+        return exposures;
     }
 
     /**

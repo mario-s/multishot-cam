@@ -22,12 +22,12 @@ public class PhotoCommand implements Runnable{
 
     private final PhotoActivable activity;
     private final Camera camera;
-    private final PhotoParams photoParams;
+    private final ShotParams shotParams;
 
     public PhotoCommand(PhotoActivable activity, Camera camera){
         this.activity = activity;
         this.camera = camera;
-        this.photoParams = new PhotoParams(activity);
+        this.shotParams = new ShotParams(activity);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class PhotoCommand implements Runnable{
         }else{
             resetExposure(camera);
         }
-        photoParams.setPhotosWithEv(shots);
-        ContinuesCallback callback = new ContinuesCallback(photoParams);
+        shotParams.setShots(shots);
+        ContinuesCallback callback = new ContinuesCallback(shotParams);
         camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), callback);
     }
 

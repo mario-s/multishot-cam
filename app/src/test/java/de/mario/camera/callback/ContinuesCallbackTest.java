@@ -52,7 +52,7 @@ public class ContinuesCallbackTest {
 
     private File folder;
 
-    private PhotoParams photoParams;
+    private ShotParams shotParams;
 
     @Before
     public void setUp() {
@@ -69,7 +69,7 @@ public class ContinuesCallbackTest {
         given(activity.getPreview()).willReturn(preview);
         given(camera.getParameters()).willReturn(params);
 
-        photoParams = new PhotoParams(activity);
+        shotParams = new ShotParams(activity);
 
         testData = TEST.getBytes();
     }
@@ -79,7 +79,7 @@ public class ContinuesCallbackTest {
     public void testOnPictureTaken() {
         given(activity.getPicturesDirectory()).willReturn(folder);
 
-        ContinuesCallback classUnderTest = new ContinuesCallback(photoParams);
+        ContinuesCallback classUnderTest = new ContinuesCallback(shotParams);
 
         classUnderTest.onPictureTaken(testData, camera);
         verify(camera).setParameters(params);
@@ -90,7 +90,7 @@ public class ContinuesCallbackTest {
     public void testOnPictureTaken_MissingPictureFile() {
         given(activity.getPicturesDirectory()).willReturn(new File("foo.bar"));
 
-        ContinuesCallback classUnderTest = new ContinuesCallback(photoParams);
+        ContinuesCallback classUnderTest = new ContinuesCallback(shotParams);
 
         classUnderTest.onPictureTaken(testData, camera);
         verify(handler).sendMessage(any(Message.class));

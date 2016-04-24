@@ -1,7 +1,6 @@
 package de.mario.camera.callback;
 
 /**
- * Created by Mario on 24.04.2016.
  */
 final class Shot {
     private final String name;

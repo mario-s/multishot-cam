@@ -24,24 +24,26 @@ import static de.mario.camera.callback.ExposureUpdater.setExposureCompensation;
 class ContinuesCallback implements PictureCallback {
 
     private final InternalMemoryAccessor memAccessor;
-    private final Shot [] shots;
+    private String [] names;
+    private int [] exposures;
     private final int defaultExposure = 0;
     private File pictureFileDir;
     private List<String> imagesNames = new ArrayList<>();
-    private final PhotoParams params;
+    private final ShotParams params;
     private int imageCounter;
     private int max;
 
     private long start;
 
-    ContinuesCallback(PhotoParams params) {
+    ContinuesCallback(ShotParams params) {
         this.params = params;
-        this.shots = params.getExposureEntries();
+        this.names = params.getNames();
+        this.exposures = params.getExposures();
         this.pictureFileDir = params.getPictureFileDir();
         this.memAccessor = new InternalMemoryAccessor(params.getInternalDirectory());
 
         imageCounter = 0;
-        max = shots.length;
+        max = exposures.length;
 
         start = System.currentTimeMillis();
     }
@@ -59,7 +61,6 @@ class ContinuesCallback implements PictureCallback {
     public void onPictureTaken(byte[] data, Camera camera) {
         if(imageCounter < max) {
             saveInternal(data);
-            imageCounter++;
             nextPhoto(camera);
         }
 
@@ -76,7 +77,7 @@ class ContinuesCallback implements PictureCallback {
 
     private void saveInternal(byte[] data) {
 
-        String name = shots[imageCounter].getName();
+        String name = names[imageCounter];
         try {
             memAccessor.save(data, name);
         } catch (IOException e) {
@@ -116,9 +117,9 @@ class ContinuesCallback implements PictureCallback {
         params.getPreview().setEnabled(true);
         camera.startPreview();
 
+        imageCounter++;
         if(imageCounter < max) {
-            int ev = shots[imageCounter].getExposure();
-            setExposureCompensation(camera, ev);
+            setExposureCompensation(camera, exposures[imageCounter]);
             camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), this);
         }
     }
