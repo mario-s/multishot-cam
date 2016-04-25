@@ -21,8 +21,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 class InternalMemoryAccessor {
 
-    private static final String KEY = InternalMemoryAccessor.class.getName();
-
     private final List<String> internalNames;
     private final Context context;
     private final ScheduledExecutorService executor;
