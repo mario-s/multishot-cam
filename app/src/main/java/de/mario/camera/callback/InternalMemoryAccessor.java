@@ -26,16 +26,18 @@ class InternalMemoryAccessor {
     private final ScheduledExecutorService executor;
 
     InternalMemoryAccessor(Context context) {
+        this(context, new ScheduledThreadPoolExecutor(1));
+    }
+
+    InternalMemoryAccessor(Context context, ScheduledExecutorService executor){
         this.context = context;
         this.internalNames = new ArrayList<>();
-        executor = new ScheduledThreadPoolExecutor(1);
+        this.executor = executor;
     }
 
     void save(byte[] data, String name) {
         executor.execute(new SaveTask(context,data,name));
     }
-
-
 
     /**
      * Loads the content from the internal storage an returns it as a byte array.

@@ -3,51 +3,53 @@ package de.mario.camera.callback;
 
 import android.content.Context;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.concurrent.ScheduledExecutorService;
 
-import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InternalMemoryAccessorTest {
-
-	private InternalMemoryAccessor classUnderTest;
-
-	private File testFile;
+	private static final String NAME = "test";
 
 	@Mock
 	private Context context;
 
+	@Mock
+	private FileInputStream inputStream;
+
+	@Mock
+	private ScheduledExecutorService executor;
+
+	@InjectMocks
+	private InternalMemoryAccessor classUnderTest;
+
 	@Before
-	public void setUp(){
-		String path = getClass().getResource(".").getFile();
-		testFile = new File(path, "test.dat");
-		classUnderTest = new InternalMemoryAccessor(context);
+	public void setUp() throws IOException {
+		given(context.openFileInput(NAME)).willReturn(inputStream);
+		given(inputStream.read(any(byte[].class))).willReturn(-1);
 	}
 
-	@After
-	public void shutDown() {
-		if(testFile.exists()){
-			testFile.delete();
-		}
-	}
 
-	@Test(expected = IOException.class)
+	@Test
 	public void testLoad() throws IOException{
 		classUnderTest.load("test");
 	}
 
 	@Test
 	public void testSave() throws IOException {
-		classUnderTest.save("test".getBytes(), testFile.getName());
-		assertTrue(testFile.exists());
+		classUnderTest.save(NAME.getBytes(), NAME);
+		verify(executor).execute(any(Runnable.class));
 	}
 
 }
