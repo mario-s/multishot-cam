@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 
 /**
@@ -23,21 +25,19 @@ class InternalMemoryAccessor {
 
     private final List<String> internalNames;
     private final Context context;
+    private final ScheduledExecutorService executor;
 
     InternalMemoryAccessor(Context context) {
         this.context = context;
         this.internalNames = new ArrayList<>();
+        executor = new ScheduledThreadPoolExecutor(1);
     }
 
-    void save(byte[] data, String name)
-            throws IOException {
-        // Create imageDir
-        FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
-        fos.write(data);
-        fos.close();
-
-        internalNames.add(name);
+    void save(byte[] data, String name) {
+        executor.execute(new SaveTask(context,data,name));
     }
+
+
 
     /**
      * Loads the content from the internal storage an returns it as a byte array.
@@ -87,6 +87,35 @@ class InternalMemoryAccessor {
             }
         }
         return target;
+    }
+
+    private class SaveTask implements Runnable {
+
+        private Context context;
+        private byte[] data;
+        private String name;
+
+        SaveTask(Context context, byte[] data, String name){
+            this.context = context;
+            this.data = data;
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            try {
+                FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
+                fos.write(data);
+                fos.close();
+                addName(name);
+            }catch (IOException exc){
+                throw new IllegalStateException(exc);
+            }
+        }
+
+        private synchronized void addName(String name) {
+            internalNames.add(name);
+        }
     }
 
 }

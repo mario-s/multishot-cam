@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
@@ -83,7 +84,7 @@ class ContinuesCallback implements PictureCallback {
         String name = names[imageCounter];
         try {
             memAccessor.save(data, name);
-        } catch (IOException e) {
+        } catch (IllegalStateException e) {
             Log.e(PhotoActivable.DEBUG_TAG,
                     "File " + name + " not saved: " + e.getMessage());
             toast(getResource(R.string.save_error));
@@ -103,14 +104,14 @@ class ContinuesCallback implements PictureCallback {
     }
 
     private void sendFinishedInfo() {
-        new Thread(new Runnable() {
+        new ScheduledThreadPoolExecutor(1).execute(new Runnable() {
             @Override
             public void run() {
                 Message msg = Message.obtain();
                 msg.getData().putStringArray(PhotoActivable.PICTURES, imagesNames.toArray(new String[imagesNames.size()]));
                 params.getHandler().sendMessage(msg);
             }
-        }).start();
+        });
     }
 
 
