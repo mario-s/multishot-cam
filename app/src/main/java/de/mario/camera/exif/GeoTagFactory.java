@@ -33,19 +33,19 @@ public class GeoTagFactory {
             String lon = num1Lon + "/1," + num2Lon + "/1," + num3Lon + "/1000";
 
             if (location.getLatitude() > 0) {
-                tags.put(ExifTag.TAG_GPS_LATITUDE_REF, N);
+                tags.put(ExifTag.GPS_LATITUDE_REF, N);
             } else {
-                tags.put(ExifTag.TAG_GPS_LATITUDE_REF, S);
+                tags.put(ExifTag.GPS_LATITUDE_REF, S);
             }
 
             if (location.getLongitude() > 0) {
-                tags.put(ExifTag.TAG_GPS_LONGITUDE_REF, E);
+                tags.put(ExifTag.GPS_LONGITUDE_REF, E);
             } else {
-                tags.put(ExifTag.TAG_GPS_LONGITUDE_REF, W);
+                tags.put(ExifTag.GPS_LONGITUDE_REF, W);
             }
 
-            tags.put(ExifTag.TAG_GPS_LATITUDE, lat);
-            tags.put(ExifTag.TAG_GPS_LONGITUDE, lon);
+            tags.put(ExifTag.GPS_LATITUDE, lat);
+            tags.put(ExifTag.GPS_LONGITUDE, lon);
         }
         return tags;
     }
