@@ -1,6 +1,5 @@
 package de.mario.camera;
 
-import android.location.Location;
 import android.os.Handler;
 
 import java.io.File;
@@ -38,9 +37,4 @@ public interface PhotoActivable {
 
     Preview getPreview();
 
-    /**
-     * This method returns the current location of the device. The location might be null.
-     * @return the current location
-     */
-    Location getCurrentLocation();
 }

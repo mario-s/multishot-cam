@@ -1,12 +1,17 @@
 package de.mario.camera.callback;
 
+import android.content.Context;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 
 /**
@@ -16,23 +21,21 @@ import java.util.List;
  */
 class InternalMemoryAccessor {
 
-    private final File internalDirectory;
     private final List<String> internalNames;
+    private final Context context;
+    private final ScheduledExecutorService executor;
 
-    InternalMemoryAccessor(File internalDirectory) {
-        this.internalDirectory = internalDirectory;
+    InternalMemoryAccessor(Context context) {
+        this.context = context;
         this.internalNames = new ArrayList<>();
+        executor = new ScheduledThreadPoolExecutor(1);
     }
 
-    void save(byte[] data, String name)
-            throws IOException {
-        // Create imageDir
-        FileOutputStream fos = new FileOutputStream(createInternalFile(name));
-        fos.write(data);
-        fos.close();
-
-        internalNames.add(name);
+    void save(byte[] data, String name) {
+        executor.execute(new SaveTask(context,data,name));
     }
+
+
 
     /**
      * Loads the content from the internal storage an returns it as a byte array.
@@ -42,15 +45,12 @@ class InternalMemoryAccessor {
      */
     byte[] load(String name) throws IOException {
 
-        RandomAccessFile file = new RandomAccessFile(createInternalFile(name).getAbsolutePath(), "r");
-        byte[] b = new byte[(int) file.length()];
-        file.read(b);
-        file.close();
-        return b;
-    }
-
-    private File createInternalFile(String name) {
-        return new File(internalDirectory, name);
+        FileInputStream inputStream = context.openFileInput(name);
+        ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
+        byte[] read = new byte[1024]; //buffer size.
+        for (int i; -1 != (i = inputStream.read(read)); os.write(read, 0, i));
+        inputStream.close();
+        return os.toByteArray();
     }
 
     /**
@@ -65,7 +65,7 @@ class InternalMemoryAccessor {
             File target = write(targetDirectory, name);
             if (target != null) {
                 imageNames.add(target.getPath());
-                createInternalFile(name).delete();
+                context.deleteFile(name);
             }
         }
         return imageNames;
@@ -85,6 +85,35 @@ class InternalMemoryAccessor {
             }
         }
         return target;
+    }
+
+    private class SaveTask implements Runnable {
+
+        private Context context;
+        private byte[] data;
+        private String name;
+
+        SaveTask(Context context, byte[] data, String name){
+            this.context = context;
+            this.data = data;
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            try {
+                FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
+                fos.write(data);
+                fos.close();
+                addName(name);
+            }catch (IOException exc){
+                throw new IllegalStateException(exc);
+            }
+        }
+
+        private synchronized void addName(String name) {
+            internalNames.add(name);
+        }
     }
 
 }
