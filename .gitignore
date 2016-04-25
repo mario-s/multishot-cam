@@ -1,4 +1,12 @@
+local.properties
+
+# gradle stuff
 .gradle
 build/
+
+# idea project files
 .idea/
-local.properties
+.idea/.name
+*.iml
+*.ipr
+*.iws
