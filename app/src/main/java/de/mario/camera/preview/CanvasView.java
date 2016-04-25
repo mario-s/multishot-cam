@@ -8,16 +8,16 @@ import android.view.View;
 
 
 /**
- * This view gives feedback about the focus of the camera.
+ * This view is on top of the preview and provides painting capabilities for a better feedback.
  */
-public class FocusView extends View {
+public class CanvasView extends View {
 
     private static final int WIDTH = 1;
     private static final int RADIUS = 50;
 
     private Paint drawPaint;
 
-    public FocusView(Context context) {
+    public CanvasView(Context context) {
         super(context);
         setupPaint();
     }

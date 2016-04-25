@@ -36,7 +36,7 @@ import de.mario.camera.callback.PhotoCommand;
 import de.mario.camera.exif.ExifTag;
 import de.mario.camera.exif.ExifWriter;
 import de.mario.camera.exif.GeoTagFactory;
-import de.mario.camera.preview.FocusView;
+import de.mario.camera.preview.CanvasView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
@@ -64,7 +64,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
-	private FocusView focusView;
+	private CanvasView canvasView;
 	private boolean canDisableShutterSound;
 	private MyLocationListener locationListener;
 	private LocationManager locationManager;
@@ -121,9 +121,9 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 
 		preview = new Preview(this, camera);
-		focusView = new FocusView(this);
+		canvasView = new CanvasView(this);
 		getPreviewLayout().addView(preview, 0);
-		getPreviewLayout().addView(focusView, 1);
+		getPreviewLayout().addView(canvasView, 1);
 	}
 
 	private void registerLocationListener() {
@@ -222,7 +222,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		camera.autoFocus(new Camera.AutoFocusCallback() {
 			@Override
 			public void onAutoFocus(boolean success, Camera camera) {
-				focusView.focused(success);
+				canvasView.focused(success);
 				if (success) {
 					Runnable command = new PhotoCommand(PhotoActivity.this, camera);
 					int delay = getDelay();
@@ -243,7 +243,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void prepareForNextShot() {
 		toggleInputs(true);
-		focusView.reset();
+		canvasView.reset();
 	}
 
 	/**
