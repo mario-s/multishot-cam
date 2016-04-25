@@ -10,7 +10,7 @@ import de.mario.camera.PhotoActivable;
 
 /**
  */
-final class ShotParams {
+class ShotParams {
 
     private Shot[] shots;
 

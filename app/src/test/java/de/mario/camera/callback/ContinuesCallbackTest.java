@@ -1,5 +1,6 @@
 package de.mario.camera.callback;
 
+import android.content.Context;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Message;
@@ -12,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.preview.Preview;
@@ -29,6 +28,9 @@ import static org.mockito.Mockito.verify;
 public class ContinuesCallbackTest {
 
     public static final String TEST = "test";
+
+    @Mock
+    private Context context;
 
     @Mock
     private PhotoActivable activity;
@@ -58,24 +60,25 @@ public class ContinuesCallbackTest {
     public void setUp() {
         folder = new File(getClass().getResource(".").getFile());
 
-        Queue<Integer> exVals = new LinkedList<>();
-        exVals.add(0);
-        exVals.add(-1);
-        exVals.add(1);
-        given(activity.getExposureValues()).willReturn(exVals);
+
         given(activity.getInternalDirectory()).willReturn(folder);
         given(activity.getHandler()).willReturn(handler);
         given(activity.getResource(anyInt())).willReturn(TEST);
         given(activity.getPreview()).willReturn(preview);
         given(camera.getParameters()).willReturn(params);
 
-        shotParams = new ShotParams(activity);
+        shotParams = new ShotParams(activity){
+            @Override
+            Context getContext() {
+                return context;
+            }
+        };
+        shotParams.setShots(new Shot[]{new Shot("a", 0), new Shot("b", 1)});
 
         testData = TEST.getBytes();
     }
 
     @Test
-    @Ignore("fixme")
     public void testOnPictureTaken() {
         given(activity.getPicturesDirectory()).willReturn(folder);
 
