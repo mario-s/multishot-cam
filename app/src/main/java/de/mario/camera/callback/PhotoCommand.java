@@ -66,6 +66,7 @@ public class PhotoCommand implements Runnable{
 
     private String createFileName(Date date, int index) {
         DateFormat dateFormat = new SimpleDateFormat(PATTERN);
-        return String.format("IMG_%s_%s.jpg", dateFormat.format(date), index);
+        //TODO pattern according to DCF
+        return String.format("DSC_%s_%s.jpg", dateFormat.format(date), index);
     }
 }
