@@ -53,10 +53,6 @@ class ShotParams {
         return activity.getPicturesDirectory();
     }
 
-    File getInternalDirectory() {
-        return activity.getInternalDirectory();
-    }
-
     Handler getHandler(){
         return activity.getHandler();
     }

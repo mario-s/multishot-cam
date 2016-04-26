@@ -61,7 +61,6 @@ public class ContinuesCallbackTest {
         folder = new File(getClass().getResource(".").getFile());
 
 
-        given(activity.getInternalDirectory()).willReturn(folder);
         given(activity.getHandler()).willReturn(handler);
         given(activity.getResource(anyInt())).willReturn(TEST);
         given(activity.getPreview()).willReturn(preview);
