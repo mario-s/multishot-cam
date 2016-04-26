@@ -312,7 +312,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	public File getPicturesDirectory() {
 		return getExternalStoragePublicDirectory(DIRECTORY_DCIM);
 	}
-	
+
 	void setCamera(Camera camera) {
 		this.camera = camera;
 	}
