@@ -3,7 +3,6 @@ package de.mario.camera;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -313,13 +312,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	public File getPicturesDirectory() {
 		return getExternalStoragePublicDirectory(DIRECTORY_DCIM);
 	}
-
-	@Override
-	public File getInternalDirectory() {
-		ContextWrapper cw = new ContextWrapper(getApplicationContext());
-		return cw.getDir("data", Context.MODE_PRIVATE);
-	}
-
+	
 	void setCamera(Camera camera) {
 		this.camera = camera;
 	}
