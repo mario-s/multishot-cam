@@ -11,7 +11,6 @@ import android.hardware.Camera;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -36,12 +35,13 @@ import de.mario.camera.callback.PhotoCommand;
 import de.mario.camera.exif.ExifTag;
 import de.mario.camera.exif.ExifWriter;
 import de.mario.camera.exif.GeoTagFactory;
+import de.mario.camera.lookup.CameraLookup;
+import de.mario.camera.lookup.StorageLookup;
 import de.mario.camera.preview.CanvasView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -89,24 +89,19 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			toast(getResource(R.string.no_cam));
 		} else {
 			showDialogWhenFirstRun();
-			CameraLookup lookup = new CameraLookup();
-			camId = lookup.findBackCamera();
-			canDisableShutterSound = lookup.canDisableShutterSound(camId);
+
+			CameraLookup cameraLookup = new CameraLookup();
+			camId = cameraLookup.findBackCamera();
+			canDisableShutterSound = cameraLookup.canDisableShutterSound(camId);
+
+			StorageLookup storageLookup = new StorageLookup(this);
+			pictureDirectory = storageLookup.createStorageDirectory();
+
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			orientationListener = new OrientationListener(this);
-			pictureDirectory = createStorageDirectory();
 		}
 	}
 
-	private File createStorageDirectory() {
-		File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-		//TODO directories according to DCF
-		directory = new File(directory, "100_MULTI");
-		if(!directory.exists()){
-			directory.mkdir();
-		}
-		return directory;
-	}
 
 	@Override
 	protected void onStart() {

@@ -1,18 +1,18 @@
-package de.mario.camera;
+package de.mario.camera.lookup;
 
 import android.hardware.Camera;
 
 /**
  * This class helps to look for available Cameras and their features on the device.
  */
-class CameraLookup {
+public class CameraLookup {
     private static final int MIN = 0;
 
-    static final int NO_CAM_ID = -1;
+    public static final int NO_CAM_ID = -1;
 
     private int numberOfCameras;
 
-    CameraLookup() {
+    public CameraLookup() {
         numberOfCameras = Camera.getNumberOfCameras();
     }
 
@@ -20,7 +20,7 @@ class CameraLookup {
      * Search for the back facing camera.
      * @return id of the camera as int.
      */
-    int findBackCamera() {
+    public int findBackCamera() {
         int cameraId = NO_CAM_ID;
 
         for (int i = MIN; i < numberOfCameras; i++) {
@@ -32,7 +32,7 @@ class CameraLookup {
         return cameraId;
     }
 
-    boolean canDisableShutterSound(int id) {
+    public boolean canDisableShutterSound(int id) {
         return getCameraInfo(id).canDisableShutterSound;
     }
 
