@@ -114,8 +114,6 @@ class ContinuesCallback implements PictureCallback {
         });
     }
 
-
-
     private void nextPhoto(Camera camera) {
 
         preview.setEnabled(true);
