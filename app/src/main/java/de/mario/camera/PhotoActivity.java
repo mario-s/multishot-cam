@@ -254,7 +254,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void prepareForNextShot() {
 		toggleInputs(true);
-		canvasView.reset();
+		canvasView.resetFocus();
 	}
 
 	/**
@@ -285,21 +285,23 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return super.onOptionsItemSelected(item);
 	}
 
-	private int getDelay() {
-		return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0"));
-	}
+	//access to settings values
+	private int getDelay() {return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0")); }
 
-	private boolean isProcessingEnabled() {
-		return getPreferences().getBoolean(SettingsValue.PROCESS_HDR.getValue(), false);
-	}
+	private boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);	}
 
-	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getPreferences().getBoolean(SettingsValue.SHUTTER_SOUND.getValue(), false);}
+	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getBoolean(SettingsValue.SHUTTER_SOUND);}
 
-	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && getPreferences().getBoolean(SettingsValue.GEO_TAGGING.getValue(), false);}
+	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && getBoolean(SettingsValue.GEO_TAGGING);}
 
 	private boolean isGpsEnabled() { return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}
 
+	private boolean isShowGrid() {  return getBoolean(SettingsValue.GRID); }
+
+	private boolean getBoolean(SettingsValue key) { return getPreferences().getBoolean(key.getValue(), false); }
+
 	private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(this);	}
+	//end settings values
 
 	private Location getCurrentLocation() {
 		return locationListener.getCurrentLocation();

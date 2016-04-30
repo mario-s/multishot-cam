@@ -74,7 +74,7 @@ class ContinuesCallback implements PictureCallback {
             Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
 
             moveExternal();
-            //reset
+            //resetFocus
             resetExposure(camera);
         }
     }

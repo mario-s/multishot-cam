@@ -15,28 +15,44 @@ public class CanvasView extends View {
     private static final int WIDTH = 1;
     private static final int RADIUS = 50;
 
-    private Paint drawPaint;
+    private Paint focusPaint;
+    private Paint gridPaint;
+
+    private boolean showGrid;
 
     public CanvasView(Context context) {
         super(context);
-        setupPaint();
+        focusPaint = createPaint();
+        gridPaint = createPaint();
     }
 
-    private void setupPaint() {
-        drawPaint = new Paint();
-        drawPaint.setColor(Color.WHITE);
-        drawPaint.setAntiAlias(true);
-        drawPaint.setStrokeWidth(WIDTH);
-        drawPaint.setStyle(Paint.Style.STROKE);
-        drawPaint.setStrokeJoin(Paint.Join.ROUND);
-        drawPaint.setStrokeCap(Paint.Cap.ROUND);
+    private Paint createPaint() {
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(WIDTH);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        return paint;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, RADIUS, drawPaint);
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, RADIUS, focusPaint);
+        if(showGrid) {
+            //do grid
+        }
+    }
+
+    public void showGrid(boolean show) {
+        boolean oldVal = showGrid;
+        if(oldVal != show) {
+            showGrid = show;
+            postInvalidate();
+        }
     }
 
     /**
@@ -44,22 +60,23 @@ public class CanvasView extends View {
      */
     public void focused(boolean success) {
         if(success) {
-            repaint(Color.GREEN);
+            repaintFocusIndicator(Color.GREEN);
         }else{
-            repaint(Color.RED);
+            repaintFocusIndicator(Color.RED);
         }
     }
 
     /**
      * resets the indicator to default
      */
-    public void reset() {
-        repaint(Color.WHITE);
+    public void resetFocus() {
+        repaintFocusIndicator(Color.WHITE);
     }
 
-    private void repaint(int color) {
-        drawPaint.setColor(color);
-        postInvalidate(); //force repaint
+    private void repaintFocusIndicator(int color) {
+        focusPaint.setColor(color);
+        postInvalidate();
     }
+
 
 }
