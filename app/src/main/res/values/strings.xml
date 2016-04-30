@@ -33,8 +33,8 @@
     <string name="prefs_shutter_sound_disable_title">Disabled Shutter Sound</string>
     <string name="prefs_geo_tagging_enabled_description">When selected, and GPS is enabled, the current Location will be saved in the EXIF data of the pictures.</string>
     <string name="prefs_geo_tagging_enabled_title">Geotagging</string>
-    <string name="prefs_grid_enabled_description">Grid</string>
-    <string name="prefs_grid_enabled_title">Show a 3x3 Grid on the preview.</string>
+    <string name="prefs_grid_enabled_description">Show a 3x3 grid on the preview.</string>
+    <string name="prefs_grid_enabled_title">Show Grid</string>
 
 
 </resources>
