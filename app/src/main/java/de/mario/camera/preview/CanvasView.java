@@ -1,17 +1,11 @@
 package de.mario.camera.preview;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.SurfaceHolder;
 import android.view.View;
 
-import de.mario.camera.PhotoActivable;
 import de.mario.camera.SettingsValue;
 
 import static de.mario.camera.preview.PaintFactory.createPaint;

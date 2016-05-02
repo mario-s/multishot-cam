@@ -1,9 +1,6 @@
 package de.mario.camera.callback;
 
 import android.hardware.Camera;
-import android.util.Log;
-
-import de.mario.camera.PhotoActivable;
 
 /**
  * Callback for Shutter.

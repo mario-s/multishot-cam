@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 /**
- *
+ * Factory to create a {@link Paint} instance.
  */
 class PaintFactory {
 
