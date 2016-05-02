@@ -46,7 +46,7 @@ public class PhotoCommand implements Runnable{
         }
         shotParams.setShots(shots);
         ContinuesCallback callback = new ContinuesCallback(shotParams);
-        camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), callback);
+        camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
     }
 
     private void toast(String msg) {

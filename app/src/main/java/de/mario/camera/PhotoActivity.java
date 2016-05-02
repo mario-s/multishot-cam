@@ -36,7 +36,7 @@ import de.mario.camera.callback.PhotoCommand;
 import de.mario.camera.exif.ExifTag;
 import de.mario.camera.exif.ExifWriter;
 import de.mario.camera.exif.GeoTagFactory;
-import de.mario.camera.preview.DefaultCanvasView;
+import de.mario.camera.preview.CanvasView;
 import de.mario.camera.preview.FocusView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
@@ -65,7 +65,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
 	private FocusView focusView;
-	private DefaultCanvasView canvasView;
+	private CanvasView canvasView;
 	private boolean canDisableShutterSound;
 	private MyLocationListener locationListener;
 	private LocationManager locationManager;
@@ -134,7 +134,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 
 		preview = new Preview(this, camera);
-		canvasView = new DefaultCanvasView(this);
+		canvasView = new CanvasView(this);
 		focusView = new FocusView(this);
 		getPreviewLayout().addView(preview, 0);
 		getPreviewLayout().addView(canvasView, 1);

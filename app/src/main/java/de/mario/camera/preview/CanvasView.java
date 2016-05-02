@@ -14,17 +14,17 @@ import android.view.View;
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.SettingsValue;
 
+import static de.mario.camera.preview.PaintFactory.createPaint;
+
 
 /**
  * This view is on top of the preview and provides painting capabilities for a better feedback.
  */
-public class DefaultCanvasView extends AbstractCanvasView {
+public class CanvasView extends View {
 
     private Paint gridPaint;
 
-    private static boolean previousPainted;
-
-    public DefaultCanvasView(Context context) {
+    public CanvasView(Context context) {
         super(context);
         gridPaint = createPaint();
     }

@@ -8,9 +8,10 @@ import de.mario.camera.PhotoActivable;
 /**
  * Callback for Shutter.
  */
-class ShutterCallback implements Camera.ShutterCallback {
+class DefaultShutterCallback implements Camera.ShutterCallback {
+    /**
+     * Method for the shutter call back. Does nothing at all.
+     */
     @Override
-    public void onShutter() {
-        Log.d(PhotoActivable.DEBUG_TAG, "onShutter");
-    }
+    public void onShutter() {  }
 }

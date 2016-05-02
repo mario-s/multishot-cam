@@ -122,7 +122,7 @@ class ContinuesCallback implements PictureCallback {
         imageCounter++;
         if(imageCounter < max) {
             setExposureCompensation(camera, exposures[imageCounter]);
-            camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), this);
+            camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), this);
         }
     }
 

@@ -4,11 +4,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.View;
+
+import static de.mario.camera.preview.PaintFactory.createPaint;
 
 /**
  * View for the focus indicator
  */
-public class FocusView extends AbstractCanvasView {
+public class FocusView extends View {
 
     private static final int RADIUS = 50;
 
