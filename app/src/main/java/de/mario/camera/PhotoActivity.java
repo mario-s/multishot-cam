@@ -38,6 +38,7 @@ import de.mario.camera.exif.GeoTagFactory;
 import de.mario.camera.lookup.CameraLookup;
 import de.mario.camera.lookup.StorageLookup;
 import de.mario.camera.preview.CanvasView;
+import de.mario.camera.preview.FocusView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
@@ -63,6 +64,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
 	private int camId = CameraLookup.NO_CAM_ID;
+	private FocusView focusView;
 	private CanvasView canvasView;
 	private boolean canDisableShutterSound;
 	private MyLocationListener locationListener;
@@ -128,8 +130,10 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		preview = new Preview(this, camera);
 		canvasView = new CanvasView(this);
+		focusView = new FocusView(this);
 		getPreviewLayout().addView(preview, 0);
 		getPreviewLayout().addView(canvasView, 1);
+		getPreviewLayout().addView(focusView, 2);
 	}
 
 	private void registerLocationListener() {
@@ -188,7 +192,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	@Override
 	protected void onPause() {
-		getPreviewLayout().removeView(preview);
+		getPreviewLayout().removeAllViews();
 		preview = null;
 		releaseCamera();
 		unregisterReceiver(receiver);
@@ -228,7 +232,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		camera.autoFocus(new Camera.AutoFocusCallback() {
 			@Override
 			public void onAutoFocus(boolean success, Camera camera) {
-				canvasView.focused(success);
+				focusView.focused(success);
 				if (success) {
 					Runnable command = new PhotoCommand(PhotoActivity.this, camera);
 					int delay = getDelay();
@@ -249,7 +253,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private void prepareForNextShot() {
 		toggleInputs(true);
-		canvasView.reset();
+		focusView.resetFocus();
 	}
 
 	/**
@@ -280,21 +284,21 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return super.onOptionsItemSelected(item);
 	}
 
-	private int getDelay() {
-		return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0"));
-	}
+	//access to settings values
+	private int getDelay() {return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0")); }
 
-	private boolean isProcessingEnabled() {
-		return getPreferences().getBoolean(SettingsValue.PROCESS_HDR.getValue(), false);
-	}
+	private boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);	}
 
-	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getPreferences().getBoolean(SettingsValue.SHUTTER_SOUND.getValue(), false);}
+	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getBoolean(SettingsValue.SHUTTER_SOUND);}
 
-	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && getPreferences().getBoolean(SettingsValue.GEO_TAGGING.getValue(), false);}
+	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && getBoolean(SettingsValue.GEO_TAGGING);}
 
 	private boolean isGpsEnabled() { return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}
 
+	private boolean getBoolean(SettingsValue key) { return getPreferences().getBoolean(key.getValue(), false); }
+
 	private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(this);	}
+	//end settings values
 
 	private Location getCurrentLocation() {
 		return locationListener.getCurrentLocation();

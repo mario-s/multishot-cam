@@ -2,6 +2,7 @@ package de.mario.camera.callback;
 
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.os.Debug;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,8 @@ class ContinuesCallback implements PictureCallback {
     private int imageCounter;
     private int max;
     private View preview;
+    private Camera.ShutterCallback shutterCallback;
+    private Camera.PictureCallback pictureCallback;
 
     private long start;
 
@@ -48,6 +51,9 @@ class ContinuesCallback implements PictureCallback {
 
         imageCounter = 0;
         max = exposures.length;
+
+        shutterCallback = new DefaultShutterCallback();
+        pictureCallback = new DefaultPictureCallback();
 
         start = System.currentTimeMillis();
     }
@@ -72,9 +78,10 @@ class ContinuesCallback implements PictureCallback {
             long end = System.currentTimeMillis();
             long duration = end - start;
             Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
+            Debug.stopMethodTracing();
 
             moveExternal();
-            //reset
+
             resetExposure(camera);
         }
     }
@@ -114,8 +121,6 @@ class ContinuesCallback implements PictureCallback {
         });
     }
 
-
-
     private void nextPhoto(Camera camera) {
 
         preview.setEnabled(true);
@@ -124,7 +129,7 @@ class ContinuesCallback implements PictureCallback {
         imageCounter++;
         if(imageCounter < max) {
             setExposureCompensation(camera, exposures[imageCounter]);
-            camera.takePicture(new ShutterCallback(), new LoggingPictureCallback(), this);
+            camera.takePicture(shutterCallback, pictureCallback, this);
         }
     }
 

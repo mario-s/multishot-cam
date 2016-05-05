@@ -25,6 +25,12 @@
             android:summary="@string/prefs_geo_tagging_enabled_description"
             android:title="@string/prefs_geo_tagging_enabled_title" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="grid"
+            android:summary="@string/prefs_grid_enabled_description"
+            android:title="@string/prefs_grid_enabled_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
