@@ -1,6 +1,7 @@
 package de.mario.camera.callback;
 
 import android.hardware.Camera;
+import android.os.Debug;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -45,6 +46,7 @@ public class PhotoCommand implements Runnable{
             resetExposure(camera);
         }
         shotParams.setShots(shots);
+        Debug.startMethodTracing("nultishot");
         ContinuesCallback callback = new ContinuesCallback(shotParams);
         camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
     }
