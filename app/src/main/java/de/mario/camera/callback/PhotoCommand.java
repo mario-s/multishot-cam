@@ -12,8 +12,6 @@ import java.util.Queue;
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
 
-import static de.mario.camera.callback.ExposureUpdater.resetExposure;
-import static de.mario.camera.callback.ExposureUpdater.setExposureCompensation;
 
 /**
  * Command which will be executed to take pictures.
@@ -28,7 +26,7 @@ public class PhotoCommand implements Runnable{
     public PhotoCommand(PhotoActivable activity, Camera camera){
         this.activity = activity;
         this.camera = camera;
-        this.shotParams = new ShotParams(activity);
+        this.shotParams = new ShotParams(activity, new ExposureUpdater(camera));
     }
 
     @Override
@@ -38,17 +36,22 @@ public class PhotoCommand implements Runnable{
             return;
         }
 
-        Shot[] shots = createEntries(activity.getExposureValues());
-        //prepare the camera for the first exposure value
-        if(shots.length > 0) {
-            setExposureCompensation(camera, shots[0].getExposure());
-        }else{
-            resetExposure(camera);
-        }
-        shotParams.setShots(shots);
+        prepareShots();
         Debug.startMethodTracing("nultishot");
         ContinuesCallback callback = new ContinuesCallback(shotParams);
         camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
+    }
+
+    private void prepareShots() {
+        Shot[] shots = createEntries(activity.getExposureValues());
+        //prepare the camera for the first exposure value
+        if(shots.length > 0) {
+            shotParams.getUpdater().setExposureCompensation(camera, shots[0].getExposure());
+        }else{
+            shotParams.getUpdater().resetExposure(camera);
+        }
+
+        shotParams.setShots(shots);
     }
 
     private void toast(String msg) {

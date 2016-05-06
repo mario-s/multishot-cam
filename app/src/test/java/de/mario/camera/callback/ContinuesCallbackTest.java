@@ -50,6 +50,8 @@ public class ContinuesCallbackTest {
     @Mock
     private Preview preview;
 
+    private ExposureUpdater updater;
+
     private byte [] testData;
 
     private File folder;
@@ -66,7 +68,9 @@ public class ContinuesCallbackTest {
         given(activity.getPreview()).willReturn(preview);
         given(camera.getParameters()).willReturn(params);
 
-        shotParams = new ShotParams(activity){
+        updater = new ExposureUpdater(params);
+
+        shotParams = new ShotParams(activity, updater){
             @Override
             Context getContext() {
                 return context;

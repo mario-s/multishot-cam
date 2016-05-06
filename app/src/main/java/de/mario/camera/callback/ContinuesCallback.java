@@ -16,8 +16,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
 
-import static de.mario.camera.callback.ExposureUpdater.resetExposure;
-import static de.mario.camera.callback.ExposureUpdater.setExposureCompensation;
 
 /**
  * This class takes pictures for each given exposure values and saves them.
@@ -82,7 +80,7 @@ class ContinuesCallback implements PictureCallback {
 
             moveExternal();
 
-            resetExposure(camera);
+            params.getUpdater().resetExposure(camera);
         }
     }
 
@@ -128,7 +126,7 @@ class ContinuesCallback implements PictureCallback {
 
         imageCounter++;
         if(imageCounter < max) {
-            setExposureCompensation(camera, exposures[imageCounter]);
+            params.getUpdater().setExposureCompensation(camera, exposures[imageCounter]);
             camera.takePicture(shutterCallback, pictureCallback, this);
         }
     }
