@@ -36,6 +36,7 @@ class ContinuesCallback implements PictureCallback {
     private View preview;
     private Camera.ShutterCallback shutterCallback;
     private Camera.PictureCallback pictureCallback;
+    private final ParameterUpdater updater;
 
     private long start;
 
@@ -46,6 +47,7 @@ class ContinuesCallback implements PictureCallback {
         this.pictureFileDir = params.getPictureFileDir();
         this.memAccessor = new InternalMemoryAccessor(params.getContext());
         this.preview = params.getPreview();
+        this.updater = params.getUpdater();
 
         imageCounter = 0;
         max = exposures.length;
@@ -126,7 +128,7 @@ class ContinuesCallback implements PictureCallback {
 
         imageCounter++;
         if(imageCounter < max) {
-            params.getUpdater().setExposureCompensation(camera, exposures[imageCounter]);
+            updater.setExposureCompensation(camera, exposures[imageCounter]);
             camera.takePicture(shutterCallback, pictureCallback, this);
         }
     }

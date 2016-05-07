@@ -50,7 +50,7 @@ public class ContinuesCallbackTest {
     @Mock
     private Preview preview;
 
-    private ExposureUpdater updater;
+    private ParameterUpdater updater;
 
     private byte [] testData;
 
@@ -68,7 +68,7 @@ public class ContinuesCallbackTest {
         given(activity.getPreview()).willReturn(preview);
         given(camera.getParameters()).willReturn(params);
 
-        updater = new ExposureUpdater(params);
+        updater = new ParameterUpdater(params);
 
         shotParams = new ShotParams(activity, updater){
             @Override

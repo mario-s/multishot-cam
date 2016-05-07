@@ -16,9 +16,9 @@ class ShotParams {
 
     private final PhotoActivable activity;
 
-    private final ExposureUpdater updater;
+    private final ParameterUpdater updater;
 
-    ShotParams(PhotoActivable activity, ExposureUpdater updater) {
+    ShotParams(PhotoActivable activity, ParameterUpdater updater) {
 
         this.activity = activity;
         this.updater = updater;
@@ -68,5 +68,5 @@ class ShotParams {
         return activity.getPreview();
     }
 
-    ExposureUpdater getUpdater() { return updater; }
+    ParameterUpdater getUpdater() { return updater; }
 }

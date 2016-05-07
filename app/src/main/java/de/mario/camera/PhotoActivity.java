@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -351,6 +352,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		private final PhotoActivity activity;
 
 		MessageHandler(PhotoActivity activity) {
+			super(Looper.getMainLooper());
 			this.activity = activity;
 		}
 

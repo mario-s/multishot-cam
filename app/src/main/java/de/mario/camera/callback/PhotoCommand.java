@@ -22,11 +22,13 @@ public class PhotoCommand implements Runnable{
     private final PhotoActivable activity;
     private final Camera camera;
     private final ShotParams shotParams;
+    private ParameterUpdater updater;
 
     public PhotoCommand(PhotoActivable activity, Camera camera){
         this.activity = activity;
         this.camera = camera;
-        this.shotParams = new ShotParams(activity, new ExposureUpdater(camera));
+        this.updater = new ParameterUpdater(camera);
+        this.shotParams = new ShotParams(activity, updater);
     }
 
     @Override
@@ -46,13 +48,14 @@ public class PhotoCommand implements Runnable{
         Shot[] shots = createEntries(activity.getExposureValues());
         //prepare the camera for the first exposure value
         if(shots.length > 0) {
-            shotParams.getUpdater().setExposureCompensation(camera, shots[0].getExposure());
+            updater.setExposureCompensation(camera, shots[0].getExposure());
         }else{
-            shotParams.getUpdater().resetExposure(camera);
+            updater.resetExposure(camera);
         }
 
         shotParams.setShots(shots);
     }
+
 
     private void toast(String msg) {
         MessageSender sender = new MessageSender(activity.getHandler());
