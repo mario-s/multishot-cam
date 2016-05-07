@@ -4,20 +4,25 @@
         android:key="camera"
         android:title="@string/camera">
 
-        <ListPreference
-            android:defaultValue="0"
-            android:enabled="true"
-            android:entries="@array/listArray"
-            android:entryValues="@array/listValues"
-            android:key="shutterDelayTime"
-            android:summary="@string/prefs_shutter_delay_time_description"
-            android:title="@string/prefs_shutter_delay_time_title"/>
+        <PreferenceScreen
+            android:key="shutter"
+            android:title="@string/shutter"
+            android:persistent="false">
+            <ListPreference
+                android:defaultValue="0"
+                android:enabled="true"
+                android:entries="@array/listArray"
+                android:entryValues="@array/listValues"
+                android:key="shutterDelayTime"
+                android:summary="@string/prefs_shutter_delay_time_description"
+                android:title="@string/prefs_shutter_delay_time_title"/>
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="shutterSound"
-            android:summary="@string/prefs_shutter_sound_disabled_description"
-            android:title="@string/prefs_shutter_sound_disable_title" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="shutterSound"
+                android:summary="@string/prefs_shutter_sound_disabled_description"
+                android:title="@string/prefs_shutter_sound_disable_title" />
+        </PreferenceScreen>
 
         <CheckBoxPreference
             android:defaultValue="false"
