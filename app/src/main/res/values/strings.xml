@@ -38,6 +38,7 @@
     <string name="prefs_debug_title">Debugging</string>
     <string name="prefs_trace_description">If enabled, a trice file for the photo shooting will be saved.</string>
     <string name="prefs_trace_title">Save Trace File</string>
-
+    <string name="prefs_image_resolution_description">Set the resolutuion for the images.</string>
+    <string name="prefs_image_resolution_title">Images Resolution</string>
 
 </resources>
