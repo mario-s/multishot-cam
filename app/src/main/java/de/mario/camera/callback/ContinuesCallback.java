@@ -75,14 +75,16 @@ class ContinuesCallback implements PictureCallback {
         }
 
         if(imageCounter == max){
-            long end = System.currentTimeMillis();
-            long duration = end - start;
-            Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
-            Debug.stopMethodTracing();
+            if(params.isTrace()) {
+                long end = System.currentTimeMillis();
+                long duration = end - start;
+                Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
+                Debug.stopMethodTracing();
+            }
 
             moveExternal();
 
-            params.getUpdater().resetExposure(camera);
+            updater.resetExposure(camera);
         }
     }
 

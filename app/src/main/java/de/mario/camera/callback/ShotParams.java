@@ -18,6 +18,8 @@ class ShotParams {
 
     private final ParameterUpdater updater;
 
+    private boolean trace;
+
     ShotParams(PhotoActivable activity, ParameterUpdater updater) {
 
         this.activity = activity;
@@ -69,4 +71,12 @@ class ShotParams {
     }
 
     ParameterUpdater getUpdater() { return updater; }
+
+    boolean isTrace() {
+        return trace;
+    }
+
+    void setTrace(boolean trace) {
+        this.trace = trace;
+    }
 }

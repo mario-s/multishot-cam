@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.location.Location;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,8 +42,6 @@ import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
 
-import static java.lang.Integer.parseInt;
-
 /**
  * Main activity.
  * 
@@ -72,6 +68,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private LocationManager locationManager;
 	private OrientationListener orientationListener;
 	private File pictureDirectory;
+	private SettingsAccess settingsAccess;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -79,6 +76,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		receiver = new ProcessReceiver();
 		executor = new ScheduledThreadPoolExecutor(1);
 		locationListener = new MyLocationListener();
+		settingsAccess = new SettingsAccess(this);
 	}
 
 	@Override
@@ -236,7 +234,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 				focusView.focused(success);
 				if (success) {
 					Runnable command = new PhotoCommand(PhotoActivity.this, camera);
-					int delay = getDelay();
+					int delay = settingsAccess.getDelay();
 
 					Log.d(DEBUG_TAG, "delay for photo: " + delay);
 
@@ -285,20 +283,12 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return super.onOptionsItemSelected(item);
 	}
 
-	//access to settings values
-	private int getDelay() {return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0")); }
+	//combined settings values
+	private boolean isShutterSoundDisabled() { return canDisableShutterSound && settingsAccess.isShutterSoundDisabled();}
 
-	private boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);	}
-
-	private boolean isShutterSoundDisabled() { return canDisableShutterSound && getBoolean(SettingsValue.SHUTTER_SOUND);}
-
-	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && getBoolean(SettingsValue.GEO_TAGGING);}
+	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && settingsAccess.isGeoTaggingEnabled();}
 
 	private boolean isGpsEnabled() { return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}
-
-	private boolean getBoolean(SettingsValue key) { return getPreferences().getBoolean(key.getValue(), false); }
-
-	private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(this);	}
 	//end settings values
 
 	private Location getCurrentLocation() {
@@ -325,12 +315,17 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		return pictureDirectory;
 	}
 
+	@Override
+	public SettingsAccess getSettingsAccess() {
+		return settingsAccess;
+	}
+
 	void setCamera(Camera camera) {
 		this.camera = camera;
 	}
 
 	private void processHdr(String [] pictures){
-		if(isProcessingEnabled()) {
+		if(settingsAccess.isProcessingEnabled()) {
 			showProgress();
 			Intent intent = new Intent(this, ExposureMergeService.class);
 			intent.putExtra(OpenCvService.PARAM_PICS, pictures);

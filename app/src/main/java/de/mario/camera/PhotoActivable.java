@@ -35,4 +35,6 @@ public interface PhotoActivable {
 
     Preview getPreview();
 
+    SettingsAccess getSettingsAccess();
+
 }

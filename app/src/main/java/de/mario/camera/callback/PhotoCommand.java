@@ -29,6 +29,7 @@ public class PhotoCommand implements Runnable{
         this.camera = camera;
         this.updater = new ParameterUpdater(camera);
         this.shotParams = new ShotParams(activity, updater);
+        this.shotParams.setTrace(activity.getSettingsAccess().isTrace());
     }
 
     @Override
@@ -39,7 +40,9 @@ public class PhotoCommand implements Runnable{
         }
 
         prepareShots();
-        Debug.startMethodTracing("nultishot");
+        if(shotParams.isTrace()) {
+            Debug.startMethodTracing("nultishot");
+        }
         ContinuesCallback callback = new ContinuesCallback(shotParams);
         camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
     }

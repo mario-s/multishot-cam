@@ -4,11 +4,11 @@ package de.mario.camera;
  */
 public enum SettingsValue {
     GEO_TAGGING("geotagging"), SHUTTER_SOUND("shutterSound"), PROCESS_HDR("processHdr"),
-    SHUTTER_DELAY("shutterDelayTime"), GRID("grid");
+    SHUTTER_DELAY("shutterDelayTime"), GRID("grid"), TRACE("trace");
 
     private String value;
 
-    private SettingsValue(String value) {
+    SettingsValue(String value) {
         this.value = value;
     }
 
