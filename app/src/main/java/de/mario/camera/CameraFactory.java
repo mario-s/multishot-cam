@@ -5,10 +5,15 @@ import android.hardware.Camera;
 import android.util.Log;
 
 /**
- * Class to open the camera.
+ * Class to open the camera and get required features.
  */
 class CameraFactory {
 
+    /**
+     * Opens the camera identified by the ID.
+     * @param id
+     * @return
+     */
     Camera getCamera(int id) {
         Camera cam = null;
         try {
@@ -16,6 +21,7 @@ class CameraFactory {
 
             Camera.Parameters params = cam.getParameters();
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            cam.setParameters(params);
         }catch (Exception e){
             Log.w(PhotoActivable.DEBUG_TAG, e);
         }

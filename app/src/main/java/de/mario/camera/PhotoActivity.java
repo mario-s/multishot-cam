@@ -269,7 +269,10 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onSettings(View view) {
-		startActivity(new Intent(this, SettingsActivity.class));
+		Intent intent = new Intent(this, SettingsActivity.class);
+		PicturesSizesHandler handler = new PicturesSizesHandler();
+		intent.putExtra("resolutions", handler.getSupportedPicturesSizes(camera));
+		startActivity(intent);
 	}
 
 	@Override
