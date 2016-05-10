@@ -69,6 +69,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private OrientationListener orientationListener;
 	private File pictureDirectory;
 	private SettingsAccess settingsAccess;
+	private PicturesSizesHandler picturesSizesHandler;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -121,6 +122,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private void initCamera() {
 		CameraFactory factory = new CameraFactory();
 		camera = factory.getCamera(camId);
+		picturesSizesHandler = new PicturesSizesHandler(camera);
 
 		if(orientationListener.canDetectOrientation()){
 			orientationListener.setCamera(camera);
@@ -270,8 +272,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 */
 	public void onSettings(View view) {
 		Intent intent = new Intent(this, SettingsActivity.class);
-		PicturesSizesHandler handler = new PicturesSizesHandler();
-		intent.putExtra("resolutions", handler.getSupportedPicturesSizes(camera));
+		intent.putExtra("resolutions", picturesSizesHandler.getSupportedPicturesSizes());
+		intent.putExtra("selectedResolution", picturesSizesHandler.getPictureSize(camera));
 		startActivity(intent);
 	}
 
