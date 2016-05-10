@@ -14,7 +14,7 @@ final class ParameterUpdater {
     }
 
     ParameterUpdater(Camera camera){
-        params = camera.getParameters();
+        this(camera.getParameters());
     }
 
     void resetExposure(Camera camera) {
