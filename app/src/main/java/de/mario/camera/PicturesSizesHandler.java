@@ -42,7 +42,10 @@ class PicturesSizesHandler {
      * @return size as string
      */
     String getPictureSize(Camera camera) {
-        Camera.Parameters params = camera.getParameters();
+        return getPictureSize(camera.getParameters());
+    }
+
+    private String getPictureSize(Camera.Parameters params) {
         Camera.Size size = params.getPictureSize();
         return String.format(KEY_TEMP, size.width, size.height);
     }
