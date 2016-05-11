@@ -2,7 +2,7 @@ package de.mario.camera;
 
 import android.hardware.Camera;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ class PicturesSizesHandler {
     private final Map<String, Camera.Size> availableSizes;
 
     PicturesSizesHandler(Camera camera) {
-        availableSizes = new HashMap<>();
+        availableSizes = new LinkedHashMap<>();
         initSizes(camera.getParameters());
     }
 

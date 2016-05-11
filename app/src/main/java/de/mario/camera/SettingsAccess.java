@@ -18,6 +18,10 @@ public class SettingsAccess {
 
     public boolean isTrace() { return getBoolean(SettingsValue.TRACE);}
 
+    String getPicSizeKey() {
+        return getPreferences().getString(SettingsValue.PICTURE_SIZE.getValue(), "");
+    }
+
     int getDelay() {return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0")); }
 
     boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);}

@@ -30,17 +30,17 @@ public class SettingsActivity extends PreferenceActivity {
 
     private void addImageResolutions() {
         Intent intent = getIntent();
-        String [] resolutions = intent.getStringArrayExtra("resolutions");
-        String selected = intent.getStringExtra("selectedResolution");
+        String [] resolutions = intent.getStringArrayExtra("pictureSizes");
+        String selected = intent.getStringExtra("selectedPictureSize");
         // Get the Preference Category which we want to add the ListPreference to
         PreferenceCategory cameraCategory = (PreferenceCategory) findPreference("camera");
         ListPreference customListPref = new ListPreference(this);
-
+        customListPref.setKey(SettingsValue.PICTURE_SIZE.getValue());
         customListPref.setEntries(resolutions);
         customListPref.setEntryValues(resolutions);
         customListPref.setValue(selected);
-        customListPref.setTitle(R.string.prefs_image_resolution_title);
-        customListPref.setSummary(R.string.prefs_image_resolution_description);
+        customListPref.setTitle(R.string.prefs_picture_size_title);
+        customListPref.setSummary(R.string.prefs_picture_size_description);
         customListPref.setPersistent(true);
 
         // Add the ListPref to the Pref category
