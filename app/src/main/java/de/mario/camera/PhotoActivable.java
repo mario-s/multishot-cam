@@ -12,6 +12,8 @@ import de.mario.camera.preview.Preview;
  */
 public interface PhotoActivable {
 
+    String PIC_SIZE_KEY = "%sx%s";
+
     String DEBUG_TAG = "PhotoActivity";
     String PICTURES = "pictures";
 

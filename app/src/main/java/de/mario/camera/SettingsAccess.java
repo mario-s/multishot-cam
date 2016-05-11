@@ -18,7 +18,7 @@ public class SettingsAccess {
 
     public boolean isTrace() { return getBoolean(SettingsValue.TRACE);}
 
-    String getPicSizeKey() {
+    public String getPicSizeKey() {
         return getPreferences().getString(SettingsValue.PICTURE_SIZE.getValue(), "");
     }
 

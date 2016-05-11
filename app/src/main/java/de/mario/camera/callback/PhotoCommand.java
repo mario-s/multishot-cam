@@ -49,6 +49,8 @@ public class PhotoCommand implements Runnable{
 
     private void prepareShots() {
         Shot[] shots = createEntries(activity.getExposureValues());
+        updater.setPictureSize(activity.getSettingsAccess().getPicSizeKey());
+
         //prepare the camera for the first exposure value
         if(shots.length > 0) {
             updater.setExposureCompensation(camera, shots[0].getExposure());
