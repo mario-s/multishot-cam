@@ -84,7 +84,8 @@ class ContinuesCallback implements PictureCallback {
 
             moveExternal();
 
-            updater.resetExposure(camera);
+            updater.resetExposure();
+            updater.update(camera);
         }
     }
 
@@ -130,7 +131,9 @@ class ContinuesCallback implements PictureCallback {
 
         imageCounter++;
         if(imageCounter < max) {
-            updater.setExposureCompensation(camera, exposures[imageCounter]);
+            updater.setExposureCompensation(exposures[imageCounter]);
+            updater.update(camera);
+
             camera.takePicture(shutterCallback, pictureCallback, this);
         }
     }

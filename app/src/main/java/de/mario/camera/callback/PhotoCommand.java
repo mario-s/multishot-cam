@@ -53,10 +53,12 @@ public class PhotoCommand implements Runnable{
 
         //prepare the camera for the first exposure value
         if(shots.length > 0) {
-            updater.setExposureCompensation(camera, shots[0].getExposure());
+            updater.setExposureCompensation(shots[0].getExposure());
         }else{
-            updater.resetExposure(camera);
+            updater.resetExposure();
         }
+
+        updater.update(camera);
 
         shotParams.setShots(shots);
     }

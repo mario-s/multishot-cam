@@ -38,12 +38,15 @@ final class ParameterUpdater {
         }
     }
 
-    void resetExposure(Camera camera) {
-        setExposureCompensation(camera, 0);
+    void resetExposure() {
+        setExposureCompensation(0);
     }
 
-    void setExposureCompensation(Camera camera, int ev) {
+    void setExposureCompensation(int ev) {
         params.setExposureCompensation(ev);
+    }
+
+    void update(Camera camera){
         camera.setParameters(params);
     }
 }
