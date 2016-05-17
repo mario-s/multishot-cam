@@ -13,12 +13,12 @@ import de.mario.camera.PhotoActivable;
 final class ParameterUpdater {
     private final Camera.Parameters params;
 
-    ParameterUpdater(Camera.Parameters params) {
-        this.params = params;
-    }
-
     ParameterUpdater(Camera camera){
         this(camera.getParameters());
+    }
+
+    ParameterUpdater(Camera.Parameters params) {
+        this.params = params;
     }
 
     /**
