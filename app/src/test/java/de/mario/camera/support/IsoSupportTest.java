@@ -1,4 +1,4 @@
-package de.mario.camera;
+package de.mario.camera.support;
 
 import android.hardware.Camera;
 
@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.List;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -29,7 +27,7 @@ public class IsoSupportTest {
 
     @Test
     public void testGetIsoValues(){
-        List<String> vals = classUnderTest.getIsoValues();
+        String[] vals = classUnderTest.getIsoValues();
         assertNotNull(vals);
     }
 }

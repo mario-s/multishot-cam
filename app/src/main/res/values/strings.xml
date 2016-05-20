@@ -40,5 +40,7 @@
     <string name="prefs_trace_title">Save Trace File</string>
     <string name="prefs_picture_size_description">Set the size for the images.</string>
     <string name="prefs_picture_size_title">Picture Size</string>
+    <string name="prefs_iso_description">Set the ISO value for the images.</string>
+    <string name="prefs_iso_title">ISO</string>
 
 </resources>

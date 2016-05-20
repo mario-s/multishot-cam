@@ -1,17 +1,19 @@
-package de.mario.camera;
+package de.mario.camera.support;
 
 import android.hardware.Camera;
 
 import java.util.List;
 
+import de.mario.camera.PhotoActivable;
+
 /**
  * This class provides support for the images sizes supported by the camera.
  */
-class PicturesSizeReader {
+public final class PicturesSizeSupport {
 
     private String[] sizes;
 
-    PicturesSizeReader(Camera camera) {
+    public PicturesSizeSupport(Camera camera) {
         initSizes(camera.getParameters());
     }
 
@@ -28,7 +30,7 @@ class PicturesSizeReader {
      * Returns the supported pictures size for the given camera.
      * @return an array of available size as string (width x height)
      */
-    String[] getSupportedPicturesSizes() {
+    public String[] getSupportedPicturesSizes() {
         return sizes;
     }
 
@@ -37,7 +39,7 @@ class PicturesSizeReader {
      * @param camera the camera to use
      * @return size as string
      */
-    String getSelectedPictureSize(Camera camera) {
+    public String getSelectedPictureSize(Camera camera) {
         return getSelectedPictureSize(camera.getParameters());
     }
 

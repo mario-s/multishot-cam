@@ -5,7 +5,7 @@ package de.mario.camera;
 public enum SettingsValue {
     GEO_TAGGING("geotagging"), SHUTTER_SOUND("shutterSound"), PROCESS_HDR("processHdr"),
     SHUTTER_DELAY("shutterDelayTime"), GRID("grid"), TRACE("trace") ,
-    PICTURE_SIZE("pictureSize");
+    PICTURE_SIZE("pictureSize"), ISO("iso");
 
     private String value;
 

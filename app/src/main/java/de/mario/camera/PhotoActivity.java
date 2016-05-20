@@ -41,6 +41,8 @@ import de.mario.camera.preview.FocusView;
 import de.mario.camera.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
+import de.mario.camera.support.IsoSupport;
+import de.mario.camera.support.PicturesSizeSupport;
 
 /**
  * Main activity.
@@ -69,7 +71,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private OrientationListener orientationListener;
 	private File pictureDirectory;
 	private SettingsAccess settingsAccess;
-	private PicturesSizeReader picturesSizeReader;
+	private IsoSupport isoSupport;
+	private PicturesSizeSupport sizeSupport;
 
 	public PhotoActivity() {
 		exposureValues = new LinkedList<>();
@@ -122,7 +125,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private void initCamera() {
 		CameraFactory factory = new CameraFactory();
 		camera = factory.getCamera(camId);
-		picturesSizeReader = new PicturesSizeReader(camera);
+		sizeSupport = new PicturesSizeSupport(camera);
+		isoSupport = new IsoSupport(camera);
 
 		if(orientationListener.canDetectOrientation()){
 			orientationListener.setCamera(camera);
@@ -272,8 +276,16 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 */
 	public void onSettings(View view) {
 		Intent intent = new Intent(this, SettingsActivity.class);
-		intent.putExtra("pictureSizes", picturesSizeReader.getSupportedPicturesSizes());
-		intent.putExtra("selectedPictureSize", picturesSizeReader.getSelectedPictureSize(camera));
+
+		intent.putExtra("pictureSizes", sizeSupport.getSupportedPicturesSizes());
+		intent.putExtra("selectedPictureSize", sizeSupport.getSelectedPictureSize(camera));
+
+		String isoKey = isoSupport.getIsoKey();
+		if(isoKey != null) {
+			intent.putExtra("selectedIso", isoSupport.getSelectedIsoValue(isoKey));
+			intent.putExtra("isos", isoSupport.getIsoValues());
+		}
+
 		startActivity(intent);
 	}
 

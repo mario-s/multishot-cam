@@ -20,30 +20,57 @@ import android.preference.PreferenceCategory;
 public class SettingsActivity extends PreferenceActivity {
 
 
+    public static final String CAMERA = "camera";
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
-        addImageResolutions();
+
+        Intent intent = getIntent();
+        addImageResolutions(intent);
+        addIsos(intent);
     }
 
-    private void addImageResolutions() {
-        Intent intent = getIntent();
+    private void addImageResolutions(Intent intent) {
         String [] resolutions = intent.getStringArrayExtra("pictureSizes");
         String selected = intent.getStringExtra("selectedPictureSize");
-        // Get the Preference Category which we want to add the ListPreference to
-        PreferenceCategory cameraCategory = (PreferenceCategory) findPreference("camera");
-        ListPreference customListPref = new ListPreference(this);
+
+        ListPreference customListPref = createListPreference(resolutions, selected);
         customListPref.setKey(SettingsValue.PICTURE_SIZE.getValue());
-        customListPref.setEntries(resolutions);
-        customListPref.setEntryValues(resolutions);
-        customListPref.setValue(selected);
         customListPref.setTitle(R.string.prefs_picture_size_title);
         customListPref.setSummary(R.string.prefs_picture_size_description);
-        customListPref.setPersistent(true);
 
-        // Add the ListPref to the Pref category
+        addPreference(customListPref);
+    }
+
+    private void addIsos(Intent intent) {
+        String selected = intent.getStringExtra("selectedIso");
+        if(selected != null) {
+            String[] isos = intent.getStringArrayExtra("isos");
+
+
+            ListPreference customListPref = createListPreference(isos, selected);
+            customListPref.setKey(SettingsValue.ISO.getValue());
+            customListPref.setTitle(R.string.prefs_iso_title);
+            customListPref.setSummary(R.string.prefs_iso_description);
+
+            addPreference(customListPref);
+        }
+    }
+
+    private ListPreference createListPreference(String [] available, String selected) {
+        ListPreference customListPref = new ListPreference(this);
+        customListPref.setPersistent(true);
+        customListPref.setEntries(available);
+        customListPref.setEntryValues(available);
+        customListPref.setValue(selected);
+        return customListPref;
+    }
+
+    private void addPreference(ListPreference customListPref) {
+        PreferenceCategory cameraCategory = (PreferenceCategory) findPreference(CAMERA);
         cameraCategory.addPreference(customListPref);
     }
 
