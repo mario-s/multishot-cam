@@ -16,15 +16,12 @@ public final class IsoSupport {
 
     private final Camera.Parameters params;
 
-    private final String isoKey;
-
     public IsoSupport(Camera camera) {
         this(camera.getParameters());
     }
 
     IsoSupport(Camera.Parameters params) {
         this.params = params;
-        isoKey = findIsoKey();
     }
 
     /**
@@ -59,10 +56,6 @@ public final class IsoSupport {
         return null;
     }
 
-    public String getSelectedIsoValue() {
-        return getSelectedIsoValue(isoKey);
-    }
-
     public String getSelectedIsoValue(String isoKey) {
 
         if(isoKey != null){
@@ -73,26 +66,17 @@ public final class IsoSupport {
 
 
     /**
-     * This method tries to look for an parameter key to get the selected ISO value for the device.
-     * @return the key as a String or null if it is not supported
+     * This method tries to look for a parameter key to get the selected ISO value for the device.
+     * @return the key as a String or a empty String if it is not supported
      */
-    private String findIsoKey() {
-        String isoKey = null;
-        String flat = params.flatten();
+    public String findIsoKey() {
+        String isoKey = "";
         for(String key : ISO_KEYS) {
             if( params.get(key) != null ){
                 isoKey = key;
                 break;
             }
         }
-        return isoKey;
-    }
-
-    /**
-     * Returns the the parameter key to access ISO value for the device.
-     * @return the key as a String or null if it is not supported
-     */
-    public String getIsoKey() {
         return isoKey;
     }
 }

@@ -52,7 +52,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 
             ListPreference customListPref = createListPreference(isos, selected);
-            customListPref.setKey(SettingsValue.ISO.getValue());
+            customListPref.setKey(SettingsValue.ISO_VALUE.getValue());
             customListPref.setTitle(R.string.prefs_iso_title);
             customListPref.setSummary(R.string.prefs_iso_description);
 

@@ -38,6 +38,12 @@ final class ParameterUpdater {
         }
     }
 
+    void setIso(String key, String value) {
+        if(!key.isEmpty() && !value.isEmpty()) {
+            params.set(key, value);
+        }
+    }
+
     void resetExposure() {
         setExposureCompensation(0);
     }

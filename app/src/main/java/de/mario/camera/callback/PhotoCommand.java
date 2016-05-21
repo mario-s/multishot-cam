@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
+import de.mario.camera.SettingsAccess;
 
 
 /**
@@ -49,7 +50,8 @@ public class PhotoCommand implements Runnable{
 
     private void prepareShots() {
         Shot[] shots = createEntries(activity.getExposureValues());
-        updater.setPictureSize(activity.getSettingsAccess().getPicSizeKey());
+        SettingsAccess settings = activity.getSettingsAccess();
+        updater.setPictureSize(settings.getPicSizeKey());
 
         //prepare the camera for the first exposure value
         if(shots.length > 0) {
@@ -57,6 +59,8 @@ public class PhotoCommand implements Runnable{
         }else{
             updater.resetExposure();
         }
+
+        updater.setIso(settings.getIsoKey(), settings.getIsoValue());
 
         updater.update(camera);
 

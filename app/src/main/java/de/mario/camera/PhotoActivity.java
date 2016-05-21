@@ -280,13 +280,24 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		intent.putExtra("pictureSizes", sizeSupport.getSupportedPicturesSizes());
 		intent.putExtra("selectedPictureSize", sizeSupport.getSelectedPictureSize(camera));
 
-		String isoKey = isoSupport.getIsoKey();
-		if(isoKey != null) {
+		String isoKey = findIsoKey();
+		if(!isoKey.isEmpty()) {
 			intent.putExtra("selectedIso", isoSupport.getSelectedIsoValue(isoKey));
 			intent.putExtra("isos", isoSupport.getIsoValues());
 		}
 
 		startActivity(intent);
+	}
+
+	private String findIsoKey() {
+		//exists the ISO key in the settings?
+		String isoKey = settingsAccess.getIsoKey();
+		if(isoKey.isEmpty()) {
+			//if not look for it
+			isoKey = isoSupport.findIsoKey();
+			settingsAccess.setIsoKey(isoKey);
+		}
+		return isoKey;
 	}
 
 	@Override
