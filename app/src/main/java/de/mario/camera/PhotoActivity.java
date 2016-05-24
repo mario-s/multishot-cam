@@ -24,7 +24,6 @@ import android.widget.Toast;
 import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -58,7 +57,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private Camera camera;
 	private Preview preview;
 	private ProgressBar progressBar;
-	private final LinkedList<Integer> exposureValues;
+
 	private Handler handler;
 	private ProcessReceiver receiver;
 	private ScheduledExecutorService executor;
@@ -75,7 +74,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private PicturesSizeSupport sizeSupport;
 
 	public PhotoActivity() {
-		exposureValues = new LinkedList<>();
 		handler = new MessageHandler(this);
 		receiver = new ProcessReceiver();
 		executor = new ScheduledThreadPoolExecutor(1);
@@ -115,8 +113,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			toast(getResource(R.string.no_back_cam));
 		} else {
 			initCamera();
-
-			fillExposuresValues();
 		}
 
 		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
@@ -187,12 +183,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private void toast(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_LONG)
 				.show();
-	}
-
-	private void fillExposuresValues() {
-		ExposureValuesFactory factory = new ExposureValuesFactory(camera);
-		exposureValues.clear();
-		exposureValues.addAll(factory.getMinMaxValues());
 	}
 
 	@Override
@@ -321,11 +311,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	private Location getCurrentLocation() {
 		return locationListener.getCurrentLocation();
-	}
-
-	@Override
-	public LinkedList<Integer> getExposureValues() {
-		return new LinkedList<>(exposureValues);
 	}
 
 	@Override

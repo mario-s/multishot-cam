@@ -14,7 +14,7 @@
                 android:enabled="true"
                 android:entries="@array/exposureArray"
                 android:entryValues="@array/exposureValues"
-                android:key="exposureValues"
+                android:key="evSequence"
                 android:summary="@string/prefs_exposure_description"
                 android:title="@string/prefs_exposure_title"/>
         </PreferenceScreen>

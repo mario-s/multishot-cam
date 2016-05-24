@@ -22,8 +22,9 @@ public class PhotoCommand implements Runnable{
 
     private final PhotoActivable activity;
     private final Camera camera;
-    private final ShotParams shotParams;
+
     private ParameterUpdater updater;
+    private final ShotParams shotParams;
 
     public PhotoCommand(PhotoActivable activity, Camera camera){
         this.activity = activity;
@@ -42,14 +43,16 @@ public class PhotoCommand implements Runnable{
 
         prepareShots();
         if(shotParams.isTrace()) {
-            Debug.startMethodTracing("nultishot");
+            Debug.startMethodTracing("multishot");
         }
         ContinuesCallback callback = new ContinuesCallback(shotParams);
         camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
     }
 
     private void prepareShots() {
-        Shot[] shots = createEntries(activity.getExposureValues());
+        ExposureValuesFactory factory = new ExposureValuesFactory(camera);
+        //TODO other sequences
+        Shot[] shots = createEntries(factory.getMinMaxValues());
         SettingsAccess settings = activity.getSettingsAccess();
         updater.setPictureSize(settings.getPicSizeKey());
 
