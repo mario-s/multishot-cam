@@ -5,14 +5,30 @@
         android:title="@string/camera">
 
         <PreferenceScreen
-            android:key="shutter"
-            android:title="@string/shutter"
+            android:key="exposure"
+            android:title="@string/exposure"
             android:persistent="false">
+
             <ListPreference
                 android:defaultValue="0"
                 android:enabled="true"
-                android:entries="@array/listArray"
-                android:entryValues="@array/listValues"
+                android:entries="@array/exposureArray"
+                android:entryValues="@array/exposureValues"
+                android:key="exposureValues"
+                android:summary="@string/prefs_exposure_description"
+                android:title="@string/prefs_exposure_title"/>
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:key="shutter"
+            android:title="@string/shutter"
+            android:persistent="false">
+
+            <ListPreference
+                android:defaultValue="0"
+                android:enabled="true"
+                android:entries="@array/delayArray"
+                android:entryValues="@array/delayValues"
                 android:key="shutterDelayTime"
                 android:summary="@string/prefs_shutter_delay_time_description"
                 android:title="@string/prefs_shutter_delay_time_title"/>
