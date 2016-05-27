@@ -46,7 +46,9 @@ public class SettingsAccess {
      */
     public String getPicSizeKey() {return getString(SettingsValue.PICTURE_SIZE);}
 
-    int getDelay() {return parseInt(getPreferences().getString(SettingsValue.SHUTTER_DELAY.getValue(), "0")); }
+    public int getExposureSequenceType() {return getInt(SettingsValue.EXPOSURE_SEQ);}
+
+    int getDelay() {return getInt(SettingsValue.SHUTTER_DELAY); }
 
     boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);}
 
@@ -55,6 +57,8 @@ public class SettingsAccess {
     boolean isGeoTaggingEnabled() { return getBoolean(SettingsValue.GEO_TAGGING);}
 
     private String getString(SettingsValue key){return getPreferences().getString(key.getValue(), "");}
+
+    private int getInt(SettingsValue key){ return parseInt(getPreferences().getString(key.getValue(), "0")); }
 
     private boolean getBoolean(SettingsValue key) { return getPreferences().getBoolean(key.getValue(), false); }
 
