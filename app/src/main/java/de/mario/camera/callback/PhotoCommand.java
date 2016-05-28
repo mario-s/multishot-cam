@@ -50,10 +50,13 @@ public class PhotoCommand implements Runnable{
     }
 
     private void prepareShots() {
-        ExposureValuesFactory factory = new ExposureValuesFactory(camera);
-        //TODO other sequences
-        Shot[] shots = createEntries(factory.getMinMaxValues());
         SettingsAccess settings = activity.getSettingsAccess();
+
+        ExposureValuesFactory factory = new ExposureValuesFactory(camera);
+
+        int seqType = settings.getExposureSequenceType();
+        Shot[] shots = createEntries(factory.getValues(seqType));
+
         updater.setPictureSize(settings.getPicSizeKey());
 
         //prepare the camera for the first exposure value

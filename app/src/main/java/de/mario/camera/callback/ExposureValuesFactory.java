@@ -19,7 +19,12 @@ final class ExposureValuesFactory {
         this.params = params;
     }
 
-    LinkedList<Integer> getMinMaxValues() {
+    LinkedList<Integer> getValues(int seqType) {
+        //TODO other sequences
+        return getMinMaxValues();
+    }
+
+    private LinkedList<Integer> getMinMaxValues() {
         LinkedList<Integer> values = new LinkedList<>();
         values.add(params.getExposureCompensation());
         values.add(params.getMinExposureCompensation());
