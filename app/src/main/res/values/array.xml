@@ -14,7 +14,7 @@
 
     <string-array name="exposureArray">
         <item>Min, 0, Max</item>
-        <item>Min - Max in 1 EL</item>
+        <item>Min -> Max in 2 EL</item>
     </string-array>
     <string-array name="exposureValues">
         <item>0</item>
