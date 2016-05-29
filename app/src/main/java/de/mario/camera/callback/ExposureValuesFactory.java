@@ -26,8 +26,8 @@ final class ExposureValuesFactory {
 
     private LinkedList<Integer> getMinMaxValues() {
         LinkedList<Integer> values = new LinkedList<>();
-        values.add(params.getExposureCompensation());
         values.add(params.getMinExposureCompensation());
+        values.add(params.getExposureCompensation());
         values.add(params.getMaxExposureCompensation());
         return values;
     }
