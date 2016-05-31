@@ -276,6 +276,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			intent.putExtra("isos", isoSupport.getIsoValues());
 		}
 
+		hideProgress();
 		startActivity(intent);
 	}
 
