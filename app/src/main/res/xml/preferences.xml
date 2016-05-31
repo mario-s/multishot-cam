@@ -5,21 +5,6 @@
         android:title="@string/camera">
 
         <PreferenceScreen
-            android:key="exposure"
-            android:title="@string/exposure"
-            android:persistent="false">
-
-            <ListPreference
-                android:defaultValue="0"
-                android:enabled="true"
-                android:entries="@array/exposureArray"
-                android:entryValues="@array/exposureValues"
-                android:key="evSequence"
-                android:summary="@string/prefs_exposure_description"
-                android:title="@string/prefs_exposure_title"/>
-        </PreferenceScreen>
-
-        <PreferenceScreen
             android:key="shutter"
             android:title="@string/shutter"
             android:persistent="false">
@@ -51,6 +36,15 @@
             android:key="grid"
             android:summary="@string/prefs_grid_enabled_description"
             android:title="@string/prefs_grid_enabled_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:enabled="true"
+            android:entries="@array/exposureArray"
+            android:entryValues="@array/exposureValues"
+            android:key="evSequence"
+            android:summary="@string/prefs_exposure_description"
+            android:title="@string/prefs_exposure_title"/>
 
     </PreferenceCategory>
 
