@@ -1,17 +1,17 @@
 package de.mario.camera;
 
-import android.hardware.Camera;
 import android.widget.ImageButton;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.mockito.Mockito.any;
+import de.mario.camera.controller.CameraController;
+
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -29,12 +29,11 @@ public class PhotoActivityTest {
     }
 
     @Test
-    @Ignore("fixme")
     public void testShutter() {
-        Camera mock = mock(Camera.class);
-        classUnderTest.setCamera(mock);
+        CameraController mock = mock(CameraController.class);
+        classUnderTest.setCameraController(mock);
         ImageButton btn = (ImageButton)classUnderTest.findViewById(R.id.shutter);
         btn.performClick();
-        verify(mock).autoFocus(any(Camera.AutoFocusCallback.class));
+        verify(mock).shot(anyInt());
     }
 }

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -22,20 +21,14 @@ import android.widget.Toast;
 import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import de.mario.camera.callback.PhotoCommand;
-import de.mario.camera.lookup.CameraLookup;
-import de.mario.camera.lookup.StorageLookup;
-import de.mario.camera.preview.CanvasView;
-import de.mario.camera.preview.FocusView;
-import de.mario.camera.preview.Preview;
+import de.mario.camera.controller.CameraControlable;
+import de.mario.camera.controller.CameraController;
+import de.mario.camera.controller.lookup.StorageLookup;
+import de.mario.camera.controller.preview.CanvasView;
+import de.mario.camera.controller.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
-import de.mario.camera.support.IsoSupport;
-import de.mario.camera.support.PicturesSizeSupport;
 
 /**
  * Main activity.
@@ -45,34 +38,36 @@ import de.mario.camera.support.PicturesSizeSupport;
  */
 public class PhotoActivity extends Activity implements PhotoActivable{
 
-	private static final int MIN = 0;
 	private static final String VERS = "version";
 	private static final String PREFS = "PREFERENCE";
-	private Camera camera;
-	private Preview preview;
 	private ProgressBar progressBar;
-
 	private Handler handler;
 	private ProcessReceiver receiver;
-	private ScheduledExecutorService executor;
-	private int camId = CameraLookup.NO_CAM_ID;
-	private FocusView focusView;
+
 	private CanvasView canvasView;
-	private boolean canDisableShutterSound;
 	private MyLocationListener locationListener;
 	private LocationManager locationManager;
-	private OrientationListener orientationListener;
 	private File pictureDirectory;
 	private SettingsAccess settingsAccess;
-	private IsoSupport isoSupport;
-	private PicturesSizeSupport sizeSupport;
+	private CameraControlable cameraController;
+
+	private boolean hasCam;
 
 	public PhotoActivity() {
 		handler = new MessageHandler(this);
 		receiver = new ProcessReceiver();
-		executor = new ScheduledThreadPoolExecutor(1);
 		locationListener = new MyLocationListener();
 		settingsAccess = new SettingsAccess(this);
+		cameraController = new CameraController(this);
+	}
+
+	void setCameraController(CameraController cameraController){
+		this.cameraController = cameraController;
+	}
+
+	@Override
+	public Context getContext() {
+		return this;
 	}
 
 	@Override
@@ -87,48 +82,34 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		} else {
 			showDialogWhenFirstRun();
 
-			CameraLookup cameraLookup = new CameraLookup();
-			camId = cameraLookup.findBackCamera();
-			canDisableShutterSound = cameraLookup.canDisableShutterSound(camId);
+			hasCam = cameraController.lookupCamera();
 
 			StorageLookup storageLookup = new StorageLookup(this);
 			pictureDirectory = storageLookup.createStorageDirectory();
 
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			orientationListener = new OrientationListener(this);
 		}
 	}
-
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (camId == CameraLookup.NO_CAM_ID) {
+		if (!hasCam) {
 			toast(getResource(R.string.no_back_cam));
 		} else {
-			initCamera();
+			initialize();
 		}
 
 		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
 	}
 
-	private void initCamera() {
-		CameraFactory factory = new CameraFactory();
-		camera = factory.getCamera(camId);
-		sizeSupport = new PicturesSizeSupport(camera);
-		isoSupport = new IsoSupport(camera);
+	private void initialize() {
+		cameraController.initialize();
 
-		if(orientationListener.canDetectOrientation()){
-			orientationListener.setCamera(camera);
-			orientationListener.enable();
-		}
-
-		preview = new Preview(this, camera);
 		canvasView = new CanvasView(this);
-		focusView = new FocusView(this);
-		getPreviewLayout().addView(preview, 0);
+		getPreviewLayout().addView(cameraController.getPreview(), 0);
 		getPreviewLayout().addView(canvasView, 1);
-		getPreviewLayout().addView(focusView, 2);
+		getPreviewLayout().addView(cameraController.getFocusView(), 2);
 	}
 
 	private void registerLocationListener() {
@@ -147,9 +128,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 		registerLocationListener();
 
-		if(camera == null) {
-			initCamera();
-		}
+		cameraController.reinitialize();
 	}
 
 	private void showDialogWhenFirstRun() {
@@ -182,21 +161,10 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	@Override
 	protected void onPause() {
 		getPreviewLayout().removeAllViews();
-		preview = null;
-		releaseCamera();
+		cameraController.releaseCamera();
 		unregisterReceiver(receiver);
 		unregisterLocationListener();
-		orientationListener.disable();
 		super.onPause();
-	}
-
-	private void releaseCamera() {
-		if (camera != null) {
-			camera.stopPreview();
-			camera.setPreviewCallback(null);
-			camera.release();
-			camera = null;
-		}
 	}
 
 	@Override
@@ -211,38 +179,20 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onShutter(View view) {
-		if(isShutterSoundDisabled()){
-			camera.enableShutterSound(false);
-		}else{
-			camera.enableShutterSound(true);
-		}
+		cameraController.enableShutterSound(!isShutterSoundDisabled());
 
 		toggleInputs(false);
-		camera.autoFocus(new Camera.AutoFocusCallback() {
-			@Override
-			public void onAutoFocus(boolean success, Camera camera) {
-				focusView.focused(success);
-				if (success) {
-					Runnable command = new PhotoCommand(PhotoActivity.this, camera);
-					int delay = settingsAccess.getDelay();
 
-					Log.d(DEBUG_TAG, "delay for photo: " + delay);
+		int delay = settingsAccess.getDelay();
+		Log.d(DEBUG_TAG, "delay for photo: " + delay);
 
-					if (delay > MIN) {
-						executor.schedule(command, delay, TimeUnit.SECONDS);
-					} else {
-						executor.execute(command);
-					}
-				} else {
-					prepareForNextShot();
-				}
-			}
-		});
+		cameraController.shot(delay);
 	}
 
-	void prepareForNextShot() {
+	@Override
+	public void prepareForNextShot() {
 		toggleInputs(true);
-		focusView.resetFocus();
+		cameraController.getFocusView().resetFocus();
 	}
 
 	/**
@@ -261,13 +211,13 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	public void onSettings(View view) {
 		Intent intent = new Intent(this, SettingsActivity.class);
 
-		intent.putExtra("pictureSizes", sizeSupport.getSupportedPicturesSizes());
-		intent.putExtra("selectedPictureSize", sizeSupport.getSelectedPictureSize(camera));
+		intent.putExtra("pictureSizes", cameraController.getSupportedPicturesSizes());
+		intent.putExtra("selectedPictureSize", cameraController.getSelectedPictureSize());
 
 		String isoKey = findIsoKey();
 		if(!isoKey.isEmpty()) {
-			intent.putExtra("selectedIso", isoSupport.getSelectedIsoValue(isoKey));
-			intent.putExtra("isos", isoSupport.getIsoValues());
+			intent.putExtra("selectedIso", cameraController.getSelectedIsoValue(isoKey));
+			intent.putExtra("isos", cameraController.getIsoValues());
 		}
 
 		startActivity(intent);
@@ -278,7 +228,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		String isoKey = settingsAccess.getIsoKey();
 		if(isoKey.isEmpty()) {
 			//if not look for it
-			isoKey = isoSupport.findIsoKey();
+			isoKey = cameraController.findIsoKey();
 			settingsAccess.setIsoKey(isoKey);
 		}
 		return isoKey;
@@ -296,7 +246,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	//combined settings values
-	private boolean isShutterSoundDisabled() { return canDisableShutterSound && settingsAccess.isShutterSoundDisabled();}
+	private boolean isShutterSoundDisabled() { return settingsAccess.isShutterSoundDisabled();}
 
 	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && settingsAccess.isGeoTaggingEnabled();}
 
@@ -314,7 +264,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 
 	@Override
 	public Preview getPreview() {
-		return preview;
+		return cameraController.getPreview();
 	}
 
 	@Override
@@ -325,10 +275,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	@Override
 	public SettingsAccess getSettingsAccess() {
 		return settingsAccess;
-	}
-
-	void setCamera(Camera camera) {
-		this.camera = camera;
 	}
 
 	void processHdr(String [] pictures){

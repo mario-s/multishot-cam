@@ -1,10 +1,11 @@
 package de.mario.camera;
 
+import android.content.Context;
 import android.os.Handler;
 
 import java.io.File;
 
-import de.mario.camera.preview.Preview;
+import de.mario.camera.controller.preview.Preview;
 
 /**
  * Interface for coupling between the activity and sub classes.
@@ -31,5 +32,9 @@ public interface PhotoActivable {
     Preview getPreview();
 
     SettingsAccess getSettingsAccess();
+
+    void prepareForNextShot();
+
+    Context getContext();
 
 }
