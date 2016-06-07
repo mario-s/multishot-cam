@@ -14,14 +14,16 @@ class ShotParams {
 
     private Shot[] shots;
 
+    private final View preview;
+
     private final PhotoActivable activity;
 
     private final ParameterUpdater updater;
 
     private boolean trace;
 
-    ShotParams(PhotoActivable activity, ParameterUpdater updater) {
-
+    ShotParams(View preview, PhotoActivable activity, ParameterUpdater updater) {
+        this.preview = preview;
         this.activity = activity;
         this.updater = updater;
     }
@@ -66,9 +68,7 @@ class ShotParams {
         return activity.getResource(key);
     }
 
-    View getPreview() {
-        return activity.getPreview();
-    }
+    View getPreview() {return preview;}
 
     ParameterUpdater getUpdater() { return updater; }
 

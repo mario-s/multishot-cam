@@ -26,11 +26,11 @@ public class PhotoCommand implements Runnable{
     private ParameterUpdater updater;
     private final ShotParams shotParams;
 
-    public PhotoCommand(PhotoActivable activity, Camera camera){
+    public PhotoCommand(CameraController cameraController, PhotoActivable activity){
         this.activity = activity;
-        this.camera = camera;
+        this.camera = cameraController.getCamera();
         this.updater = new ParameterUpdater(camera);
-        this.shotParams = new ShotParams(activity, updater);
+        this.shotParams = new ShotParams(cameraController.getPreview(), activity, updater);
         this.shotParams.setTrace(activity.getSettingsAccess().isTrace());
     }
 

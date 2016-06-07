@@ -5,8 +5,6 @@ import android.os.Handler;
 
 import java.io.File;
 
-import de.mario.camera.controller.preview.Preview;
-
 /**
  * Interface for coupling between the activity and sub classes.
  */
@@ -28,8 +26,6 @@ public interface PhotoActivable {
      * @return the directory
      */
     File getPicturesDirectory();
-
-    Preview getPreview();
 
     SettingsAccess getSettingsAccess();
 

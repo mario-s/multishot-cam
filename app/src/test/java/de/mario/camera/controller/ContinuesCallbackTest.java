@@ -31,24 +31,20 @@ public class ContinuesCallbackTest {
 
     @Mock
     private Context context;
-
     @Mock
     private PhotoActivable activity;
-
     @Mock
     private Handler handler;
-
     @Mock
     private Camera camera;
-
     @Mock
     private Camera.Parameters params;
-
     @Mock
     private Message message;
-
     @Mock
     private Preview preview;
+    @Mock
+    private CameraController cameraController;
 
     private ParameterUpdater updater;
 
@@ -65,12 +61,12 @@ public class ContinuesCallbackTest {
 
         given(activity.getHandler()).willReturn(handler);
         given(activity.getResource(anyInt())).willReturn(TEST);
-        given(activity.getPreview()).willReturn(preview);
+        given(cameraController.getPreview()).willReturn(preview);
         given(camera.getParameters()).willReturn(params);
 
         updater = new ParameterUpdater(params);
 
-        shotParams = new ShotParams(activity, updater){
+        shotParams = new ShotParams(preview, activity, updater){
             @Override
             Context getContext() {
                 return context;

@@ -100,7 +100,7 @@ public class CameraController implements CameraControlable{
             public void onAutoFocus(boolean success, Camera camera) {
                 focusView.focused(success);
                 if (success) {
-                    Runnable command = new PhotoCommand(activity, camera);
+                    Runnable command = new PhotoCommand(CameraController.this, activity);
 
                     if (delay > MIN) {
                         executor.schedule(command, delay, TimeUnit.SECONDS);
@@ -159,5 +159,9 @@ public class CameraController implements CameraControlable{
     @Override
     public String findIsoKey(){
         return isoSupport.findIsoKey();
+    }
+
+    Camera getCamera() {
+        return camera;
     }
 }

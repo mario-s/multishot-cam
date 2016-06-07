@@ -26,7 +26,6 @@ import de.mario.camera.controller.CameraControlable;
 import de.mario.camera.controller.CameraController;
 import de.mario.camera.controller.lookup.StorageLookup;
 import de.mario.camera.controller.preview.CanvasView;
-import de.mario.camera.controller.preview.Preview;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
 
@@ -261,11 +260,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	@Override
 	public Handler getHandler() {
 		return handler;
-	}
-
-	@Override
-	public Preview getPreview() {
-		return cameraController.getPreview();
 	}
 
 	@Override
