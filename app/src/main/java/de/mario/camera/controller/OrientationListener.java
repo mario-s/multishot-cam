@@ -27,11 +27,14 @@ class OrientationListener extends OrientationEventListener{
             int orientation = getOrientation(angle);
             if(orientation != lastOrientation) {
                 Camera.Parameters cameraParams = camera.getParameters();
-
-                if (orientation == 1 || orientation == 3) { //vertical
-                    cameraParams.setRotation(90);
-                } else if (orientation == 0 || orientation == 2) {
-                    cameraParams.setRotation(0);
+                switch(orientation){
+                    case 1: cameraParams.setRotation(90);
+                        break;
+                    case 2: cameraParams.setRotation(180);
+                        break;
+                    case 3: cameraParams.setRotation(270);
+                        break;
+                    default: cameraParams.setRotation(0);
                 }
 
                 camera.setParameters(cameraParams);
