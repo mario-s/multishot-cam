@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.util.ActivityController;
 
 import de.mario.camera.controller.CameraController;
 
@@ -25,7 +26,8 @@ public class PhotoActivityTest {
 
     @Before
     public void setUp(){
-        classUnderTest = Robolectric.setupActivity(PhotoActivity.class);
+        ActivityController<PhotoActivity> controller = Robolectric.buildActivity(PhotoActivity.class);
+        classUnderTest = controller.attach().create().get();
     }
 
     @Test
