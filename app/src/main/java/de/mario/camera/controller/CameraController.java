@@ -34,15 +34,21 @@ public class CameraController implements CameraControlable{
     private CameraFactory cameraFactory;
 
     public CameraController(PhotoActivable activity) {
-        this.activity = activity;
-        executor = new ScheduledThreadPoolExecutor(1);
-        cameraLookup = new CameraLookup();
-        cameraFactory = new CameraFactory();
+        this(activity, new CameraLookup(), new CameraFactory());
     }
+
+    CameraController(PhotoActivable activity, CameraLookup cameraLookup, CameraFactory cameraFactory) {
+        this.activity = activity;
+        this.cameraLookup = cameraLookup;
+        this.cameraFactory = cameraFactory;
+        executor = new ScheduledThreadPoolExecutor(1);
+    }
+
+
 
     /**
      * Look for a camera and return true if we got one.
-     * @return
+     * @return boolean
      */
     @Override
     public boolean lookupCamera() {
