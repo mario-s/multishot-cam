@@ -13,8 +13,8 @@ public final class PicturesSizeSupport {
 
     private String[] sizes;
 
-    public PicturesSizeSupport(Camera camera) {
-        initSizes(camera.getParameters());
+    public PicturesSizeSupport(Camera.Parameters params) {
+        initSizes(params);
     }
 
     private void initSizes(Camera.Parameters params) {
@@ -43,7 +43,12 @@ public final class PicturesSizeSupport {
         return getSelectedPictureSize(camera.getParameters());
     }
 
-    private String getSelectedPictureSize(Camera.Parameters params) {
+    /**
+     * Return the selected picture size of the given camera parameters.
+     * @param params the parameters to use
+     * @return size as string
+     */
+    public String getSelectedPictureSize(Camera.Parameters params) {
         Camera.Size size = params.getPictureSize();
         return String.format(PhotoActivable.PIC_SIZE_KEY, size.width, size.height);
     }

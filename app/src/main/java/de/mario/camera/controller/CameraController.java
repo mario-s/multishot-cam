@@ -66,8 +66,8 @@ public class CameraController implements CameraControlable{
     @Override
     public void initialize() {
         camera = cameraFactory.getCamera(camId);
-        sizeSupport = new PicturesSizeSupport(camera);
-        isoSupport = new IsoSupport(camera);
+        sizeSupport = new PicturesSizeSupport(camera.getParameters());
+        isoSupport = new IsoSupport(camera.getParameters());
 
         orientationListener = new OrientationListener(activity.getContext());
         if (orientationListener.canDetectOrientation()) {
@@ -75,8 +75,16 @@ public class CameraController implements CameraControlable{
             orientationListener.enable();
         }
 
-        preview = new Preview(activity.getContext(), camera);
-        focusView = new FocusView(activity.getContext());
+        createViews();
+    }
+
+    private void createViews() {
+        if(preview == null){
+            preview = new Preview(activity.getContext(), camera);
+        }
+        if(focusView == null) {
+            focusView = new FocusView(activity.getContext());
+        }
     }
 
 
@@ -169,5 +177,9 @@ public class CameraController implements CameraControlable{
 
     Camera getCamera() {
         return camera;
+    }
+
+    void setFocusView(FocusView focusView) {
+        this.focusView = focusView;
     }
 }

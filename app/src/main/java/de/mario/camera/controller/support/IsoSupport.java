@@ -16,11 +16,7 @@ public final class IsoSupport {
 
     private final Camera.Parameters params;
 
-    public IsoSupport(Camera camera) {
-        this(camera.getParameters());
-    }
-
-    IsoSupport(Camera.Parameters params) {
+    public IsoSupport(Camera.Parameters params) {
         this.params = params;
     }
 

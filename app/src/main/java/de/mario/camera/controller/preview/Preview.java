@@ -19,7 +19,6 @@ import de.mario.camera.PhotoActivable;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
-    private SurfaceHolder surfaceHolder;
     private Camera camera;
     private List<Dim> previewSizeList;
     private List<Dim> pictureSizeList;
@@ -38,9 +37,11 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     // Install a SurfaceHolder.Callback so we get notified when the
     // underlying surface is created and destroyed.
     private void initHolder() {
-        surfaceHolder = getHolder();
-        surfaceHolder.addCallback(this);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        SurfaceHolder surfaceHolder = getHolder();
+        if(surfaceHolder != null) {
+            surfaceHolder.addCallback(this);
+            surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        }
     }
 
     private void initSupportedSizes() {
