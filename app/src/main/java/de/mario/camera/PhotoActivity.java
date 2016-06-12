@@ -49,6 +49,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	private File pictureDirectory;
 	private SettingsAccess settingsAccess;
 	private CameraControlable cameraController;
+	private ViewsOrientationListener orientationListener;
 
 	private boolean hasCam;
 
@@ -117,6 +118,15 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		}
 	}
 
+	private void registerViewsOrientationListener(){
+		if(orientationListener == null){
+			orientationListener = new ViewsOrientationListener(this);
+			orientationListener.addView(findViewById(R.id.shutter));
+			orientationListener.addView(findViewById(R.id.settings));
+			orientationListener.enable();
+		}
+	}
+
 	private void unregisterLocationListener() {
 		locationManager.removeUpdates(locationListener);
 	}
@@ -126,6 +136,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 		super.onResume();
 
 		registerLocationListener();
+		registerViewsOrientationListener();
 
 		cameraController.reinitialize();
 	}
