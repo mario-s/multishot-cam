@@ -30,7 +30,7 @@ public class ViewsOrientationListenerTest {
 
     @Test
     public void testOnOrientationChanged() {
-        classUnderTest.onOrientationChanged(1);
-        verify(view).setRotation(359);
+        classUnderTest.onOrientationChanged(70);
+        verify(view).setRotation(270);
     }
 }

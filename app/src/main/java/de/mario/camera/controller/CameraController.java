@@ -29,7 +29,7 @@ public class CameraController implements CameraControlable{
     private IsoSupport isoSupport;
     private PicturesSizeSupport sizeSupport;
     private ScheduledExecutorService executor;
-    private OrientationListener orientationListener;
+    private CameraOrientationListener orientationListener;
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
 
@@ -69,7 +69,7 @@ public class CameraController implements CameraControlable{
         sizeSupport = new PicturesSizeSupport(camera.getParameters());
         isoSupport = new IsoSupport(camera.getParameters());
 
-        orientationListener = new OrientationListener(activity.getContext());
+        orientationListener = new CameraOrientationListener(activity.getContext());
         if (orientationListener.canDetectOrientation()) {
             orientationListener.setCamera(camera);
             orientationListener.enable();

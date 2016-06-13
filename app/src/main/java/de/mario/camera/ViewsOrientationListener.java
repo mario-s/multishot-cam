@@ -1,7 +1,6 @@
 package de.mario.camera;
 
 import android.content.Context;
-import android.view.OrientationEventListener;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * Orientation listener to update the rotation of views.
  */
-final class ViewsOrientationListener extends OrientationEventListener {
+final class ViewsOrientationListener extends AbstractOrientationListener {
 
     private final List<View> views;
 
@@ -20,10 +19,10 @@ final class ViewsOrientationListener extends OrientationEventListener {
     }
 
     @Override
-    public void onOrientationChanged(int orientation) {
-        int angle = 360 - orientation;
+    protected void orientationChanged(int orientation) {
+        int angl = 360 - orientation;
         for (View view: views) {
-            view.setRotation(angle);
+            view.setRotation(angl);
         }
     }
 
