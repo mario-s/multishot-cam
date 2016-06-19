@@ -30,7 +30,7 @@ class ContinuesCallback implements PictureCallback {
     private final int defaultExposure = 0;
     private File pictureFileDir;
     private List<String> imagesNames = new ArrayList<>();
-    private final ShotParams params;
+    private final ShotParams shotParams;
     private int imageCounter;
     private int max;
     private View preview;
@@ -41,7 +41,7 @@ class ContinuesCallback implements PictureCallback {
     private long start;
 
     ContinuesCallback(ShotParams params) {
-        this.params = params;
+        this.shotParams = params;
         this.names = params.getNames();
         this.exposures = params.getExposures();
         this.pictureFileDir = params.getPictureFileDir();
@@ -59,11 +59,11 @@ class ContinuesCallback implements PictureCallback {
     }
 
     private String getResource(int key) {
-        return params.getResource(key);
+        return shotParams.getResource(key);
     }
 
     private void toast(final String message) {
-        MessageSender sender = new MessageSender(params.getHandler());
+        MessageSender sender = new MessageSender(shotParams.getHandler());
         sender.toast(message);
     }
 
@@ -75,7 +75,7 @@ class ContinuesCallback implements PictureCallback {
         }
 
         if(imageCounter == max){
-            if(params.isTrace()) {
+            if(shotParams.isTrace()) {
                 long end = System.currentTimeMillis();
                 long duration = end - start;
                 Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
@@ -84,7 +84,7 @@ class ContinuesCallback implements PictureCallback {
 
             moveExternal();
 
-            updater.resetExposure();
+            updater.reset();
             updater.update(camera);
         }
     }
@@ -119,7 +119,7 @@ class ContinuesCallback implements PictureCallback {
             public void run() {
                 Message msg = Message.obtain();
                 msg.getData().putStringArray(PhotoActivable.PICTURES, imagesNames.toArray(new String[imagesNames.size()]));
-                params.getHandler().sendMessage(msg);
+                shotParams.getHandler().sendMessage(msg);
             }
         });
     }
@@ -132,6 +132,7 @@ class ContinuesCallback implements PictureCallback {
         imageCounter++;
         if(imageCounter < max) {
             updater.setExposureCompensation(exposures[imageCounter]);
+            updater.enableFlash(shotParams.isFlash(imageCounter));
             updater.update(camera);
 
             camera.takePicture(shutterCallback, pictureCallback, this);

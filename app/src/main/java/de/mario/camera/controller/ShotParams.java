@@ -79,4 +79,8 @@ class ShotParams {
     void setTrace(boolean trace) {
         this.trace = trace;
     }
+
+    boolean isFlash(int index){
+        return shots[index].isFlash();
+    }
 }

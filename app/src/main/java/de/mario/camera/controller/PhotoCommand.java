@@ -57,7 +57,7 @@ public class PhotoCommand implements Runnable{
         if(shots.length > 0) {
             updater.setExposureCompensation(shots[0].getExposure());
         }else{
-            updater.resetExposure();
+            updater.reset();
         }
 
         updater.setIso(settings.getIsoKey(), settings.getIsoValue());

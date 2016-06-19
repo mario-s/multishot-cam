@@ -1,6 +1,27 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:key="el"
+        android:title="@string/prefs_el_title">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:enabled="true"
+            android:entries="@array/exposureArray"
+            android:entryValues="@array/exposureValues"
+            android:key="evSequence"
+            android:summary="@string/prefs_exposure_description"
+            android:title="@string/prefs_exposure_title"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="lastFlash"
+            android:summary="@string/prefs_last_flash_description"
+            android:title="@string/prefs_last_flash_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="camera"
         android:title="@string/camera">
 
@@ -24,27 +45,6 @@
                 android:summary="@string/prefs_shutter_sound_disabled_description"
                 android:title="@string/prefs_shutter_sound_disable_title" />
         </PreferenceScreen>
-
-        <PreferenceCategory
-            android:key="el"
-            android:title="@string/prefs_el_title">
-
-            <ListPreference
-                android:defaultValue="0"
-                android:enabled="true"
-                android:entries="@array/exposureArray"
-                android:entryValues="@array/exposureValues"
-                android:key="evSequence"
-                android:summary="@string/prefs_exposure_description"
-                android:title="@string/prefs_exposure_title"/>
-
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="lastFlash"
-                android:summary="@string/prefs_last_flash_description"
-                android:title="@string/prefs_last_flash_title" />
-
-        </PreferenceCategory>
 
         <CheckBoxPreference
             android:defaultValue="false"

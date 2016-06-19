@@ -44,12 +44,21 @@ final class ParameterUpdater {
         }
     }
 
-    void resetExposure() {
+    void reset() {
         setExposureCompensation(0);
+        enableFlash(false);
     }
 
     void setExposureCompensation(int ev) {
         params.setExposureCompensation(ev);
+    }
+
+    void enableFlash(boolean enable) {
+        if(enable) {
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+        }else{
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        }
     }
 
     void update(Camera camera){

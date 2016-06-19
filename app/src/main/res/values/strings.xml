@@ -46,7 +46,7 @@
     <string name="prefs_iso_title">ISO</string>
     <string name="prefs_exposure_description">Set the sequence of exposure values.</string>
     <string name="prefs_exposure_title">Exposure Values</string>
-    <string name="prefs_el_title">EL</string>
+    <string name="prefs_el_title">Exposure Values</string>
     <string name="prefs_last_flash_description">Add a picture with a flash to the sequence.</string>
     <string name="prefs_last_flash_title">Last With Flash</string>
 
