@@ -12,7 +12,7 @@ import de.mario.camera.SettingsAccess;
 /**
  * Command which will be executed to take pictures.
  */
-public class PhotoCommand implements Runnable{
+class PhotoCommand implements Runnable{
 
     private final PhotoActivable activity;
     private final Camera camera;
@@ -22,7 +22,7 @@ public class PhotoCommand implements Runnable{
     private final SettingsAccess settings;
     private PhotoShotsFactory photoShotsFactory;
 
-    public PhotoCommand(CameraController cameraController, PhotoActivable activity){
+    PhotoCommand(CameraController cameraController, PhotoActivable activity){
         this.activity = activity;
         this.camera = cameraController.getCamera();
         this.photoShotsFactory = new PhotoShotsFactory(camera);
