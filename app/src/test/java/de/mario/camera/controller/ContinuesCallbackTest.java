@@ -72,7 +72,7 @@ public class ContinuesCallbackTest {
                 return context;
             }
         };
-        shotParams.setShots(new Shot[]{new Shot("a", 0), new Shot("b", 1)});
+        shotParams.setShots(new Shot[]{new Shot("a"), new Shot("b")});
 
         testData = TEST.getBytes();
     }
