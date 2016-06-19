@@ -25,6 +25,7 @@ public class PhotoCommand implements Runnable{
 
     private ParameterUpdater updater;
     private final ShotParams shotParams;
+    private final SettingsAccess settings;
 
     public PhotoCommand(CameraController cameraController, PhotoActivable activity){
         this.activity = activity;
@@ -32,6 +33,7 @@ public class PhotoCommand implements Runnable{
         this.updater = new ParameterUpdater(camera);
         this.shotParams = new ShotParams(cameraController.getPreview(), activity, updater);
         this.shotParams.setTrace(activity.getSettingsAccess().isTrace());
+        this.settings = activity.getSettingsAccess();
     }
 
     @Override
@@ -50,15 +52,10 @@ public class PhotoCommand implements Runnable{
     }
 
     private void prepareShots() {
-        SettingsAccess settings = activity.getSettingsAccess();
-
-        ExposureValuesFactory factory = new ExposureValuesFactory(camera);
-
-        int seqType = settings.getExposureSequenceType();
-        Shot[] shots = createEntries(factory.getValues(seqType));
 
         updater.setPictureSize(settings.getPicSizeKey());
 
+        Shot[] shots = createShots();
         //prepare the camera for the first exposure value
         if(shots.length > 0) {
             updater.setExposureCompensation(shots[0].getExposure());
@@ -73,18 +70,25 @@ public class PhotoCommand implements Runnable{
         shotParams.setShots(shots);
     }
 
-
     private void toast(String msg) {
         MessageSender sender = new MessageSender(activity.getHandler());
         sender.toast(msg);
         Log.d(PhotoActivable.DEBUG_TAG, msg);
     }
 
+    private Shot[] createShots() {
+        ExposureValuesFactory factory = new ExposureValuesFactory(camera);
+
+        int seqType = settings.getExposureSequenceType();
+        return createEntries(factory.getValues(seqType));
+    }
+
     private Shot[] createEntries(Queue<Integer> els) {
         Date date = new Date();
         Shot[] shots = new Shot[els.size()];
         for (int i = 0; i < shots.length; i++) {
-            shots[i] = new Shot(createFileName(date, i), els.poll());
+            shots[i] = new Shot(createFileName(date, i));
+            shots[i].setExposure(els.poll());
         }
         return shots;
     }
