@@ -37,6 +37,8 @@ class ContinuesCallback implements PictureCallback {
     private Camera.ShutterCallback shutterCallback;
     private Camera.PictureCallback pictureCallback;
     private final ParameterUpdater updater;
+    //remember the state of the last flash. was it enabled?
+    private boolean lastFlash;
 
     private long start;
 
@@ -95,8 +97,7 @@ class ContinuesCallback implements PictureCallback {
         try {
             memAccessor.save(data, name);
         } catch (IllegalStateException e) {
-            Log.e(PhotoActivable.DEBUG_TAG,
-                    "File " + name + " not saved: " + e.getMessage());
+            Log.e(PhotoActivable.DEBUG_TAG, String.format("File %s not saved: %s", name, e.getMessage()));
             toast(getResource(R.string.save_error));
         }
     }
@@ -132,11 +133,21 @@ class ContinuesCallback implements PictureCallback {
         imageCounter++;
         if(imageCounter < max) {
             updater.setExposureCompensation(exposures[imageCounter]);
-            updater.enableFlash(shotParams.isFlash(imageCounter));
+
+            updateFlash();
+
             updater.update(camera);
 
             camera.takePicture(shutterCallback, pictureCallback, this);
         }
+    }
+
+    private void updateFlash() {
+        boolean flash = shotParams.isFlash(imageCounter);
+        if(flash != lastFlash) {
+            updater.enableFlash(flash);
+        }
+        lastFlash = flash;
     }
 
 }
