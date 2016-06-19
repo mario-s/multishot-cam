@@ -25,6 +25,27 @@
                 android:title="@string/prefs_shutter_sound_disable_title" />
         </PreferenceScreen>
 
+        <PreferenceCategory
+            android:key="el"
+            android:title="@string/prefs_el_title">
+
+            <ListPreference
+                android:defaultValue="0"
+                android:enabled="true"
+                android:entries="@array/exposureArray"
+                android:entryValues="@array/exposureValues"
+                android:key="evSequence"
+                android:summary="@string/prefs_exposure_description"
+                android:title="@string/prefs_exposure_title"/>
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="lastFlash"
+                android:summary="@string/prefs_last_flash_description"
+                android:title="@string/prefs_last_flash_title" />
+
+        </PreferenceCategory>
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="geotagging"
@@ -36,15 +57,6 @@
             android:key="grid"
             android:summary="@string/prefs_grid_enabled_description"
             android:title="@string/prefs_grid_enabled_title" />
-
-        <ListPreference
-            android:defaultValue="0"
-            android:enabled="true"
-            android:entries="@array/exposureArray"
-            android:entryValues="@array/exposureValues"
-            android:key="evSequence"
-            android:summary="@string/prefs_exposure_description"
-            android:title="@string/prefs_exposure_title"/>
 
     </PreferenceCategory>
 

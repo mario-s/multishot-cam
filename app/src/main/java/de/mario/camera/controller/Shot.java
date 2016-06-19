@@ -12,6 +12,12 @@ final class Shot {
         this.name = name;
     }
 
+    Shot(Shot other) {
+        this(other.getName());
+        this.setExposure(other.getExposure());
+        this.setFlash(other.isFlash());
+    }
+
     String getName() {
         return name;
     }

@@ -48,6 +48,8 @@ public class SettingsAccess {
 
     public int getExposureSequenceType() {return getInt(SettingsValue.EXPOSURE_SEQ);}
 
+    public boolean isLastFlash() {return getBoolean(SettingsValue.LAST_FLASH);}
+
     int getDelay() {return getInt(SettingsValue.SHUTTER_DELAY); }
 
     boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);}
