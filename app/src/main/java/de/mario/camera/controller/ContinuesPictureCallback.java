@@ -1,7 +1,6 @@
 package de.mario.camera.controller;
 
 import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
 import android.os.Debug;
 import android.os.Message;
 import android.util.Log;
@@ -22,12 +21,11 @@ import de.mario.camera.R;
  *
  * @author Mario
  */
-class ContinuesCallback implements PictureCallback {
+class ContinuesPictureCallback extends DefaultPictureCallback {
 
     private final InternalMemoryAccessor memAccessor;
     private String [] names;
     private int [] exposures;
-    private final int defaultExposure = 0;
     private File pictureFileDir;
     private List<String> imagesNames = new ArrayList<>();
     private final ShotParams shotParams;
@@ -42,7 +40,7 @@ class ContinuesCallback implements PictureCallback {
 
     private long start;
 
-    ContinuesCallback(ShotParams params) {
+    ContinuesPictureCallback(ShotParams params) {
         this.shotParams = params;
         this.names = params.getNames();
         this.exposures = params.getExposures();

@@ -1,11 +1,12 @@
 package de.mario.camera.controller;
 
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
 
 /**
  * A call back for the picture process.
  */
-class DefaultPictureCallback implements Camera.PictureCallback {
+class DefaultPictureCallback implements PictureCallback {
     /**
      * Default implementation of call back method, which does nothing at all.
      * @param data

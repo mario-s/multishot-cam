@@ -44,7 +44,7 @@ class PhotoCommand implements Runnable{
         if(shotParams.isTrace()) {
             Debug.startMethodTracing("multishot");
         }
-        ContinuesCallback callback = new ContinuesCallback(shotParams);
+        ContinuesPictureCallback callback = new ContinuesPictureCallback(shotParams);
         camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
     }
 

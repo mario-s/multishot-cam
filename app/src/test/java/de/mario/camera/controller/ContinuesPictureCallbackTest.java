@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 /**
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ContinuesCallbackTest {
+public class ContinuesPictureCallbackTest {
 
     public static final String TEST = "test";
 
@@ -81,7 +81,7 @@ public class ContinuesCallbackTest {
     public void testOnPictureTaken() {
         given(activity.getPicturesDirectory()).willReturn(folder);
 
-        ContinuesCallback classUnderTest = new ContinuesCallback(shotParams);
+        ContinuesPictureCallback classUnderTest = new ContinuesPictureCallback(shotParams);
 
         classUnderTest.onPictureTaken(testData, camera);
         verify(camera).setParameters(params);
@@ -92,7 +92,7 @@ public class ContinuesCallbackTest {
     public void testOnPictureTaken_MissingPictureFile() {
         given(activity.getPicturesDirectory()).willReturn(new File("foo.bar"));
 
-        ContinuesCallback classUnderTest = new ContinuesCallback(shotParams);
+        ContinuesPictureCallback classUnderTest = new ContinuesPictureCallback(shotParams);
 
         classUnderTest.onPictureTaken(testData, camera);
         verify(handler).sendMessage(any(Message.class));
