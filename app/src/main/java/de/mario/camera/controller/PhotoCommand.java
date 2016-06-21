@@ -67,9 +67,12 @@ class PhotoCommand implements Runnable{
     }
 
     private void toast(String msg) {
-        MessageSender sender = new MessageSender(activity.getHandler());
-        sender.toast(msg);
+        newSender().toast(msg);
         Log.d(PhotoActivable.DEBUG_TAG, msg);
+    }
+
+    MessageSender newSender() {
+        return new MessageSender(activity.getHandler());
     }
 
 }
