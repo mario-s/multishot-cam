@@ -28,7 +28,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
     private int [] exposures;
     private File pictureFileDir;
     private List<String> imagesNames = new ArrayList<>();
-    private final ShotParams shotParams;
+    private final ShotParameters shotParams;
     private int imageCounter;
     private int max;
     private View preview;
@@ -40,7 +40,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
 
     private long start;
 
-    ContinuesPictureCallback(ShotParams params) {
+    ContinuesPictureCallback(ShotParameters params) {
         this.shotParams = params;
         this.names = params.getNames();
         this.exposures = params.getExposures();

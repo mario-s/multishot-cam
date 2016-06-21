@@ -10,7 +10,7 @@ import de.mario.camera.PhotoActivable;
 
 /**
  */
-class ShotParams {
+class ShotParameters {
 
     private Shot[] shots;
 
@@ -22,7 +22,7 @@ class ShotParams {
 
     private boolean trace;
 
-    ShotParams(View preview, PhotoActivable activity, ParameterUpdater updater) {
+    ShotParameters(View preview, PhotoActivable activity, ParameterUpdater updater) {
         this.preview = preview;
         this.activity = activity;
         this.updater = updater;
@@ -58,6 +58,11 @@ class ShotParams {
      */
     File getPictureFileDir() {
         return activity.getPicturesDirectory();
+    }
+
+    boolean existsPictureSaveDirectory(){
+        File folder = getPictureFileDir();
+        return folder != null && folder.exists();
     }
 
     Handler getHandler(){

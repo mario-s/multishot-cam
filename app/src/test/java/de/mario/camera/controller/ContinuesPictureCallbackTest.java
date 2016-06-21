@@ -52,7 +52,7 @@ public class ContinuesPictureCallbackTest {
 
     private File folder;
 
-    private ShotParams shotParams;
+    private ShotParameters shotParams;
 
     @Before
     public void setUp() {
@@ -66,7 +66,7 @@ public class ContinuesPictureCallbackTest {
 
         updater = new ParameterUpdater(params);
 
-        shotParams = new ShotParams(preview, activity, updater){
+        shotParams = new ShotParameters(preview, activity, updater){
             @Override
             Context getContext() {
                 return context;

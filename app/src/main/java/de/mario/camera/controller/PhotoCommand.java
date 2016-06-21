@@ -18,34 +18,33 @@ class PhotoCommand implements Runnable{
     private final Camera camera;
 
     private ParameterUpdater updater;
-    private final ShotParams shotParams;
+    private final ShotParameters shotParams;
     private final SettingsAccess settings;
     private PhotoShotsFactory photoShotsFactory;
 
     PhotoCommand(CameraController cameraController, PhotoActivable activity){
         this.activity = activity;
         this.camera = cameraController.getCamera();
+        this.settings = activity.getSettingsAccess();
+
         this.photoShotsFactory = new PhotoShotsFactory(camera);
         this.updater = new ParameterUpdater(camera);
-
-        this.shotParams = new ShotParams(cameraController.getPreview(), activity, updater);
-        this.shotParams.setTrace(activity.getSettingsAccess().isTrace());
-        this.settings = activity.getSettingsAccess();
+        this.shotParams = new ShotParameters(cameraController.getPreview(), activity, updater);
+        this.shotParams.setTrace(settings.isTrace());
     }
 
     @Override
     public void run() {
-        if (!activity.getPicturesDirectory().exists()) {
+        if (shotParams.existsPictureSaveDirectory()) {
+            prepareShots();
+            if(shotParams.isTrace()) {
+                Debug.startMethodTracing("multishot");
+            }
+            ContinuesPictureCallback callback = new ContinuesPictureCallback(shotParams);
+            camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
+        }else{
             toast(activity.getResource(R.string.no_directory));
-            return;
         }
-
-        prepareShots();
-        if(shotParams.isTrace()) {
-            Debug.startMethodTracing("multishot");
-        }
-        ContinuesPictureCallback callback = new ContinuesPictureCallback(shotParams);
-        camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
     }
 
     private void prepareShots() {
