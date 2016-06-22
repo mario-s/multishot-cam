@@ -10,7 +10,7 @@ import de.mario.camera.PhotoActivable;
  * Updates the parameters of the camera without getting them each time a single parameter
  * is adjusted.
  */
-final class ParameterUpdater {
+class ParameterUpdater {
     private final Camera.Parameters params;
 
     ParameterUpdater(Camera camera){

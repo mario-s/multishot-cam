@@ -12,7 +12,7 @@ import de.mario.camera.SettingsAccess;
 /**
  * This exposureValuesFactory creates a sequence of {@link Shot}.
  */
-final class PhotoShotsFactory {
+class PhotoShotsFactory {
     private static final String PATTERN = "yyyy-MM-dd_HH:mm:ss";
     private ExposureValuesFactory exposureValuesFactory;
 

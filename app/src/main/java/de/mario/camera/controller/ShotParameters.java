@@ -60,11 +60,6 @@ class ShotParameters {
         return activity.getPicturesDirectory();
     }
 
-    boolean existsPictureSaveDirectory(){
-        File folder = getPictureFileDir();
-        return folder != null && folder.exists();
-    }
-
     Handler getHandler(){
         return activity.getHandler();
     }

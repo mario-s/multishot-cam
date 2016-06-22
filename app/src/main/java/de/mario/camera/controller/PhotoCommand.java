@@ -1,11 +1,10 @@
 package de.mario.camera.controller;
 
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
 import android.os.Debug;
-import android.util.Log;
 
 import de.mario.camera.PhotoActivable;
-import de.mario.camera.R;
 import de.mario.camera.SettingsAccess;
 
 
@@ -17,7 +16,7 @@ class PhotoCommand implements Runnable{
     private final PhotoActivable activity;
     private final Camera camera;
 
-    private ParameterUpdater updater;
+    private ParameterUpdater parameterUpdater;
     private final ShotParameters shotParams;
     private final SettingsAccess settings;
     private PhotoShotsFactory photoShotsFactory;
@@ -28,51 +27,41 @@ class PhotoCommand implements Runnable{
         this.settings = activity.getSettingsAccess();
 
         this.photoShotsFactory = new PhotoShotsFactory(camera);
-        this.updater = new ParameterUpdater(camera);
-        this.shotParams = new ShotParameters(cameraController.getPreview(), activity, updater);
+        this.parameterUpdater = new ParameterUpdater(camera);
+        this.shotParams = new ShotParameters(cameraController.getPreview(), activity, parameterUpdater);
         this.shotParams.setTrace(settings.isTrace());
     }
 
     @Override
     public void run() {
-        if (shotParams.existsPictureSaveDirectory()) {
-            prepareShots();
-            if(shotParams.isTrace()) {
-                Debug.startMethodTracing("multishot");
-            }
-            ContinuesPictureCallback callback = new ContinuesPictureCallback(shotParams);
-            camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), callback);
-        }else{
-            toast(activity.getResource(R.string.no_directory));
+        prepareShots();
+        if(shotParams.isTrace()) {
+            Debug.startMethodTracing("multishot");
         }
+        camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), newPictureCallback());
+    }
+
+    PictureCallback newPictureCallback() {
+        return new ContinuesPictureCallback(shotParams);
     }
 
     private void prepareShots() {
 
-        updater.setPictureSize(settings.getPicSizeKey());
+        parameterUpdater.setPictureSize(settings.getPicSizeKey());
 
         Shot[] shots = photoShotsFactory.create(settings);
         //prepare the camera for the first exposure value
         if(shots.length > 0) {
-            updater.setExposureCompensation(shots[0].getExposure());
+            parameterUpdater.setExposureCompensation(shots[0].getExposure());
         }else{
-            updater.reset();
+            parameterUpdater.reset();
         }
 
-        updater.setIso(settings.getIsoKey(), settings.getIsoValue());
+        parameterUpdater.setIso(settings.getIsoKey(), settings.getIsoValue());
 
-        updater.update(camera);
+        parameterUpdater.update(camera);
 
         shotParams.setShots(shots);
-    }
-
-    private void toast(String msg) {
-        newSender().toast(msg);
-        Log.d(PhotoActivable.DEBUG_TAG, msg);
-    }
-
-    MessageSender newSender() {
-        return new MessageSender(activity.getHandler());
     }
 
 }

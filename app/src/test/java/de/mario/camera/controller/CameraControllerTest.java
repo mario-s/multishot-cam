@@ -2,6 +2,7 @@ package de.mario.camera.controller;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.os.Handler;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,10 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.verify;
+import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 /**
  */
@@ -39,17 +43,23 @@ public class CameraControllerTest {
     private FocusView focusView;
     @Mock
     private Camera.Parameters parameters;
+    @Mock
+    private MessageSender messageSender;
+    @Mock
+    private Handler handler;
     @InjectMocks
     private CameraController classUnderTest;
 
     @Before
     public void setUp() {
-        classUnderTest.setFocusView(focusView);
+        setInternalState(classUnderTest, "focusView", focusView);
+        setInternalState(classUnderTest, "messageSender", messageSender);
 
         given(cameraLookup.findBackCamera()).willReturn(1);
         given(cameraFactory.getCamera(anyInt())).willReturn(camera);
         given(camera.getParameters()).willReturn(parameters);
         given(activity.getContext()).willReturn(context);
+        given(activity.getHandler()).willReturn(handler);
     }
 
     @Test
@@ -69,5 +79,11 @@ public class CameraControllerTest {
     public void testInitialize() {
         classUnderTest.initialize();
         assertNotNull(classUnderTest.getPreview());
+    }
+
+    @Test
+    public void testShot_NoDirectory() {
+        classUnderTest.shot(0);
+        verify(messageSender).toast(anyString());
     }
 }

@@ -1,10 +1,10 @@
 package de.mario.camera.controller.support;
 
-import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -16,14 +16,9 @@ import static junit.framework.Assert.assertNotNull;
 public class IsoSupportTest {
 
     @Mock
-    private Camera.Parameters parameters;
-
+    private Parameters parameters;
+    @InjectMocks
     private IsoSupport classUnderTest;
-
-    @Before
-    public void setUp(){
-        classUnderTest = new IsoSupport(parameters);
-    }
 
     @Test
     public void testGetIsoValues(){

@@ -1,12 +1,15 @@
 package de.mario.camera.controller;
 
 import android.hardware.Camera;
+import android.util.Log;
 
+import java.io.File;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.mario.camera.PhotoActivable;
+import de.mario.camera.R;
 import de.mario.camera.controller.lookup.CameraLookup;
 import de.mario.camera.controller.preview.FocusView;
 import de.mario.camera.controller.preview.Preview;
@@ -32,6 +35,7 @@ public class CameraController implements CameraControlable{
     private CameraOrientationListener orientationListener;
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
+    private MessageSender messageSender;
 
     public CameraController(PhotoActivable activity) {
         this(activity, new CameraLookup(), new CameraFactory());
@@ -42,6 +46,7 @@ public class CameraController implements CameraControlable{
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
         executor = new ScheduledThreadPoolExecutor(1);
+        messageSender = new MessageSender(activity.getHandler());
     }
 
 
@@ -109,23 +114,41 @@ public class CameraController implements CameraControlable{
 
     @Override
     public void shot(final int delay) {
-        camera.autoFocus(new Camera.AutoFocusCallback() {
-            @Override
-            public void onAutoFocus(boolean success, Camera camera) {
-                focusView.focused(success);
-                if (success) {
-                    Runnable command = new PhotoCommand(CameraController.this, activity);
-
-                    if (delay > MIN) {
-                        executor.schedule(command, delay, TimeUnit.SECONDS);
+        if(existsPictureSaveDirectory()) {
+            camera.autoFocus(new Camera.AutoFocusCallback() {
+                @Override
+                public void onAutoFocus(boolean success, Camera camera) {
+                    focusView.focused(success);
+                    if (success) {
+                        execute(delay);
                     } else {
-                        executor.execute(command);
+                        prepareNextShot();
                     }
-                } else {
-                    prepareNextShot();
                 }
-            }
-        });
+            });
+        }else{
+            toast(activity.getResource(R.string.no_directory));
+        }
+    }
+
+    private void execute(int delay) {
+        Runnable command = new PhotoCommand(CameraController.this, activity);
+
+        if (delay > MIN) {
+            executor.schedule(command, delay, TimeUnit.SECONDS);
+        } else {
+            executor.execute(command);
+        }
+    }
+
+    private boolean existsPictureSaveDirectory(){
+        File folder = activity.getPicturesDirectory();
+        return folder != null && folder.exists();
+    }
+
+    private void toast(String msg) {
+        messageSender.toast(msg);
+        Log.d(PhotoActivable.DEBUG_TAG, msg);
     }
 
     private void prepareNextShot() {
@@ -179,7 +202,4 @@ public class CameraController implements CameraControlable{
         return camera;
     }
 
-    void setFocusView(FocusView focusView) {
-        this.focusView = focusView;
-    }
 }
