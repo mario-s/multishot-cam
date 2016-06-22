@@ -29,15 +29,11 @@ class PhotoCommand implements Runnable{
         this.photoShotsFactory = new PhotoShotsFactory(camera);
         this.parameterUpdater = new ParameterUpdater(camera);
         this.shotParams = new ShotParameters(cameraController.getPreview(), activity, parameterUpdater);
-        this.shotParams.setTrace(settings.isTrace());
     }
 
     @Override
     public void run() {
         prepareShots();
-        if(shotParams.isTrace()) {
-            Debug.startMethodTracing("multishot");
-        }
         camera.takePicture(new DefaultShutterCallback(), new DefaultPictureCallback(), newPictureCallback());
     }
 
@@ -62,6 +58,12 @@ class PhotoCommand implements Runnable{
         parameterUpdater.update(camera);
 
         shotParams.setShots(shots);
+
+        boolean trace = settings.isTrace();
+        shotParams.setTrace(trace);
+        if(trace) {
+            Debug.startMethodTracing("multishot");
+        }
     }
 
 }
