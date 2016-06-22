@@ -12,7 +12,6 @@ import org.robolectric.util.ActivityController;
 
 import de.mario.camera.controller.CameraController;
 
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -36,6 +35,6 @@ public class PhotoActivityTest {
         classUnderTest.setCameraController(mock);
         ImageButton btn = (ImageButton)classUnderTest.findViewById(R.id.shutter);
         btn.performClick();
-        verify(mock).shot(anyInt());
+        verify(mock).shot();
     }
 }

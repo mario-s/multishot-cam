@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import de.mario.camera.PhotoActivable;
+import de.mario.camera.SettingsAccess;
 import de.mario.camera.controller.lookup.CameraLookup;
 import de.mario.camera.controller.preview.FocusView;
 
@@ -47,6 +48,8 @@ public class CameraControllerTest {
     private MessageSender messageSender;
     @Mock
     private Handler handler;
+    @Mock
+    private SettingsAccess settingsAccess;
     @InjectMocks
     private CameraController classUnderTest;
 
@@ -60,6 +63,7 @@ public class CameraControllerTest {
         given(camera.getParameters()).willReturn(parameters);
         given(activity.getContext()).willReturn(context);
         given(activity.getHandler()).willReturn(handler);
+        given(activity.getSettingsAccess()).willReturn(settingsAccess);
     }
 
     @Test
@@ -83,7 +87,7 @@ public class CameraControllerTest {
 
     @Test
     public void testShot_NoDirectory() {
-        classUnderTest.shot(0);
+        classUnderTest.shot();
         verify(messageSender).toast(anyString());
     }
 }

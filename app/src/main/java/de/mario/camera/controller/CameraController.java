@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
+import de.mario.camera.SettingsAccess;
 import de.mario.camera.controller.lookup.CameraLookup;
 import de.mario.camera.controller.preview.FocusView;
 import de.mario.camera.controller.preview.Preview;
@@ -113,17 +114,19 @@ public class CameraController implements CameraControlable{
     }
 
     @Override
-    public void shot(final int delay) {
+    public void shot() {
+        enableShutterSound(!isShutterSoundDisabled());
+
         if(existsPictureSaveDirectory()) {
             camera.autoFocus(new Camera.AutoFocusCallback() {
                 @Override
                 public void onAutoFocus(boolean success, Camera camera) {
-                    focusView.focused(success);
-                    if (success) {
-                        execute(delay);
-                    } else {
-                        prepareNextShot();
-                    }
+                focusView.focused(success);
+                if (success) {
+                    execute(getSettings().getDelay());
+                } else {
+                    prepareNextShot();
+                }
                 }
             });
         }else{
@@ -131,7 +134,15 @@ public class CameraController implements CameraControlable{
         }
     }
 
+    private boolean isShutterSoundDisabled() { return getSettings().isShutterSoundDisabled();}
+
+    private SettingsAccess getSettings() {
+        return activity.getSettingsAccess();
+    }
+
     private void execute(int delay) {
+        Log.d(PhotoActivable.DEBUG_TAG, "delay for photo: " + delay);
+
         Runnable command = new PhotoCommand(CameraController.this, activity);
 
         if (delay > MIN) {
@@ -156,8 +167,7 @@ public class CameraController implements CameraControlable{
         activity.prepareForNextShot();
     }
 
-    @Override
-    public void enableShutterSound(boolean enable) {
+    private void enableShutterSound(boolean enable) {
         if(canDisableShutterSound) {
             camera.enableShutterSound(enable);
         }

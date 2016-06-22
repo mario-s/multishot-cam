@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -189,14 +188,8 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onShutter(View view) {
-		cameraController.enableShutterSound(!isShutterSoundDisabled());
-
 		toggleInputs(false);
-
-		int delay = settingsAccess.getDelay();
-		Log.d(DEBUG_TAG, "delay for photo: " + delay);
-
-		cameraController.shot(delay);
+		cameraController.shot();
 	}
 
 	@Override
@@ -219,6 +212,13 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onSettings(View view) {
+		Intent intent = newIntent();
+
+		hideProgress();
+		startActivity(intent);
+	}
+
+	private Intent newIntent() {
 		Intent intent = new Intent(this, SettingsActivity.class);
 
 		intent.putExtra("pictureSizes", cameraController.getSupportedPicturesSizes());
@@ -229,9 +229,7 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			intent.putExtra("selectedIso", cameraController.getSelectedIsoValue(isoKey));
 			intent.putExtra("isos", cameraController.getIsoValues());
 		}
-
-		hideProgress();
-		startActivity(intent);
+		return intent;
 	}
 
 	private String findIsoKey() {
@@ -257,8 +255,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	}
 
 	//combined settings values
-	private boolean isShutterSoundDisabled() { return settingsAccess.isShutterSoundDisabled();}
-
 	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && settingsAccess.isGeoTaggingEnabled();}
 
 	private boolean isGpsEnabled() { return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}

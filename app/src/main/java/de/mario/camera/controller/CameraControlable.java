@@ -15,9 +15,7 @@ public interface CameraControlable {
 
     void releaseCamera();
 
-    void shot(final int delay);
-
-    void enableShutterSound(boolean enable);
+    void shot();
 
     Preview getPreview();
 

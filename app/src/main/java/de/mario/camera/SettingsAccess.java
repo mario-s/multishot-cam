@@ -50,11 +50,11 @@ public class SettingsAccess {
 
     public boolean isLastFlash() {return getBoolean(SettingsValue.LAST_FLASH);}
 
-    int getDelay() {return getInt(SettingsValue.SHUTTER_DELAY); }
+    public int getDelay() {return getInt(SettingsValue.SHUTTER_DELAY); }
 
     boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);}
 
-    boolean isShutterSoundDisabled() {return getBoolean(SettingsValue.SHUTTER_SOUND);}
+    public boolean isShutterSoundDisabled() {return getBoolean(SettingsValue.SHUTTER_SOUND);}
 
     boolean isGeoTaggingEnabled() { return getBoolean(SettingsValue.GEO_TAGGING);}
 
