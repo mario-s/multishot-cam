@@ -1,6 +1,5 @@
 package de.mario.camera;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.inject.Inject;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -27,6 +27,9 @@ import de.mario.camera.controller.lookup.StorageLookup;
 import de.mario.camera.controller.preview.CanvasView;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 
 /**
  * Main activity.
@@ -34,21 +37,27 @@ import de.mario.camera.service.OpenCvService;
  * @author Mario
  * 
  */
-public class PhotoActivity extends Activity implements PhotoActivable{
+@ContentView(R.layout.activity_photo)
+public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	private static final String VERS = "version";
 	private static final String PREFS = "PREFERENCE";
-	private ProgressBar progressBar;
+	@InjectView(R.id.progress_bar)
+	private View progressBar;
+	private CanvasView canvasView;
+
+	private MyLocationListener locationListener;
+	@Inject
+	private LocationManager locationManager;
+
 	private Handler handler;
 	private ProcessReceiver receiver;
 
-	private CanvasView canvasView;
-	private MyLocationListener locationListener;
-	private LocationManager locationManager;
-	private File pictureDirectory;
 	private SettingsAccess settingsAccess;
 	private CameraControlable cameraController;
 	private ViewsOrientationListener orientationListener;
+
+	private File pictureDirectory;
 
 	private boolean hasCam;
 
@@ -72,8 +81,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_photo);
-		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -86,7 +93,6 @@ public class PhotoActivity extends Activity implements PhotoActivable{
 			StorageLookup storageLookup = new StorageLookup(this);
 			pictureDirectory = storageLookup.createStorageDirectory();
 
-			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		}
 	}
 
