@@ -46,6 +46,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private View progressBar;
 	private CanvasView canvasView;
 
+	@Inject
 	private MyLocationListener locationListener;
 	@Inject
 	private LocationManager locationManager;
@@ -64,7 +65,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	public PhotoActivity() {
 		handler = new MessageHandler(this);
 		receiver = new ProcessReceiver();
-		locationListener = new MyLocationListener();
 		settingsAccess = new SettingsAccess(this);
 		cameraController = new CameraController(this);
 	}
