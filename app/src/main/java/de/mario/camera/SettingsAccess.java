@@ -4,17 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.inject.Inject;
+
 import static java.lang.Integer.parseInt;
 
 /**
  * This class provides easier access to settings values.
  */
 public class SettingsAccess {
-    private final Context context;
-
-    public SettingsAccess(Context context) {
-        this.context = context;
-    }
+    @Inject
+    private Context context;
 
     public boolean isTrace() { return getBoolean(SettingsValue.TRACE);}
 

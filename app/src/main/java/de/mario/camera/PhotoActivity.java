@@ -53,7 +53,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	private Handler handler;
 	private ProcessReceiver receiver;
-
+	@Inject
 	private SettingsAccess settingsAccess;
 	private CameraControlable cameraController;
 	private ViewsOrientationListener orientationListener;
@@ -65,7 +65,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	public PhotoActivity() {
 		handler = new MessageHandler(this);
 		receiver = new ProcessReceiver();
-		settingsAccess = new SettingsAccess(this);
 		cameraController = new CameraController(this);
 	}
 
