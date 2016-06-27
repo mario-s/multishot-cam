@@ -1,5 +1,6 @@
 package de.mario.camera.controller;
 
+import de.mario.camera.PhotoActivable;
 import de.mario.camera.controller.preview.FocusView;
 import de.mario.camera.controller.preview.Preview;
 
@@ -30,4 +31,6 @@ public interface CameraControlable {
     String getSelectedPictureSize();
 
     String findIsoKey();
+
+    void setActivity(PhotoActivable activity);
 }

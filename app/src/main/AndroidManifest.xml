@@ -45,6 +45,9 @@
         <service
             android:name=".service.ExposureMergeService">
         </service>
+
+        <meta-data android:name="roboguice.modules"
+            android:value="de.mario.camera.glue.DefaultModule" />
     </application>
 
 </manifest>

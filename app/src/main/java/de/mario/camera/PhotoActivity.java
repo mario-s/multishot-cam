@@ -22,7 +22,6 @@ import org.opencv.android.OpenCVLoader;
 import java.io.File;
 
 import de.mario.camera.controller.CameraControlable;
-import de.mario.camera.controller.CameraController;
 import de.mario.camera.controller.lookup.StorageLookup;
 import de.mario.camera.controller.preview.CanvasView;
 import de.mario.camera.service.ExposureMergeService;
@@ -55,6 +54,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private ProcessReceiver receiver;
 	@Inject
 	private SettingsAccess settingsAccess;
+	@Inject
 	private CameraControlable cameraController;
 	private ViewsOrientationListener orientationListener;
 
@@ -65,11 +65,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	public PhotoActivity() {
 		handler = new MessageHandler(this);
 		receiver = new ProcessReceiver();
-		cameraController = new CameraController(this);
-	}
-
-	void setCameraController(CameraController cameraController){
-		this.cameraController = cameraController;
 	}
 
 	@Override
@@ -87,6 +82,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		} else {
 			showDialogWhenFirstRun();
 
+			cameraController.setActivity(this);
 			hasCam = cameraController.lookupCamera();
 
 			StorageLookup storageLookup = new StorageLookup(this);

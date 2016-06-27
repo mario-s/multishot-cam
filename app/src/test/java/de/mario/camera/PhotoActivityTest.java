@@ -14,6 +14,7 @@ import de.mario.camera.controller.CameraController;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 /**
  */
@@ -21,20 +22,22 @@ import static org.mockito.Mockito.verify;
 @Config(constants = BuildConfig.class, sdk = 18)
 public class PhotoActivityTest {
 
-    PhotoActivity classUnderTest;
+    private PhotoActivity classUnderTest;
+
+    private CameraController cameraController;
 
     @Before
     public void setUp(){
         ActivityController<PhotoActivity> controller = Robolectric.buildActivity(PhotoActivity.class);
         classUnderTest = controller.attach().create().get();
+        cameraController = mock(CameraController.class);
+        setInternalState(classUnderTest, "cameraController", cameraController);
     }
 
     @Test
     public void testShutter() {
-        CameraController mock = mock(CameraController.class);
-        classUnderTest.setCameraController(mock);
         ImageButton btn = (ImageButton)classUnderTest.findViewById(R.id.shutter);
         btn.performClick();
-        verify(mock).shot();
+        verify(cameraController).shot();
     }
 }

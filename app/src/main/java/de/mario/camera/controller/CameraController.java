@@ -38,8 +38,8 @@ public class CameraController implements CameraControlable{
     private CameraFactory cameraFactory;
     private MessageSender messageSender;
 
-    public CameraController(PhotoActivable activity) {
-        this(activity, new CameraLookup(), new CameraFactory());
+    public CameraController() {
+        this(null, new CameraLookup(), new CameraFactory());
     }
 
     CameraController(PhotoActivable activity, CameraLookup cameraLookup, CameraFactory cameraFactory) {
@@ -47,10 +47,13 @@ public class CameraController implements CameraControlable{
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
         executor = new ScheduledThreadPoolExecutor(1);
-        messageSender = new MessageSender(activity.getHandler());
     }
 
-
+    @Override
+    public void setActivity(PhotoActivable activity) {
+        this.activity = activity;
+        messageSender = new MessageSender(activity.getHandler());
+    }
 
     /**
      * Look for a camera and return true if we got one.
