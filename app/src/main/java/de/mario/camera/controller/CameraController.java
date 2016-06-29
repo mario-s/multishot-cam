@@ -12,6 +12,7 @@ import de.mario.camera.PhotoActivable;
 import de.mario.camera.R;
 import de.mario.camera.SettingsAccess;
 import de.mario.camera.controller.lookup.CameraLookup;
+import de.mario.camera.controller.lookup.StorageLookable;
 import de.mario.camera.controller.preview.FocusView;
 import de.mario.camera.controller.preview.Preview;
 import de.mario.camera.controller.support.IsoSupport;
@@ -21,6 +22,8 @@ import de.mario.camera.controller.support.PicturesSizeSupport;
  */
 public class CameraController implements CameraControlable{
     private static final int MIN = 0;
+
+    private StorageLookable storageLookable;
 
     private PhotoActivable activity;
     private int camId = CameraLookup.NO_CAM_ID;
@@ -156,8 +159,12 @@ public class CameraController implements CameraControlable{
     }
 
     private boolean existsPictureSaveDirectory(){
-        File folder = activity.getPicturesDirectory();
+        File folder = getPictureSaveDirectory();
         return folder != null && folder.exists();
+    }
+
+    File getPictureSaveDirectory() {
+        return storageLookable.lookupSaveDirectory();
     }
 
     private void toast(String msg) {
@@ -215,4 +222,8 @@ public class CameraController implements CameraControlable{
         return camera;
     }
 
+    @Override
+    public void setStorageLookup(StorageLookable storageLookup) {
+        this.storageLookable = storageLookup;
+    }
 }

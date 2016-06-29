@@ -14,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.SettingsAccess;
 import de.mario.camera.controller.lookup.CameraLookup;
+import de.mario.camera.controller.lookup.StorageLookable;
 import de.mario.camera.controller.preview.FocusView;
 
 import static junit.framework.Assert.assertFalse;
@@ -50,6 +51,8 @@ public class CameraControllerTest {
     private Handler handler;
     @Mock
     private SettingsAccess settingsAccess;
+    @Mock
+    private StorageLookable storageLookable;
     @InjectMocks
     private CameraController classUnderTest;
 
@@ -57,6 +60,8 @@ public class CameraControllerTest {
     public void setUp() {
         setInternalState(classUnderTest, "focusView", focusView);
         setInternalState(classUnderTest, "messageSender", messageSender);
+
+        classUnderTest.setStorageLookup(storageLookable);
 
         given(cameraLookup.findBackCamera()).willReturn(1);
         given(cameraFactory.getCamera(anyInt())).willReturn(camera);

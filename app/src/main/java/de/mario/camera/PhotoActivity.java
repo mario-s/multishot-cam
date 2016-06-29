@@ -19,10 +19,8 @@ import com.google.inject.Inject;
 
 import org.opencv.android.OpenCVLoader;
 
-import java.io.File;
-
 import de.mario.camera.controller.CameraControlable;
-import de.mario.camera.controller.lookup.StorageLookup;
+import de.mario.camera.controller.lookup.StorageLookable;
 import de.mario.camera.controller.preview.CanvasView;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
@@ -50,15 +48,15 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Inject
 	private LocationManager locationManager;
 
-	private Handler handler;
+	private MessageHandler handler;
 	private ProcessReceiver receiver;
 	@Inject
 	private SettingsAccess settingsAccess;
 	@Inject
 	private CameraControlable cameraController;
+	@Inject
+	private StorageLookable pictureSaveSearchable;
 	private ViewsOrientationListener orientationListener;
-
-	private File pictureDirectory;
 
 	private boolean hasCam;
 
@@ -82,12 +80,10 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		} else {
 			showDialogWhenFirstRun();
 
+			handler.setPictureSaveDirectory(pictureSaveSearchable.lookupSaveDirectory());
+
 			cameraController.setActivity(this);
 			hasCam = cameraController.lookupCamera();
-
-			StorageLookup storageLookup = new StorageLookup(this);
-			pictureDirectory = storageLookup.createStorageDirectory();
-
 		}
 	}
 
@@ -268,11 +264,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Override
 	public Handler getHandler() {
 		return handler;
-	}
-
-	@Override
-	public File getPicturesDirectory() {
-		return pictureDirectory;
 	}
 
 	@Override

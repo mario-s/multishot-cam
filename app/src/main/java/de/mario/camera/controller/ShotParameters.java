@@ -20,10 +20,13 @@ class ShotParameters {
 
     private final ParameterUpdater updater;
 
+    private File picturesDirectory;
+
     private boolean trace;
 
-    ShotParameters(View preview, PhotoActivable activity, ParameterUpdater updater) {
-        this.preview = preview;
+    ShotParameters(CameraController cameraController, PhotoActivable activity, ParameterUpdater updater) {
+        this.preview = cameraController.getPreview();
+        this.picturesDirectory = cameraController.getPictureSaveDirectory();
         this.activity = activity;
         this.updater = updater;
     }
@@ -57,8 +60,9 @@ class ShotParameters {
      * @return path as string
      */
     File getPictureFileDir() {
-        return activity.getPicturesDirectory();
+        return picturesDirectory;
     }
+
 
     Handler getHandler(){
         return activity.getHandler();

@@ -3,8 +3,6 @@ package de.mario.camera;
 import android.content.Context;
 import android.os.Handler;
 
-import java.io.File;
-
 /**
  * Interface for coupling between the activity and sub classes.
  */
@@ -20,12 +18,6 @@ public interface PhotoActivable {
     String getResource(int key);
 
     Handler getHandler();
-
-    /**
-     * Directory where to save the images on a mounted storage.
-     * @return the directory
-     */
-    File getPicturesDirectory();
 
     SettingsAccess getSettingsAccess();
 

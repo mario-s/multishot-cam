@@ -20,9 +20,15 @@ class MessageHandler extends Handler {
 
     private final PhotoActivity activity;
 
+    private File pictureSaveDirectory;
+
     MessageHandler(PhotoActivity activity) {
         super(Looper.getMainLooper());
         this.activity = activity;
+    }
+
+    void setPictureSaveDirectory(File pictureSaveDirectory) {
+        this.pictureSaveDirectory = pictureSaveDirectory;
     }
 
     @Override
@@ -45,8 +51,7 @@ class MessageHandler extends Handler {
 
     private void informAboutPictures(String[] pictures) {
         int len = pictures.length;
-        File dir = activity.getPicturesDirectory();
-        activity.toast(String.format(activity.getString(R.string.photos_saved), len, dir));
+        activity.toast(String.format(activity.getString(R.string.photos_saved), len, pictureSaveDirectory));
     }
 
     private void updateExif(String [] pictures){

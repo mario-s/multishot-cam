@@ -9,15 +9,25 @@ import java.io.File;
 /**
  * This class encapsulates the search for directories where to store files.
  */
-public class StorageLookup {
+public class StorageLookup implements StorageLookable {
     public static final String MULTI = "100_MULTI";
     private final Context context;
+
+    private File pictureSaveDirectory;
 
     public StorageLookup(Context context) {
         this.context = context;
     }
 
-    public File createStorageDirectory() {
+    @Override
+    public File lookupSaveDirectory() {
+        if(pictureSaveDirectory == null){
+            pictureSaveDirectory = createStorageDirectory();
+        }
+        return pictureSaveDirectory;
+    }
+
+    private File createStorageDirectory() {
         File sdDcimDir = findRealSdDirectory();
         //TODO directories according to DCF
         File directory = new File(sdDcimDir, MULTI);

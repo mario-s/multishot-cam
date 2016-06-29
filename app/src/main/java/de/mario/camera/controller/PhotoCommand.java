@@ -28,7 +28,7 @@ class PhotoCommand implements Runnable{
 
         this.photoShotsFactory = new PhotoShotsFactory(camera);
         this.parameterUpdater = new ParameterUpdater(camera);
-        this.shotParams = new ShotParameters(cameraController.getPreview(), activity, parameterUpdater);
+        this.shotParams = new ShotParameters(cameraController, activity, parameterUpdater);
     }
 
     @Override

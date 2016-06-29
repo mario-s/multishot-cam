@@ -62,11 +62,12 @@ public class ContinuesPictureCallbackTest {
         given(activity.getHandler()).willReturn(handler);
         given(activity.getResource(anyInt())).willReturn(TEST);
         given(cameraController.getPreview()).willReturn(preview);
+        given(cameraController.getPictureSaveDirectory()).willReturn(folder);
         given(camera.getParameters()).willReturn(params);
 
         updater = new ParameterUpdater(params);
 
-        shotParams = new ShotParameters(preview, activity, updater){
+        shotParams = new ShotParameters(cameraController, activity, updater){
             @Override
             Context getContext() {
                 return context;
@@ -79,7 +80,6 @@ public class ContinuesPictureCallbackTest {
 
     @Test
     public void testOnPictureTaken() {
-        given(activity.getPicturesDirectory()).willReturn(folder);
 
         ContinuesPictureCallback classUnderTest = new ContinuesPictureCallback(shotParams);
 
@@ -90,7 +90,6 @@ public class ContinuesPictureCallbackTest {
     @Test
     @Ignore("fixme")
     public void testOnPictureTaken_MissingPictureFile() {
-        given(activity.getPicturesDirectory()).willReturn(new File("foo.bar"));
 
         ContinuesPictureCallback classUnderTest = new ContinuesPictureCallback(shotParams);
 

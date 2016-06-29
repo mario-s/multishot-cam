@@ -1,6 +1,7 @@
 package de.mario.camera.controller;
 
 import de.mario.camera.PhotoActivable;
+import de.mario.camera.controller.lookup.StorageLookable;
 import de.mario.camera.controller.preview.FocusView;
 import de.mario.camera.controller.preview.Preview;
 
@@ -33,4 +34,6 @@ public interface CameraControlable {
     String findIsoKey();
 
     void setActivity(PhotoActivable activity);
+
+    void setStorageLookup(StorageLookable storageLookup);
 }
