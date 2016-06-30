@@ -1,6 +1,7 @@
 package de.mario.camera.controller.shot;
 
 import android.hardware.Camera;
+import android.os.Bundle;
 import android.os.Debug;
 import android.os.Message;
 import android.util.Log;
@@ -104,19 +105,21 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
         try {
             String path = pictureFileDir.getAbsolutePath();
             imagesNames.addAll(memAccessor.moveAll(path));
-            sendFinishedInfo();
+            sendFinishedInfo(path);
         } catch (IOException exc) {
             Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
             toast(getResource(R.string.save_error));
         }
     }
 
-    private void sendFinishedInfo() {
+    private void sendFinishedInfo(final String path) {
         new ScheduledThreadPoolExecutor(1).execute(new Runnable() {
             @Override
             public void run() {
                 Message msg = Message.obtain();
-                msg.getData().putStringArray(PhotoActivable.PICTURES, imagesNames.toArray(new String[imagesNames.size()]));
+                Bundle bundle = msg.getData();
+                bundle.putStringArray(PhotoActivable.PICTURES, imagesNames.toArray(new String[imagesNames.size()]));
+                bundle.putString(PhotoActivable.SAVE_FOLDER, path);
                 shotParams.getHandler().sendMessage(msg);
             }
         });

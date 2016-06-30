@@ -20,15 +20,9 @@ class MessageHandler extends Handler {
 
     private final PhotoActivity activity;
 
-    private File pictureSaveDirectory;
-
     MessageHandler(PhotoActivity activity) {
         super(Looper.getMainLooper());
         this.activity = activity;
-    }
-
-    void setPictureSaveDirectory(File pictureSaveDirectory) {
-        this.pictureSaveDirectory = pictureSaveDirectory;
     }
 
     @Override
@@ -40,18 +34,19 @@ class MessageHandler extends Handler {
         }else{
             String[] pictures = bundle.getStringArray(
                     PhotoActivable.PICTURES);
+            String folder = bundle.getString(PhotoActivable.SAVE_FOLDER);
             updateExif(pictures);
             activity.processHdr(pictures);
 
             activity.prepareForNextShot();
-            informAboutPictures(pictures);
+            informAboutPictures(pictures, folder);
             Log.d(PhotoActivable.DEBUG_TAG, "ready for next photo session");
         }
     }
 
-    private void informAboutPictures(String[] pictures) {
+    private void informAboutPictures(String[] pictures, String folder) {
         int len = pictures.length;
-        activity.toast(String.format(activity.getString(R.string.photos_saved), len, pictureSaveDirectory));
+        activity.toast(String.format(activity.getString(R.string.photos_saved), len, folder));
     }
 
     private void updateExif(String [] pictures){

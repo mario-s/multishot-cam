@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import org.opencv.android.OpenCVLoader;
 
 import de.mario.camera.controller.CameraControlable;
-import de.mario.camera.controller.lookup.StorageLookable;
 import de.mario.camera.controller.preview.CanvasView;
 import de.mario.camera.service.ExposureMergeService;
 import de.mario.camera.service.OpenCvService;
@@ -54,8 +53,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private SettingsAccess settingsAccess;
 	@Inject
 	private CameraControlable cameraController;
-	@Inject
-	private StorageLookable pictureSaveSearchable;
+
 	private ViewsOrientationListener orientationListener;
 
 	private boolean hasCam;
@@ -79,8 +77,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 			toast(getResource(R.string.no_cam));
 		} else {
 			showDialogWhenFirstRun();
-
-			handler.setPictureSaveDirectory(pictureSaveSearchable.lookupSaveDirectory());
 
 			cameraController.setActivity(this);
 			hasCam = cameraController.lookupCamera();

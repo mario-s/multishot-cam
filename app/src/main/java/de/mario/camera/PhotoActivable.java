@@ -12,6 +12,7 @@ public interface PhotoActivable {
 
     String DEBUG_TAG = "PhotoActivity";
     String PICTURES = "pictures";
+    String SAVE_FOLDER = "saveFolder";
 
     String EXPOSURE_MERGE = "exposureMerge";
 
