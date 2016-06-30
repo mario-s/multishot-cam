@@ -129,7 +129,7 @@ public class CameraController implements CameraControlable{
                 }
             });
         }else{
-            toast(activity.getResource(R.string.no_directory));
+            send(activity.getResource(R.string.no_directory));
         }
     }
 
@@ -156,9 +156,8 @@ public class CameraController implements CameraControlable{
         return folder != null && folder.exists();
     }
 
-    @Override
-    public void toast(String msg) {
-        messageSender.toast(msg);
+    private void send(String msg) {
+        messageSender.send(msg);
         Log.d(PhotoActivable.DEBUG_TAG, msg);
     }
 

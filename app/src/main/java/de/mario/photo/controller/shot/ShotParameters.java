@@ -1,13 +1,14 @@
 package de.mario.photo.controller.shot;
 
 import android.content.Context;
-import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import java.io.File;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.controller.CameraControlable;
+import de.mario.photo.controller.MessageSender;
 
 /**
  */
@@ -21,12 +22,15 @@ class ShotParameters {
 
     private final ParameterUpdater updater;
 
+    private final MessageSender sender;
+
     private boolean trace;
 
     ShotParameters(CameraControlable cameraController, PhotoActivable activity, ParameterUpdater updater) {
         this.cameraController = cameraController;
         this.activity = activity;
         this.updater = updater;
+        this.sender = new MessageSender(activity.getHandler());
     }
 
     void setShots(Shot[] shots) {
@@ -61,11 +65,6 @@ class ShotParameters {
         return cameraController.getPictureSaveDirectory();
     }
 
-
-    Handler getHandler(){
-        return activity.getHandler();
-    }
-
     String getResource(int key) {
         return activity.getResource(key);
     }
@@ -86,7 +85,12 @@ class ShotParameters {
         return shots[index].isFlash();
     }
 
-    void toast(String message) {
-        cameraController.toast(message);
+
+    void sendMessage(Message message) {
+        sender.send(message);
+    }
+
+    void sendMessage(String message){
+        sender.send(message);
     }
 }

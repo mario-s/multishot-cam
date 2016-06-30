@@ -4,19 +4,22 @@ import android.os.Handler;
 import android.os.Message;
 
 /**
- *
+ * This class send messages from any client to registered {@link Handler}.
  */
-class MessageSender {
+public class MessageSender {
 
     private final Handler handler;
 
-    MessageSender(Handler handler) {
+    public MessageSender(Handler handler) {
         this.handler = handler;
     }
 
-    void toast(final String message) {
-        Message msg = createMessage(message);
-        handler.sendMessage(msg);
+    public void send(final Message message) {
+        handler.sendMessage(message);
+    }
+
+    public void send(final String message) {
+        send(createMessage(message));
     }
 
     Message createMessage(String message) {

@@ -63,8 +63,8 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
         return shotParams.getResource(key);
     }
 
-    private void toast(final String message) {
-        shotParams.toast(message);
+    private void send(final String message) {
+        shotParams.sendMessage(message);
     }
 
     @Override
@@ -96,7 +96,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
             memAccessor.save(data, name);
         } catch (IllegalStateException e) {
             Log.e(PhotoActivable.DEBUG_TAG, String.format("File %s not saved: %s", name, e.getMessage()));
-            toast(getResource(R.string.save_error));
+            send(getResource(R.string.save_error));
         }
     }
 
@@ -108,7 +108,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
             sendFinishedInfo(path);
         } catch (IOException exc) {
             Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
-            toast(getResource(R.string.save_error));
+            send(getResource(R.string.save_error));
         }
     }
 
@@ -120,7 +120,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
                 Bundle bundle = msg.getData();
                 bundle.putStringArray(PhotoActivable.PICTURES, imagesNames.toArray(new String[imagesNames.size()]));
                 bundle.putString(PhotoActivable.SAVE_FOLDER, path);
-                shotParams.getHandler().sendMessage(msg);
+                shotParams.sendMessage(msg);
             }
         });
     }

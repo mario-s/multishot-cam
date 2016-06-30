@@ -94,6 +94,6 @@ public class CameraControllerTest {
     @Test
     public void testShot_NoDirectory() {
         classUnderTest.shot();
-        verify(messageSender).toast(anyString());
+        verify(messageSender).send(anyString());
     }
 }

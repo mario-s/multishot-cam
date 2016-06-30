@@ -49,6 +49,4 @@ public interface CameraControlable {
 
     File getPictureSaveDirectory();
 
-    void toast(String msg);
-
 }
