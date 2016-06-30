@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.preference.PreferenceManager;
 import android.view.View;
 
+import javax.inject.Inject;
+
 import de.mario.camera.SettingsValue;
 
 import static de.mario.camera.controller.preview.PaintFactory.createPaint;
@@ -18,6 +20,7 @@ public class CanvasView extends View {
 
     private Paint gridPaint;
 
+    @Inject
     public CanvasView(Context context) {
         super(context);
         gridPaint = createPaint();

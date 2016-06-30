@@ -40,6 +40,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private static final String PREFS = "PREFERENCE";
 	@InjectView(R.id.progress_bar)
 	private View progressBar;
+	@Inject
 	private CanvasView canvasView;
 
 	@Inject
@@ -98,7 +99,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private void initialize() {
 		cameraController.initialize();
 
-		canvasView = new CanvasView(this);
 		getPreviewLayout().addView(cameraController.getPreview(), 0);
 		getPreviewLayout().addView(canvasView, 1);
 		getPreviewLayout().addView(cameraController.getFocusView(), 2);
