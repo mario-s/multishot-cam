@@ -47,7 +47,7 @@
         </service>
 
         <meta-data android:name="roboguice.modules"
-            android:value="de.mario.camera.glue.DefaultModule" />
+            android:value="de.mario.camera.controller.ControllerModule" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package de.mario.camera.controller;
+package de.mario.camera.controller.shot;
 
 import android.hardware.Camera;
 import android.os.Debug;
@@ -63,8 +63,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
     }
 
     private void toast(final String message) {
-        MessageSender sender = new MessageSender(shotParams.getHandler());
-        sender.toast(message);
+        shotParams.toast(message);
     }
 
     @Override

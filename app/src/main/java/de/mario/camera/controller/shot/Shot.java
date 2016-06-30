@@ -1,5 +1,5 @@
 
-package de.mario.camera.controller;
+package de.mario.camera.controller.shot;
 
 /**
  */

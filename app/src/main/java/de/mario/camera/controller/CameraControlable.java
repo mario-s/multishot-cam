@@ -1,7 +1,10 @@
 package de.mario.camera.controller;
 
+import android.hardware.Camera;
+
+import java.io.File;
+
 import de.mario.camera.PhotoActivable;
-import de.mario.camera.controller.lookup.StorageLookable;
 import de.mario.camera.controller.preview.FocusView;
 import de.mario.camera.controller.preview.Preview;
 
@@ -35,5 +38,10 @@ public interface CameraControlable {
 
     void setActivity(PhotoActivable activity);
 
-    void setStorageLookup(StorageLookable storageLookup);
+    Camera getCamera();
+
+    File getPictureSaveDirectory();
+
+    void toast(String msg);
+
 }

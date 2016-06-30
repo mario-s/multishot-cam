@@ -1,4 +1,4 @@
-package de.mario.camera.glue;
+package de.mario.camera.controller;
 
 import android.content.Context;
 

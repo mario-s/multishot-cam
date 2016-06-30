@@ -1,4 +1,4 @@
-package de.mario.camera.controller;
+package de.mario.camera.controller.shot;
 
 import android.content.Context;
 import android.os.Handler;
@@ -7,6 +7,7 @@ import android.view.View;
 import java.io.File;
 
 import de.mario.camera.PhotoActivable;
+import de.mario.camera.controller.CameraControlable;
 
 /**
  */
@@ -14,19 +15,16 @@ class ShotParameters {
 
     private Shot[] shots;
 
-    private final View preview;
+    private CameraControlable cameraController;
 
     private final PhotoActivable activity;
 
     private final ParameterUpdater updater;
 
-    private File picturesDirectory;
-
     private boolean trace;
 
-    ShotParameters(CameraController cameraController, PhotoActivable activity, ParameterUpdater updater) {
-        this.preview = cameraController.getPreview();
-        this.picturesDirectory = cameraController.getPictureSaveDirectory();
+    ShotParameters(CameraControlable cameraController, PhotoActivable activity, ParameterUpdater updater) {
+        this.cameraController = cameraController;
         this.activity = activity;
         this.updater = updater;
     }
@@ -60,7 +58,7 @@ class ShotParameters {
      * @return path as string
      */
     File getPictureFileDir() {
-        return picturesDirectory;
+        return cameraController.getPictureSaveDirectory();
     }
 
 
@@ -72,7 +70,7 @@ class ShotParameters {
         return activity.getResource(key);
     }
 
-    View getPreview() {return preview;}
+    View getPreview() {return cameraController.getPreview();}
 
     ParameterUpdater getUpdater() { return updater; }
 
@@ -86,5 +84,9 @@ class ShotParameters {
 
     boolean isFlash(int index){
         return shots[index].isFlash();
+    }
+
+    void toast(String message) {
+        cameraController.toast(message);
     }
 }

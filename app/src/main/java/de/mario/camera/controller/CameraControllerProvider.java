@@ -1,10 +1,8 @@
-package de.mario.camera.glue;
+package de.mario.camera.controller;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import de.mario.camera.controller.CameraControlable;
-import de.mario.camera.controller.CameraController;
 import de.mario.camera.controller.lookup.StorageLookable;
 
 /**

@@ -1,4 +1,4 @@
-package de.mario.camera.controller;
+package de.mario.camera.controller.shot;
 
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;

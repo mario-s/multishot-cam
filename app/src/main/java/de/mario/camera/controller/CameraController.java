@@ -15,6 +15,7 @@ import de.mario.camera.controller.lookup.CameraLookup;
 import de.mario.camera.controller.lookup.StorageLookable;
 import de.mario.camera.controller.preview.FocusView;
 import de.mario.camera.controller.preview.Preview;
+import de.mario.camera.controller.shot.PhotoCommand;
 import de.mario.camera.controller.support.IsoSupport;
 import de.mario.camera.controller.support.PicturesSizeSupport;
 
@@ -163,11 +164,8 @@ public class CameraController implements CameraControlable{
         return folder != null && folder.exists();
     }
 
-    File getPictureSaveDirectory() {
-        return storageLookable.lookupSaveDirectory();
-    }
-
-    private void toast(String msg) {
+    @Override
+    public void toast(String msg) {
         messageSender.toast(msg);
         Log.d(PhotoActivable.DEBUG_TAG, msg);
     }
@@ -182,6 +180,16 @@ public class CameraController implements CameraControlable{
             camera.enableShutterSound(enable);
         }
     }
+
+    void setStorageLookup(StorageLookable storageLookup) {
+        this.storageLookable = storageLookup;
+    }
+
+    @Override
+    public File getPictureSaveDirectory() {
+        return storageLookable.lookupSaveDirectory();
+    }
+
 
     @Override
     public Preview getPreview() {
@@ -218,12 +226,9 @@ public class CameraController implements CameraControlable{
         return isoSupport.findIsoKey();
     }
 
-    Camera getCamera() {
+    @Override
+    public Camera getCamera() {
         return camera;
     }
 
-    @Override
-    public void setStorageLookup(StorageLookable storageLookup) {
-        this.storageLookable = storageLookup;
-    }
 }

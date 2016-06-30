@@ -1,4 +1,4 @@
-package de.mario.camera.controller;
+package de.mario.camera.controller.shot;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -15,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.File;
 
 import de.mario.camera.PhotoActivable;
+import de.mario.camera.controller.CameraController;
 import de.mario.camera.controller.preview.Preview;
 
 import static org.mockito.BDDMockito.given;

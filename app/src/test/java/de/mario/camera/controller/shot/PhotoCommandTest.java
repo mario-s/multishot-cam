@@ -1,4 +1,4 @@
-package de.mario.camera.controller;
+package de.mario.camera.controller.shot;
 
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.SettingsAccess;
+import de.mario.camera.controller.CameraController;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;

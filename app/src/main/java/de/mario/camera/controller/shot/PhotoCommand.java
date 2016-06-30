@@ -1,4 +1,4 @@
-package de.mario.camera.controller;
+package de.mario.camera.controller.shot;
 
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -6,12 +6,13 @@ import android.os.Debug;
 
 import de.mario.camera.PhotoActivable;
 import de.mario.camera.SettingsAccess;
+import de.mario.camera.controller.CameraControlable;
 
 
 /**
  * Command which will be executed to take pictures.
  */
-class PhotoCommand implements Runnable{
+public class PhotoCommand implements Runnable{
 
     private final PhotoActivable activity;
     private final Camera camera;
@@ -21,7 +22,7 @@ class PhotoCommand implements Runnable{
     private final SettingsAccess settings;
     private PhotoShotsFactory photoShotsFactory;
 
-    PhotoCommand(CameraController cameraController, PhotoActivable activity){
+    public PhotoCommand(CameraControlable cameraController, PhotoActivable activity){
         this.activity = activity;
         this.camera = cameraController.getCamera();
         this.settings = activity.getSettingsAccess();

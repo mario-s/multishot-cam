@@ -1,13 +1,12 @@
-package de.mario.camera.glue;
+package de.mario.camera.controller;
 
 import com.google.inject.AbstractModule;
 
-import de.mario.camera.controller.CameraControlable;
 import de.mario.camera.controller.lookup.StorageLookable;
 
 /**
  */
-public class DefaultModule extends AbstractModule{
+public class ControllerModule extends AbstractModule{
 
     @Override
     protected void configure() {
