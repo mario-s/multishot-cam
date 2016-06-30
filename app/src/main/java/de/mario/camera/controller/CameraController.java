@@ -43,11 +43,10 @@ public class CameraController implements CameraControlable{
     private MessageSender messageSender;
 
     public CameraController() {
-        this(null, new CameraLookup(), new CameraFactory());
+        this(new CameraLookup(), new CameraFactory());
     }
 
-    CameraController(PhotoActivable activity, CameraLookup cameraLookup, CameraFactory cameraFactory) {
-        this.activity = activity;
+    CameraController(CameraLookup cameraLookup, CameraFactory cameraFactory) {
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
         executor = new ScheduledThreadPoolExecutor(1);

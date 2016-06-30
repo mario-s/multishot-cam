@@ -58,17 +58,18 @@ public class CameraControllerTest {
 
     @Before
     public void setUp() {
-        setInternalState(classUnderTest, "focusView", focusView);
-        setInternalState(classUnderTest, "messageSender", messageSender);
-
-        classUnderTest.setStorageLookup(storageLookable);
-
         given(cameraLookup.findBackCamera()).willReturn(1);
         given(cameraFactory.getCamera(anyInt())).willReturn(camera);
         given(camera.getParameters()).willReturn(parameters);
         given(activity.getContext()).willReturn(context);
         given(activity.getHandler()).willReturn(handler);
         given(activity.getSettingsAccess()).willReturn(settingsAccess);
+
+        classUnderTest.setActivity(activity);
+        classUnderTest.setStorageLookup(storageLookable);
+
+        setInternalState(classUnderTest, "focusView", focusView);
+        setInternalState(classUnderTest, "messageSender", messageSender);
     }
 
     @Test

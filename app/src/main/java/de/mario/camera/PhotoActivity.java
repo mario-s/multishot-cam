@@ -21,8 +21,6 @@ import org.opencv.android.OpenCVLoader;
 
 import de.mario.camera.controller.CameraControlable;
 import de.mario.camera.controller.preview.CanvasView;
-import de.mario.camera.service.ExposureMergeService;
-import de.mario.camera.service.OpenCvService;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -54,6 +52,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private SettingsAccess settingsAccess;
 	@Inject
 	private CameraControlable cameraController;
+	@Inject
+	private IntentFactory intentFactory;
 
 	private ViewsOrientationListener orientationListener;
 
@@ -205,35 +205,10 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onSettings(View view) {
-		Intent intent = newIntent();
+		Intent intent = intentFactory.newSettingsIntent();
 
 		hideProgress();
 		startActivity(intent);
-	}
-
-	private Intent newIntent() {
-		Intent intent = new Intent(this, SettingsActivity.class);
-
-		intent.putExtra("pictureSizes", cameraController.getSupportedPicturesSizes());
-		intent.putExtra("selectedPictureSize", cameraController.getSelectedPictureSize());
-
-		String isoKey = findIsoKey();
-		if(!isoKey.isEmpty()) {
-			intent.putExtra("selectedIso", cameraController.getSelectedIsoValue(isoKey));
-			intent.putExtra("isos", cameraController.getIsoValues());
-		}
-		return intent;
-	}
-
-	private String findIsoKey() {
-		//exists the ISO key in the settings?
-		String isoKey = settingsAccess.getIsoKey();
-		if(isoKey.isEmpty()) {
-			//if not look for it
-			isoKey = cameraController.findIsoKey();
-			settingsAccess.setIsoKey(isoKey);
-		}
-		return isoKey;
 	}
 
 	@Override
@@ -270,9 +245,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	void processHdr(String [] pictures){
 		if(settingsAccess.isProcessingEnabled()) {
 			showProgress();
-			Intent intent = new Intent(this, ExposureMergeService.class);
-			intent.putExtra(OpenCvService.PARAM_PICS, pictures);
-			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
+			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intentFactory.newOpenCvIntent(pictures));
 			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
 		}
 	}
