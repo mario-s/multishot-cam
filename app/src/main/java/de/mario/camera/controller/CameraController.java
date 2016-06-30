@@ -59,10 +59,6 @@ public class CameraController implements CameraControlable{
         messageSender = new MessageSender(activity.getHandler());
     }
 
-    /**
-     * Look for a camera and return true if we got one.
-     * @return boolean
-     */
     @Override
     public boolean lookupCamera() {
         camId = cameraLookup.findBackCamera();
@@ -73,9 +69,6 @@ public class CameraController implements CameraControlable{
         return false;
     }
 
-    /**
-     * Initialize the camera. Make sure that you called lookup before and got a true value.
-     */
     @Override
     public void initialize() {
         camera = cameraFactory.getCamera(camId);
