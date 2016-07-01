@@ -11,3 +11,5 @@ build/
 *.ipr
 *.iws
 /.nb-gradle/
+
+**/Thumbs.db

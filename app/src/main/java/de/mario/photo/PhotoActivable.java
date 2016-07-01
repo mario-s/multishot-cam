@@ -16,6 +16,10 @@ public interface PhotoActivable {
 
     String EXPOSURE_MERGE = "exposureMerge";
 
+    /**
+     * Use getContext().getString(int key);
+     */
+    @Deprecated
     String getResource(int key);
 
     Handler getHandler();

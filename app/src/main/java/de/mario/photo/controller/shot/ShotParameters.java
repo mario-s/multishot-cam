@@ -66,7 +66,7 @@ class ShotParameters {
     }
 
     String getResource(int key) {
-        return activity.getResource(key);
+        return activity.getContext().getString(key);
     }
 
     View getPreview() {return cameraController.getPreview();}
