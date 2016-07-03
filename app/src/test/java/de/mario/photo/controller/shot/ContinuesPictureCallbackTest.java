@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -19,7 +18,6 @@ import de.mario.photo.controller.CameraController;
 import de.mario.photo.controller.preview.Preview;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 
@@ -86,16 +84,6 @@ public class ContinuesPictureCallbackTest {
 
         classUnderTest.onPictureTaken(testData, camera);
         verify(camera).setParameters(params);
-    }
-
-    @Test
-    @Ignore("fixme")
-    public void testOnPictureTaken_MissingPictureFile() {
-
-        ContinuesPictureCallback classUnderTest = new ContinuesPictureCallback(shotParams);
-
-        classUnderTest.onPictureTaken(testData, camera);
-        verify(handler).sendMessage(any(Message.class));
     }
 
 }
