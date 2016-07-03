@@ -1,6 +1,8 @@
 package de.mario.photo.controller;
 
 import android.hardware.Camera;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import java.io.File;
@@ -42,6 +44,9 @@ public class CameraController implements CameraControlable{
     private CameraFactory cameraFactory;
     private MessageSender messageSender;
 
+    private HandlerThread handlerThread;
+    private Handler handler;
+
     public CameraController() {
         this(new CameraLookup(), new CameraFactory());
     }
@@ -49,7 +54,11 @@ public class CameraController implements CameraControlable{
     CameraController(CameraLookup cameraLookup, CameraFactory cameraFactory) {
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
+
         executor = new ScheduledThreadPoolExecutor(1);
+        handlerThread = new HandlerThread(getClass().getSimpleName());
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
     }
 
     @Override
@@ -71,16 +80,23 @@ public class CameraController implements CameraControlable{
     @Override
     public void initialize() {
         camera = cameraFactory.getCamera(camId);
-        sizeSupport = new PicturesSizeSupport(camera.getParameters());
-        isoSupport = new IsoSupport(camera.getParameters());
-
-        orientationListener = new CameraOrientationListener(activity.getContext());
-        if (orientationListener.canDetectOrientation()) {
-            orientationListener.setCamera(camera);
-            orientationListener.enable();
-        }
 
         createViews();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                sizeSupport = new PicturesSizeSupport(camera.getParameters());
+                isoSupport = new IsoSupport(camera.getParameters());
+
+                orientationListener = new CameraOrientationListener(activity.getContext());
+                if (orientationListener.canDetectOrientation()) {
+                    orientationListener.setCamera(camera);
+                    orientationListener.enable();
+                }
+            }
+        });
     }
 
     private void createViews() {
@@ -109,27 +125,6 @@ public class CameraController implements CameraControlable{
             camera.setPreviewCallback(null);
             camera.release();
             camera = null;
-        }
-    }
-
-    @Override
-    public void shot() {
-        enableShutterSound(!isShutterSoundDisabled());
-
-        if(existsPictureSaveDirectory()) {
-            camera.autoFocus(new Camera.AutoFocusCallback() {
-                @Override
-                public void onAutoFocus(boolean success, Camera camera) {
-                focusView.focused(success);
-                if (success) {
-                    execute(getSettings().getDelay());
-                } else {
-                    prepareNextShot();
-                }
-                }
-            });
-        }else{
-            send(activity.getResource(R.string.no_directory));
         }
     }
 
@@ -220,6 +215,34 @@ public class CameraController implements CameraControlable{
     @Override
     public Camera getCamera() {
         return camera;
+    }
+
+    @Override
+    public void shot() {
+        handler.post(new ShotRunner());
+    }
+
+    class ShotRunner implements Runnable{
+        @Override
+        public void run() {
+            enableShutterSound(!isShutterSoundDisabled());
+
+            if(existsPictureSaveDirectory()) {
+                camera.autoFocus(new Camera.AutoFocusCallback() {
+                    @Override
+                    public void onAutoFocus(boolean success, Camera camera) {
+                        focusView.focused(success);
+                        if (success) {
+                            execute(getSettings().getDelay());
+                        } else {
+                            prepareNextShot();
+                        }
+                    }
+                });
+            }else{
+                send(activity.getContext().getString(R.string.no_directory));
+            }
+        }
     }
 
 }

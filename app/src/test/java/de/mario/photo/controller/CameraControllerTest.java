@@ -3,6 +3,7 @@ package de.mario.photo.controller;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.os.HandlerThread;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
@@ -53,6 +54,8 @@ public class CameraControllerTest {
     private SettingsAccess settingsAccess;
     @Mock
     private StorageLookable storageLookable;
+    @Mock
+    private HandlerThread handlerThread;
     @InjectMocks
     private CameraController classUnderTest;
 
@@ -70,6 +73,8 @@ public class CameraControllerTest {
 
         setInternalState(classUnderTest, "focusView", focusView);
         setInternalState(classUnderTest, "messageSender", messageSender);
+        setInternalState(classUnderTest, "handlerThread", handlerThread);
+        setInternalState(classUnderTest, "handler", handler);
     }
 
     @Test
@@ -92,8 +97,8 @@ public class CameraControllerTest {
     }
 
     @Test
-    public void testShot_NoDirectory() {
+    public void testShot() {
         classUnderTest.shot();
-        verify(messageSender).send(anyString());
+        verify(handler).post(any(CameraController.ShotRunner.class));
     }
 }
