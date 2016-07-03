@@ -4,15 +4,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 /**
- * Factory to create a {@link Paint} instance.
+ * Factory to create a {@link Paint} instance for the view instances.
  */
 class PaintFactory {
 
     private static final int WIDTH = 1;
 
-    private PaintFactory(){}
-
-    static Paint createPaint() {
+    Paint create() {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);

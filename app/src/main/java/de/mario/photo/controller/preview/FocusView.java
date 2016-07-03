@@ -3,30 +3,23 @@ package de.mario.photo.controller.preview;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.view.View;
-
-import static de.mario.photo.controller.preview.PaintFactory.createPaint;
 
 /**
  * View for the focus indicator
  */
-public class FocusView extends View {
+public class FocusView extends AbstractPaintView {
 
     private static final int RADIUS = 50;
 
-    private Paint focusPaint;
-
     public FocusView(Context context) {
         super(context);
-        focusPaint = createPaint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, RADIUS, focusPaint);
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, RADIUS, getPaint());
     }
 
     /**
@@ -48,7 +41,7 @@ public class FocusView extends View {
     }
 
     private void repaintFocusIndicator(int color) {
-        focusPaint.setColor(color);
+        getPaint().setColor(color);
         postInvalidate();
     }
 }
