@@ -19,6 +19,10 @@ public class FocusView extends AbstractPaintView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        drawIndicator(canvas);
+    }
+
+    void drawIndicator(Canvas canvas) {
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, RADIUS, getPaint());
     }
 

@@ -3,11 +3,12 @@ package de.mario.photo.controller.preview;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
 
 import de.mario.photo.SettingsValue;
+
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 
 /**
@@ -23,12 +24,15 @@ public class CanvasView extends AbstractPaintView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawGrid(canvas);
+    }
 
-        Paint gridPaint = getPaint();
-
+    void drawGrid(Canvas canvas) {
         if (isShowGrid()) {
             int width = canvas.getWidth();
             int height = canvas.getHeight();
+            Paint gridPaint = getPaint();
+
             canvas.drawLine(width / 3.0f, 0.0f, width / 3.0f, height - 1.0f, gridPaint);
             canvas.drawLine(2.0f * width / 3.0f, 0.0f, 2.0f * width / 3.0f, height - 1.0f, gridPaint);
             canvas.drawLine(0.0f, height / 3.0f, width - 1.0f, height / 3.0f, gridPaint);
@@ -36,8 +40,8 @@ public class CanvasView extends AbstractPaintView {
         }
     }
 
-    private boolean isShowGrid() {
-        return PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(SettingsValue.GRID.getValue(), false);
+    boolean isShowGrid() {
+        return getDefaultSharedPreferences(getContext()).getBoolean(SettingsValue.GRID.getValue(), false);
     }
 
 }
