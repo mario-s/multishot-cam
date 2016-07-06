@@ -1,7 +1,6 @@
 package de.mario.photo.service;
 
 import android.media.ExifInterface;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.mario.photo.PhotoActivable;
+import roboguice.util.Ln;
 
 /**
  * Processes images after they are stored.
@@ -51,6 +50,6 @@ class ExposureTimeReader {
     }
 
     void log(Exception exc) {
-        Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
+        Ln.w(exc, exc.getMessage());
     }
 }

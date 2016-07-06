@@ -2,9 +2,8 @@ package de.mario.photo.controller;
 
 
 import android.hardware.Camera;
-import android.util.Log;
 
-import de.mario.photo.PhotoActivable;
+import roboguice.util.Ln;
 
 /**
  * Class to open the camera and get required features.
@@ -25,7 +24,7 @@ class CameraFactory {
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             cam.setParameters(params);
         }catch (Exception e){
-            Log.w(PhotoActivable.DEBUG_TAG, e);
+            Ln.w(e, e.getMessage());
         }
         return cam;
     }

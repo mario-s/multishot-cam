@@ -3,7 +3,6 @@ package de.mario.photo.controller;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 
 import java.io.File;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,6 +19,7 @@ import de.mario.photo.controller.preview.Preview;
 import de.mario.photo.controller.shot.PhotoCommand;
 import de.mario.photo.controller.support.IsoSupport;
 import de.mario.photo.controller.support.PicturesSizeSupport;
+import roboguice.util.Ln;
 
 /**
  */
@@ -135,7 +135,7 @@ public class CameraController implements CameraControlable{
     }
 
     private void execute(int delay) {
-        Log.d(PhotoActivable.DEBUG_TAG, "delay for photo: " + delay);
+        Ln.d("delay for photo: %s", delay);
 
         Runnable command = new PhotoCommand(CameraController.this, activity);
 
@@ -153,7 +153,7 @@ public class CameraController implements CameraControlable{
 
     private void send(String msg) {
         messageSender.send(msg);
-        Log.d(PhotoActivable.DEBUG_TAG, msg);
+        Ln.d("sending message: %s", msg);
     }
 
     private void prepareNextShot() {

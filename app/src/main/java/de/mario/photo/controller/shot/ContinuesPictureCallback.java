@@ -4,7 +4,6 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 
 import java.io.File;
@@ -15,6 +14,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.R;
+import roboguice.util.Ln;
 
 
 /**
@@ -78,7 +78,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
             if(shotParams.isTrace()) {
                 long end = System.currentTimeMillis();
                 long duration = end - start;
-                Log.d(PhotoActivable.DEBUG_TAG, "duration: " + duration);
+                Ln.d("duration: %s", duration);
                 Debug.stopMethodTracing();
             }
 
@@ -95,7 +95,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
         try {
             memAccessor.save(data, name);
         } catch (IllegalStateException e) {
-            Log.e(PhotoActivable.DEBUG_TAG, String.format("File %s not saved: %s", name, e.getMessage()));
+            Ln.w(e, "File %s not saved: %s", name, e.getMessage());
             send(getResource(R.string.save_error));
         }
     }
@@ -107,7 +107,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
             imagesNames.addAll(memAccessor.moveAll(path));
             sendFinishedInfo(path);
         } catch (IOException exc) {
-            Log.e(PhotoActivable.DEBUG_TAG, exc.getMessage());
+            Ln.w(exc, exc.getMessage());
             send(getResource(R.string.save_error));
         }
     }
