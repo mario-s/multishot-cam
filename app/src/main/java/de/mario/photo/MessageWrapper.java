@@ -3,7 +3,7 @@ package de.mario.photo;
 import android.os.Message;
 
 /**
- * This class wraps a android message.
+ * This class wraps an android message.
  */
 class MessageWrapper {
     private Message message;

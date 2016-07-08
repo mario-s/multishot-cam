@@ -16,6 +16,7 @@ import de.mario.photo.exif.GeoTagFactory;
 import roboguice.util.Ln;
 
 /**
+ * This class handles incoming messages from the sub parts.
  */
 class MessageHandler extends Handler {
 
