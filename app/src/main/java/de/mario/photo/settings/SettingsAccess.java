@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -51,11 +51,11 @@ public class SettingsAccess {
 
     public int getDelay() {return getInt(SettingsValue.SHUTTER_DELAY); }
 
-    boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);}
+    public boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);}
 
     public boolean isShutterSoundDisabled() {return getBoolean(SettingsValue.SHUTTER_SOUND);}
 
-    boolean isGeoTaggingEnabled() { return getBoolean(SettingsValue.GEO_TAGGING);}
+    public boolean isGeoTaggingEnabled() { return getBoolean(SettingsValue.GEO_TAGGING);}
 
     private String getString(SettingsValue key){return getPreferences().getString(key.getValue(), "");}
 

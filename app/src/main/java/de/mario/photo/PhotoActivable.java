@@ -3,6 +3,8 @@ package de.mario.photo;
 import android.content.Context;
 import android.os.Handler;
 
+import de.mario.photo.settings.SettingsAccess;
+
 /**
  * Interface for coupling between the activity and sub classes.
  */

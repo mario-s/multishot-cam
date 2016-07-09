@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.R;
-import de.mario.photo.SettingsAccess;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.preview.FocusView;
@@ -19,6 +18,7 @@ import de.mario.photo.controller.preview.Preview;
 import de.mario.photo.controller.shot.PhotoCommand;
 import de.mario.photo.controller.support.IsoSupport;
 import de.mario.photo.controller.support.PicturesSizeSupport;
+import de.mario.photo.settings.SettingsAccess;
 import roboguice.util.Ln;
 
 /**

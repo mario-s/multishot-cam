@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.settings;
 
 /**
  */

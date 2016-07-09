@@ -1,10 +1,12 @@
-package de.mario.photo;
+package de.mario.photo.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+
+import de.mario.photo.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

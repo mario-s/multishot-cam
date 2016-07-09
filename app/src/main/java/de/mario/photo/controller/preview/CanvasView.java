@@ -6,7 +6,7 @@ import android.graphics.Paint;
 
 import javax.inject.Inject;
 
-import de.mario.photo.SettingsValue;
+import de.mario.photo.settings.SettingsValue;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 

@@ -8,6 +8,8 @@ import com.google.inject.Inject;
 import de.mario.photo.controller.CameraControlable;
 import de.mario.photo.service.ExposureMergeService;
 import de.mario.photo.service.OpenCvService;
+import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.settings.SettingsActivity;
 
 /**
  *

@@ -5,8 +5,8 @@ import android.hardware.Camera.PictureCallback;
 import android.os.Debug;
 
 import de.mario.photo.PhotoActivable;
-import de.mario.photo.SettingsAccess;
 import de.mario.photo.controller.CameraControlable;
+import de.mario.photo.settings.SettingsAccess;
 
 
 /**

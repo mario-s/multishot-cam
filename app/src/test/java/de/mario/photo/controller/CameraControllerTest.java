@@ -13,10 +13,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import de.mario.photo.PhotoActivable;
-import de.mario.photo.SettingsAccess;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.preview.FocusView;
+import de.mario.photo.settings.SettingsAccess;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;

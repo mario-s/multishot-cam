@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import de.mario.photo.SettingsAccess;
+import de.mario.photo.settings.SettingsAccess;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;

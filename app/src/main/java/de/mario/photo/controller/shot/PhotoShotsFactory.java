@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Queue;
 
-import de.mario.photo.SettingsAccess;
+import de.mario.photo.settings.SettingsAccess;
 
 /**
  * This exposureValuesFactory creates a sequence of {@link Shot}.
