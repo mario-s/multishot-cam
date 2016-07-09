@@ -17,12 +17,6 @@ public interface PhotoActivable {
     String EXPOSURE_MERGE = "exposureMerge";
     String MERGED = "merged";
 
-    /**
-     * Use getContext().getString(int key);
-     */
-    @Deprecated
-    String getResource(int key);
-
     Handler getHandler();
 
     SettingsAccess getSettingsAccess();
@@ -30,5 +24,4 @@ public interface PhotoActivable {
     void prepareForNextShot();
 
     Context getContext();
-
 }

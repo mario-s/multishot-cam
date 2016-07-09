@@ -76,7 +76,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-			toast(getResource(R.string.no_cam));
+			toast(getString(R.string.no_cam));
 		} else {
 			showDialogWhenFirstRun();
 
@@ -89,7 +89,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	protected void onStart() {
 		super.onStart();
 		if (!hasCam) {
-			toast(getResource(R.string.no_back_cam));
+			toast(getString(R.string.no_back_cam));
 		} else {
 			initialize();
 		}
@@ -149,11 +149,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	private ViewGroup getPreviewLayout() {
 		return (ViewGroup) findViewById(R.id.preview);
-	}
-
-	@Override
-	public String getResource(int key) {
-		return getString(key);
 	}
 
 	void toast(String msg) {

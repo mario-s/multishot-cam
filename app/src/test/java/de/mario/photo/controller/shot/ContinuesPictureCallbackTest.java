@@ -18,7 +18,6 @@ import de.mario.photo.controller.CameraController;
 import de.mario.photo.controller.preview.Preview;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -57,9 +56,7 @@ public class ContinuesPictureCallbackTest {
     public void setUp() {
         folder = new File(getClass().getResource(".").getFile());
 
-
         given(activity.getHandler()).willReturn(handler);
-        given(activity.getResource(anyInt())).willReturn(TEST);
         given(cameraController.getPreview()).willReturn(preview);
         given(cameraController.getPictureSaveDirectory()).willReturn(folder);
         given(camera.getParameters()).willReturn(params);
