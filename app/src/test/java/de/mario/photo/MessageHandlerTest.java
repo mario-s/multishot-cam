@@ -1,7 +1,5 @@
 package de.mario.photo;
 
-import android.content.Intent;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +45,6 @@ public class MessageHandlerTest {
     @Test
     public void testHandleMessage_PictureInfo() {
         classUnderTest.handleMessage(wrapper);
-        verify(activity, times(DUMMY.length)).sendBroadcast(any(Intent.class));
+        verify(activity, times(DUMMY.length)).refreshPictureFolder(any(String.class));
     }
 }

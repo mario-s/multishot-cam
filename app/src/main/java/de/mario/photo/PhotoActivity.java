@@ -1,12 +1,12 @@
 package de.mario.photo;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 
 import org.opencv.android.OpenCVLoader;
+
+import java.io.File;
 
 import de.mario.photo.controller.CameraControlable;
 import de.mario.photo.controller.preview.CanvasView;
@@ -40,14 +42,10 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private View progressBar;
 	@Inject
 	private CanvasView canvasView;
-
 	@Inject
 	private MyLocationListener locationListener;
 	@Inject
 	private LocationManager locationManager;
-
-	private MessageHandler handler;
-	private ProcessReceiver receiver;
 	@Inject
 	private SettingsAccess settingsAccess;
 	@Inject
@@ -55,13 +53,16 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Inject
 	private IntentFactory intentFactory;
 
+	private MessageHandler handler;
+	private ProcessedMessageReceiver receiver;
+
 	private ViewsOrientationListener orientationListener;
 
 	private boolean hasCam;
 
 	public PhotoActivity() {
 		handler = new MessageHandler(this);
-		receiver = new ProcessReceiver();
+		receiver = new ProcessedMessageReceiver(this);
 	}
 
 	@Override
@@ -254,19 +255,13 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		progressBar.setVisibility(View.VISIBLE);
 	}
 
-	private void hideProgress() {
+	void hideProgress() {
 		progressBar.setVisibility(View.GONE);
 	}
 
-	private class ProcessReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if(intent.getAction().equals(EXPOSURE_MERGE)){
-				hideProgress();
-				String result = intent.getStringExtra("merged");
-				toast(result);
-			}
-		}
+	void refreshPictureFolder(String path){
+		File file = new File(path);
+		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file));
+		sendBroadcast(intent);
 	}
 }

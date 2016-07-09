@@ -1,8 +1,6 @@
 package de.mario.photo;
 
-import android.content.Intent;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -62,14 +60,8 @@ class MessageHandler extends Handler {
         activity.toast(String.format(activity.getString(PHOTOS_SAVED), len, folder));
 
         for(String pic : pictures) {
-            refreshPictureFolder(pic);
+            activity.refreshPictureFolder(pic);
         }
-    }
-
-    private void refreshPictureFolder(String path){
-        File file = new File(path);
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file));
-        activity.sendBroadcast(intent);
     }
 
     private void updateExif(String [] pictures){
