@@ -15,6 +15,7 @@ public interface PhotoActivable {
     String SAVE_FOLDER = "saveFolder";
 
     String EXPOSURE_MERGE = "exposureMerge";
+    String MERGED = "merged";
 
     /**
      * Use getContext().getString(int key);

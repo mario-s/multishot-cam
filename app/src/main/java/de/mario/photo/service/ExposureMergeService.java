@@ -23,8 +23,6 @@ import de.mario.photo.exif.ExifWriter;
  */
 public class ExposureMergeService extends OpenCvService {
 
-    static final String MERGED = "merged";
-
     private Merger merger;
 
     private ExifWriter exifWriter;
@@ -71,8 +69,10 @@ public class ExposureMergeService extends OpenCvService {
     private void sendNotification(File file) {
         Intent intent = new Intent(PhotoActivable.EXPOSURE_MERGE);
         String path = file.getAbsolutePath();
-        intent.putExtra(MERGED, path);
+        intent.putExtra(PhotoActivable.MERGED, path);
         sendBroadcast(intent);
+
+        //general notification
         NotificationSender sender = new NotificationSender(this);
         sender.send(path);
     }
@@ -81,7 +81,7 @@ public class ExposureMergeService extends OpenCvService {
         int pos = src.lastIndexOf(".") ;
         String prefix = src.substring(0, pos - 1);
         String suffix = src.substring(pos);
-        return prefix + MERGED + suffix;
+        return prefix + PhotoActivable.MERGED + suffix;
     }
 
     void write(Mat fusion, File out) {

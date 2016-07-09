@@ -261,7 +261,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	void refreshPictureFolder(String path){
 		File file = new File(path);
-		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file));
-		sendBroadcast(intent);
+		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
 	}
 }

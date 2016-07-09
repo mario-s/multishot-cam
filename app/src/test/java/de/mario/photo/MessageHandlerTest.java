@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
@@ -45,6 +44,6 @@ public class MessageHandlerTest {
     @Test
     public void testHandleMessage_PictureInfo() {
         classUnderTest.handleMessage(wrapper);
-        verify(activity, times(DUMMY.length)).refreshPictureFolder(any(String.class));
+        verify(activity, times(DUMMY.length)).refreshPictureFolder(anyString());
     }
 }
