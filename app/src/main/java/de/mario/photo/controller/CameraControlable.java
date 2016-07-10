@@ -5,8 +5,8 @@ import android.hardware.Camera;
 import java.io.File;
 
 import de.mario.photo.PhotoActivable;
-import de.mario.photo.controller.preview.FocusView;
-import de.mario.photo.controller.preview.Preview;
+import de.mario.photo.preview.FocusView;
+import de.mario.photo.preview.Preview;
 
 /**
  */

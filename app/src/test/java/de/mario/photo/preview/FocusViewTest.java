@@ -1,26 +1,27 @@
-package de.mario.photo.controller.preview;
+package de.mario.photo.preview;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 /**
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CanvasViewTest {
+public class FocusViewTest {
     @Mock
     private Context context;
     @Mock
@@ -29,28 +30,30 @@ public class CanvasViewTest {
     private Canvas canvas;
     @Mock
     private PaintFactory paintFactory;
-
-    private CanvasView classUnderTest;
-
-    private boolean showGrid;
+    @InjectMocks
+    private FocusView classUnderTest;
 
     @Before
     public void setUp() {
-        classUnderTest = new CanvasView(context) {
-            @Override
-            boolean isShowGrid() {
-                return showGrid;
-            }
-        };
-
         given(paintFactory.create()).willReturn(paint);
         setInternalState(classUnderTest, "paintFactory", paintFactory);
     }
 
     @Test
-    public void testDrawGrid() {
-        showGrid = true;
-        classUnderTest.drawGrid(canvas);
-        verify(canvas, times(4)).drawLine(anyFloat(), anyFloat(), anyFloat(), anyFloat(), eq(paint));
+    public void testFocused_Success() {
+        classUnderTest.focused(true);
+        verify(paint).setColor(Color.GREEN);
+    }
+
+    @Test
+    public void testFocused_Failed() {
+        classUnderTest.focused(false);
+        verify(paint).setColor(Color.RED);
+    }
+
+    @Test
+    public void testDrawIndicator() {
+        classUnderTest.drawIndicator(canvas);
+        verify(canvas).drawCircle(anyFloat(), anyFloat(), anyFloat(), eq(paint));
     }
 }

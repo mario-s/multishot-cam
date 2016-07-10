@@ -1,4 +1,4 @@
-package de.mario.photo.controller.preview;
+package de.mario.photo.preview;
 
 import android.hardware.Camera;
 
