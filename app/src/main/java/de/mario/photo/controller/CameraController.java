@@ -226,19 +226,22 @@ public class CameraController implements CameraControlable{
             enableShutterSound(!isShutterSoundDisabled());
 
             if(existsPictureSaveDirectory()) {
-                camera.autoFocus(new Camera.AutoFocusCallback() {
-                    @Override
-                    public void onAutoFocus(boolean success, Camera camera) {
-                        focusView.focused(success);
-                        if (success) {
-                            execute(getSettings().getDelay());
-                        } else {
-                            prepareNextShot();
-                        }
-                    }
-                });
+                camera.autoFocus(new FocusCallBack());
             }else{
                 send(activity.getContext().getString(R.string.no_directory));
+            }
+        }
+    }
+
+    class FocusCallBack implements Camera.AutoFocusCallback {
+
+        @Override
+        public void onAutoFocus(boolean success, Camera camera) {
+            focusView.focused(success);
+            if (success) {
+                execute(getSettings().getDelay());
+            } else {
+                prepareNextShot();
             }
         }
     }
