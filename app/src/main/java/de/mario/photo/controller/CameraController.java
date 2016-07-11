@@ -108,7 +108,6 @@ public class CameraController implements CameraControlable{
         }
     }
 
-
     @Override
     public void reinitialize(){
         if(camera == null) {
@@ -175,7 +174,6 @@ public class CameraController implements CameraControlable{
     public File getPictureSaveDirectory() {
         return storageLookable.lookupSaveDirectory();
     }
-
 
     @Override
     public Preview getPreview() {
@@ -244,5 +242,4 @@ public class CameraController implements CameraControlable{
             }
         }
     }
-
 }
