@@ -47,7 +47,21 @@ public class SettingsAccess {
 
     public int getExposureSequenceType() {return getInt(SettingsValue.EXPOSURE_SEQ);}
 
-    public boolean isLastFlash() {return getBoolean(SettingsValue.LAST_FLASH);}
+    public int getFlashMode() {
+        return getInt(SettingsValue.FLASH);
+    }
+
+    /**
+     * This methods returns true when for each photo the flash shall be activated.
+     * @return boolean
+     */
+    public boolean isFlashForEach() {return getFlashMode() == 1;}
+
+    /**
+     * This methods returns true when the flash shall be activated for the an extra photo at the end.
+     * @return boolean
+     */
+    public boolean isLastFlash() {return getFlashMode() == 2;}
 
     public int getDelay() {return getInt(SettingsValue.SHUTTER_DELAY); }
 

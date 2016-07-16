@@ -26,6 +26,8 @@ class ShotParameters {
 
     private boolean trace;
 
+    private boolean extraFlash;
+
     ShotParameters(CameraControlable cameraController, PhotoActivable activity, ParameterUpdater updater) {
         this.cameraController = cameraController;
         this.activity = activity;
@@ -82,9 +84,12 @@ class ShotParameters {
     }
 
     boolean isFlash(int index){
-        return shots[index].isFlash();
+        boolean flash = false;
+        if(extraFlash) {
+            flash = shots[index].isFlash();
+        }
+        return flash;
     }
-
 
     void sendMessage(Message message) {
         sender.send(message);
@@ -92,5 +97,9 @@ class ShotParameters {
 
     void sendMessage(String message){
         sender.send(message);
+    }
+
+    void setExtraFlash(boolean extraFlash) {
+        this.extraFlash = extraFlash;
     }
 }

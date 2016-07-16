@@ -144,7 +144,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
 
     private void updateFlash() {
         boolean flash = shotParams.isFlash(imageCounter);
-        if(flash != lastFlash) {
+        if (flash != lastFlash) {
             updater.enableFlash(flash);
         }
         lastFlash = flash;

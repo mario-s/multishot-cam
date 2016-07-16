@@ -5,6 +5,7 @@ import android.hardware.Camera;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Queue;
 
 import de.mario.photo.settings.SettingsAccess;
@@ -27,9 +28,11 @@ class PhotoShotsFactory {
     Shot[] create(SettingsAccess settings) {
 
         int seqType = settings.getExposureSequenceType();
+        LinkedList<Integer> els = exposureValuesFactory.getValues(seqType);
+
         boolean lastFlash = settings.isLastFlash();
 
-        return createEntries(exposureValuesFactory.getValues(seqType), lastFlash);
+        return createEntries(els, lastFlash);
     }
 
     private Shot[] createEntries(Queue<Integer> els, boolean lastFlash) {
@@ -37,6 +40,7 @@ class PhotoShotsFactory {
         Date date = new Date();
         int size = els.size();
         int m = lastFlash ? size + 1 : size;
+
         Shot[] shots = new Shot[m];
         for (int i = 0; i < m; i++) {
             shots[i] = new Shot(createFileName(date, i));

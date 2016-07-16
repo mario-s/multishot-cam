@@ -55,9 +55,10 @@ public class PhotoCommand implements Runnable{
         }
 
         parameterUpdater.setIso(settings.getIsoKey(), settings.getIsoValue());
-
+        parameterUpdater.enableContinuesFlash(settings.isFlashForEach());
         parameterUpdater.update(camera);
 
+        shotParams.setExtraFlash(settings.isLastFlash());
         shotParams.setShots(shots);
 
         boolean trace = settings.isTrace();

@@ -13,11 +13,14 @@
             android:summary="@string/prefs_exposure_description"
             android:title="@string/prefs_exposure_title"/>
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="lastFlash"
-            android:summary="@string/prefs_last_flash_description"
-            android:title="@string/prefs_last_flash_title" />
+        <ListPreference
+            android:defaultValue="0"
+            android:enabled="true"
+            android:entries="@array/flashArray"
+            android:entryValues="@array/flashValues"
+            android:key="flashMode"
+            android:summary="@string/prefs_flash_description"
+            android:title="@string/prefs_flash_title"/>
 
     </PreferenceCategory>
 

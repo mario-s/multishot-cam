@@ -59,8 +59,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	private ViewsOrientationListener orientationListener;
 
-	private boolean hasCam;
-
 	public PhotoActivity() {
 		handler = new MessageHandler(this);
 		receiver = new ProcessedMessageReceiver(this);
@@ -80,15 +78,14 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 			toast(getString(R.string.no_cam));
 		} else {
 			showDialogWhenFirstRun();
-
-			cameraController.setActivity(this);
-			hasCam = cameraController.lookupCamera();
 		}
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
+		cameraController.setActivity(this);
+		boolean hasCam = cameraController.lookupCamera();
 		if (!hasCam) {
 			toast(getString(R.string.no_back_cam));
 		} else {

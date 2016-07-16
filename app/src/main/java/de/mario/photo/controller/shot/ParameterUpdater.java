@@ -61,6 +61,14 @@ class ParameterUpdater {
         }
     }
 
+    void enableContinuesFlash(boolean enable) {
+        if(enable) {
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        }else{
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        }
+    }
+
     void update(Camera camera){
         camera.setParameters(params);
     }
