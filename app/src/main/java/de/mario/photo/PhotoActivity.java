@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.inject.Inject;
 
@@ -59,6 +58,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	private ViewsOrientationListener orientationListener;
 
+	private ImageToast imageToast;
+
 	public PhotoActivity() {
 		handler = new MessageHandler(this);
 		receiver = new ProcessedMessageReceiver(this);
@@ -72,6 +73,9 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		View toastView = getLayoutInflater().inflate(R.layout.toast, (ViewGroup)findViewById(R.id.toast));
+		imageToast = new ImageToast(this, toastView);
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -150,8 +154,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	void toast(String msg) {
-		Toast.makeText(this, msg, Toast.LENGTH_LONG)
-				.show();
+		//Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+		imageToast.setImageResource().setText(msg).show();
 	}
 
 	@Override
