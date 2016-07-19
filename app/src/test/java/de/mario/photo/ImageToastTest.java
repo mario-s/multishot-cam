@@ -38,7 +38,7 @@ public class ImageToastTest {
         given(toastView.findViewById(R.id.toast_image)).willReturn(imageView);
         given(toastView.findViewById(R.id.toast_text)).willReturn(textView);
 
-        classUnderTest = new ImageToast(context, toastView);
+        classUnderTest = new ImageToast(toastView);
     }
 
     @Test

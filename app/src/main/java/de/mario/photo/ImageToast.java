@@ -1,7 +1,5 @@
 package de.mario.photo;
 
-import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,14 +15,13 @@ class ImageToast extends Toast{
 
     private View toastView;
 
-    ImageToast(Context context, View toastView){
-        super(context);
+    ImageToast(View toastView) {
+        super(toastView.getContext());
         this.toastView = toastView;
         init();
     }
 
     private void init() {
-        setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         setDuration(Toast.LENGTH_LONG);
 
         imageView = (ImageView) toastView.findViewById(R.id.toast_image);

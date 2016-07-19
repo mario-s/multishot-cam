@@ -73,9 +73,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		View toastView = getLayoutInflater().inflate(R.layout.toast, (ViewGroup)findViewById(R.id.toast));
-		imageToast = new ImageToast(this, toastView);
+		createImageToast();
 
 		if (!getPackageManager()
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -83,6 +81,11 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		} else {
 			showDialogWhenFirstRun();
 		}
+	}
+
+	private void createImageToast() {
+		View view = getLayoutInflater().inflate(R.layout.toast, (ViewGroup) findViewById(R.id.toast));
+		imageToast = new ImageToast(view);
 	}
 
 	@Override
