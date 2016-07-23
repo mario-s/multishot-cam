@@ -21,7 +21,6 @@ final class ProcessedMessageReceiver extends BroadcastReceiver {
             String result = intent.getStringExtra(PhotoActivable.MERGED);
 
             activity.hideProgress();
-            activity.imageToast(result);
             activity.refreshPictureFolder(result);
         }
     }

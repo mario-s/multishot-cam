@@ -160,10 +160,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		imageToast.setText(msg).show();
 	}
 
-	void imageToast(String msg) {
-		imageToast.setImage(msg).show();
-	}
-
 	@Override
 	protected void onPause() {
 		getPreviewLayout().removeAllViews();
@@ -264,6 +260,11 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	void refreshPictureFolder(String path){
 		File file = new File(path);
-		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+		Uri uri = Uri.fromFile(file);
+		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+		sendBroadcast(intent);
+		imageToast.setImage(file).show();
 	}
+
+
 }

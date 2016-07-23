@@ -1,6 +1,8 @@
 package de.mario.photo;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,8 @@ import java.io.File;
 /**
  */
 class ImageToast extends Toast{
+
+    private static final int THUMBSIZE = 96;
 
     private ImageView imageView;
 
@@ -35,9 +39,20 @@ class ImageToast extends Toast{
         setView(toastView);
     }
 
-    ImageToast setImage(String path) {
-        File file = new File(path);
-        imageView.setImageURI(Uri.fromFile(file));
+    private Bitmap getThumbnail(File file) {
+        return ThumbnailUtils.extractThumbnail(
+                BitmapFactory.decodeFile(file.getAbsolutePath()),
+                THUMBSIZE,
+                THUMBSIZE);
+    }
+
+    ImageToast setImage(File file) {
+        imageView.setImageBitmap(getThumbnail(file));
+        return this;
+    }
+
+    ImageToast setImage(Bitmap bitmap) {
+        imageView.setImageBitmap(bitmap);
         return this;
     }
 

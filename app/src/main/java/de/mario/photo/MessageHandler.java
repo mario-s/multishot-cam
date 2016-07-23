@@ -56,11 +56,6 @@ class MessageHandler extends Handler {
     }
 
     private void informAboutPictures(String[] pictures, String folder) {
-        int len = pictures.length;
-        //String msg = String.format(activity.getString(PHOTOS_SAVED), len, folder);
-        //activity.toast(msg);
-        activity.imageToast(pictures[0]);
-
         for(String pic : pictures) {
             activity.refreshPictureFolder(pic);
         }
