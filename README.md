@@ -8,4 +8,4 @@ At the moment several images with different EL are taken and merged using OpenCV
 
 ----------
 
-[![Build Status](https://travis-ci.org/Mario-S/multishot-cam.svg?branch=master)](https://travis-ci.org/Mario-S/multishot-cam)
+[![Build Status](https://travis-ci.org/mario-s/multishot-cam.svg?branch=master)](https://travis-ci.org/Mario-S/multishot-cam)
