@@ -1,9 +1,12 @@
 package de.mario.photo;
 
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 
 /**
  */
@@ -27,11 +30,14 @@ class ImageToast extends Toast{
         imageView = (ImageView) toastView.findViewById(R.id.toast_image);
         textView = (TextView) toastView.findViewById(R.id.toast_text);
 
+        imageView.setImageResource(R.drawable.ic_launcher);
+
         setView(toastView);
     }
 
-    ImageToast setImageResource(){
-        imageView.setImageResource(R.drawable.ic_launcher);
+    ImageToast setImage(String path) {
+        File file = new File(path);
+        imageView.setImageURI(Uri.fromFile(file));
         return this;
     }
 

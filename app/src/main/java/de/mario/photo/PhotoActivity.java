@@ -157,8 +157,11 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	void toast(String msg) {
-		//Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-		imageToast.setImageResource().setText(msg).show();
+		imageToast.setText(msg).show();
+	}
+
+	void imageToast(String msg) {
+		imageToast.setImage(msg).show();
 	}
 
 	@Override
