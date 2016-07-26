@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 
@@ -156,8 +157,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		return (ViewGroup) findViewById(R.id.preview);
 	}
 
-	void toast(String msg) {
-		imageToast.setText(msg).show();
+	private void toast(String msg) {
+		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -254,11 +255,12 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		progressBar.setVisibility(View.VISIBLE);
 	}
 
-	void hideProgress() {
+	private void hideProgress() {
 		progressBar.setVisibility(View.GONE);
 	}
 
 	void refreshPictureFolder(String path){
+		hideProgress();
 		File file = new File(path);
 		Uri uri = Uri.fromFile(file);
 		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);

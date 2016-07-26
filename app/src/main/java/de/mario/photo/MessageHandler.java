@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.Map;
@@ -34,7 +35,7 @@ class MessageHandler extends Handler {
     void handleMessage(MessageWrapper wrapper){
         if(wrapper.isDataEmpty()) {
             String msg = wrapper.getParcelAsString();
-            activity.toast(msg);
+            Toast.makeText(activity.getContext(), msg, Toast.LENGTH_LONG).show();
         }else{
             handleMessageAsPictureInfo(wrapper);
         }

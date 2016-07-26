@@ -19,8 +19,6 @@ final class ProcessedMessageReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(PhotoActivable.EXPOSURE_MERGE)){
             String result = intent.getStringExtra(PhotoActivable.MERGED);
-
-            activity.hideProgress();
             activity.refreshPictureFolder(result);
         }
     }
