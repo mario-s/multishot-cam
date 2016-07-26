@@ -35,10 +35,14 @@ class MessageHandler extends Handler {
     void handleMessage(MessageWrapper wrapper){
         if(wrapper.isDataEmpty()) {
             String msg = wrapper.getParcelAsString();
-            Toast.makeText(activity.getContext(), msg, Toast.LENGTH_LONG).show();
+            toast(msg);
         }else{
             handleMessageAsPictureInfo(wrapper);
         }
+    }
+
+    void toast(String msg) {
+        Toast.makeText(activity.getContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     private void handleMessageAsPictureInfo(MessageWrapper wrapper){

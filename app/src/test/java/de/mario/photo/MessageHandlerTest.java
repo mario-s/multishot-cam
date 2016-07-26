@@ -1,9 +1,10 @@
 package de.mario.photo;
 
+import android.content.Context;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -20,25 +21,36 @@ import static org.mockito.Mockito.verify;
 public class MessageHandlerTest {
     private static final String[] DUMMY = new String[]{"a", "b", "c"};
     @Mock
+    private Context context;
+    @Mock
     private PhotoActivity activity;
     @Mock
     private MessageWrapper wrapper;
-    @InjectMocks
+
     private MessageHandler classUnderTest;
 
 
     @Before
     public void setUp() {
+
+        given(activity.getContext()).willReturn(context);
         given(activity.getString(anyInt())).willReturn("test");
         given(wrapper.getStringArray(PhotoActivable.PICTURES)).willReturn(DUMMY);
         given(wrapper.getString(PhotoActivable.SAVE_FOLDER)).willReturn("a");
+        given(wrapper.getParcelAsString()).willReturn("foo");
+
+        classUnderTest = new MessageHandler(activity) {
+            @Override
+            void toast(String msg) {
+            }
+        };
     }
 
     @Test
     public void testHandleMessage_String() {
         given(wrapper.isDataEmpty()).willReturn(true);
         classUnderTest.handleMessage(wrapper);
-        verify(activity).toast(anyString());
+        verify(wrapper).getParcelAsString();
     }
 
     @Test
