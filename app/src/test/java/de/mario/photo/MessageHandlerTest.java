@@ -37,7 +37,7 @@ public class MessageHandlerTest {
         given(activity.getString(anyInt())).willReturn("test");
         given(wrapper.getStringArray(PhotoActivable.PICTURES)).willReturn(DUMMY);
         given(wrapper.getString(PhotoActivable.SAVE_FOLDER)).willReturn("a");
-        given(wrapper.getParcelAsString()).willReturn("foo");
+
 
         classUnderTest = new MessageHandler(activity) {
             @Override
@@ -47,10 +47,19 @@ public class MessageHandlerTest {
     }
 
     @Test
-    public void testHandleMessage_String() {
+    public void testHandleStringMessage_ShouldToast() {
         given(wrapper.isDataEmpty()).willReturn(true);
+        given(wrapper.getParcelAsString()).willReturn("foo");
         classUnderTest.handleMessage(wrapper);
         verify(wrapper).getParcelAsString();
+    }
+
+    @Test
+    public void testHandlePrepareMessage_ShouldPrepare() {
+        given(wrapper.isDataEmpty()).willReturn(true);
+        given(wrapper.getParcelAsString()).willReturn(PhotoActivable.PREPARE_FOR_NEXT);
+        classUnderTest.handleMessage(wrapper);
+        verify(activity).prepareForNextShot();
     }
 
     @Test

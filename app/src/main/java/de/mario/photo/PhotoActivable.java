@@ -19,11 +19,11 @@ public interface PhotoActivable {
     String EXPOSURE_MERGE = "exposureMerge";
     String MERGED = "merged";
 
+    String PREPARE_FOR_NEXT = "prepareForNext";
+
     Handler getHandler();
 
     SettingsAccess getSettingsAccess();
-
-    void prepareForNextShot();
 
     Context getContext();
 }

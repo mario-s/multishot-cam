@@ -35,7 +35,13 @@ class MessageHandler extends Handler {
     void handleMessage(MessageWrapper wrapper){
         if(wrapper.isDataEmpty()) {
             String msg = wrapper.getParcelAsString();
-            toast(msg);
+            switch (msg) {
+                case PhotoActivable.PREPARE_FOR_NEXT:
+                    activity.prepareForNextShot();
+                    break;
+                default:
+                    toast(msg);
+            }
         }else{
             handleMessageAsPictureInfo(wrapper);
         }

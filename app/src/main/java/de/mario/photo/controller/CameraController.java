@@ -157,7 +157,7 @@ public class CameraController implements CameraControlable{
 
     private void prepareNextShot() {
         focusView.resetFocus();
-        activity.prepareForNextShot();
+        send(PhotoActivable.PREPARE_FOR_NEXT);
     }
 
     private void enableShutterSound(boolean enable) {
