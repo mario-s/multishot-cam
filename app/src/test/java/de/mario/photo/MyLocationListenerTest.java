@@ -26,7 +26,7 @@ public class MyLocationListenerTest {
     }
 
     @Test
-    public void testOnLoactionChanged_CurrentIsInput() {
+    public void testOnLacationChanged_CurrentIsInput() {
         classUnderTest.onLocationChanged(location);
         Location result = classUnderTest.getCurrentLocation();
         assertThat(result, equalTo(location));
