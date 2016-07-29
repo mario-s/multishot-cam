@@ -56,6 +56,8 @@ public class CameraControllerTest {
     private StorageLookable storageLookable;
     @Mock
     private HandlerThread handlerThread;
+    @Mock
+    private CameraOrientationListener orientationListener;
     @InjectMocks
     private CameraController classUnderTest;
 
@@ -75,6 +77,7 @@ public class CameraControllerTest {
         setInternalState(classUnderTest, "messageSender", messageSender);
         setInternalState(classUnderTest, "handlerThread", handlerThread);
         setInternalState(classUnderTest, "handler", handler);
+        setInternalState(classUnderTest, "orientationListener", orientationListener);
     }
 
     @Test
@@ -100,5 +103,12 @@ public class CameraControllerTest {
     public void testShot() {
         classUnderTest.shot();
         verify(handler).post(any(CameraController.ShotRunner.class));
+    }
+
+    @Test
+    public void testReleaseCamera() {
+        classUnderTest.initialize();
+        classUnderTest.releaseCamera();
+        verify(camera).release();
     }
 }
