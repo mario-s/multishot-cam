@@ -23,7 +23,7 @@ import java.io.File;
 import de.mario.photo.controller.CameraControlable;
 import de.mario.photo.preview.CanvasView;
 import de.mario.photo.settings.SettingsAccess;
-import de.mario.photo.support.GalleryOpener;
+import de.mario.photo.support.ImageOpener;
 import de.mario.photo.support.MediaUpdater;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -59,7 +59,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Inject
 	private MediaUpdater mediaUpdater;
 	@Inject
-	private GalleryOpener opener;
+	private ImageOpener opener;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;

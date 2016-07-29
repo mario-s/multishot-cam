@@ -17,12 +17,12 @@ import roboguice.util.Ln;
 /**
  * Opens the gallery of taken photos.
  */
-public class GalleryOpener {
+public class ImageOpener {
     public static final String MODE = "r";
     private final Context context;
 
     @Inject
-    public GalleryOpener(Context context) {
+    public ImageOpener(Context context) {
         this.context = context;
     }
 

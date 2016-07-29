@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
  *
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GalleryOpenerTest {
+public class ImageOpenerTest {
     @Mock
     private Context context;
     @Mock
@@ -30,13 +30,13 @@ public class GalleryOpenerTest {
     @Mock
     private ComponentName componentName;
 
-    private GalleryOpener classUnderTest;
+    private ImageOpener classUnderTest;
 
     private File file;
 
     @Before
     public void setUp() {
-        classUnderTest = new GalleryOpener(context) {
+        classUnderTest = new ImageOpener(context) {
             @Override
             Intent newIntent() {
                 return intent;
