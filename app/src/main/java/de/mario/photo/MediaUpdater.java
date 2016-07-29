@@ -13,7 +13,7 @@ import java.io.File;
  */
 final class MediaUpdater {
     private final Context context;
-    private Uri lastUpdated;
+    private File lastUpdated;
 
     @Inject
     MediaUpdater(Context context) {
@@ -21,12 +21,13 @@ final class MediaUpdater {
     }
 
     void sendUpdate(File file) {
-        lastUpdated = Uri.fromFile(file);
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, lastUpdated);
+        lastUpdated = file;
+        Uri uri = Uri.fromFile(file);
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
         context.sendBroadcast(intent);
     }
 
-    Uri getLastUpdated() {
+    File getLastUpdated() {
         return lastUpdated;
     }
 }

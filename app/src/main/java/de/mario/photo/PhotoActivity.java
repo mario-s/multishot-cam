@@ -6,7 +6,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -223,7 +222,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	public void onGallery(View view) {
-		Uri last = mediaUpdater.getLastUpdated();
+		File last = mediaUpdater.getLastUpdated();
 		opener.open(last);
 	}
 

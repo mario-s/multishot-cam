@@ -1,16 +1,19 @@
 package de.mario.photo;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.pm.PackageManager;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Matchers.any;
+import java.io.File;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -21,13 +24,33 @@ public class GalleryOpenerTest {
     @Mock
     private Context context;
     @Mock
-    private Uri uri;
-    @InjectMocks
+    private PackageManager packageManager;
+    @Mock
+    private Intent intent;
+    @Mock
+    private ComponentName componentName;
+
     private GalleryOpener classUnderTest;
+
+    private File file;
+
+    @Before
+    public void setUp() {
+        classUnderTest = new GalleryOpener(context) {
+            @Override
+            Intent newIntent() {
+                return intent;
+            }
+        };
+
+        file = new File(".");
+        given(context.getPackageManager()).willReturn(packageManager);
+    }
 
     @Test
     public void testOpen_UriExists() {
-        classUnderTest.open(uri);
-        verify(context).startActivity(any(Intent.class));
+        given(intent.resolveActivity(packageManager)).willReturn(componentName);
+        classUnderTest.open(file);
+        verify(context).startActivity(intent);
     }
 }
