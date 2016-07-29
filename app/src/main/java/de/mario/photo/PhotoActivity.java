@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -36,6 +37,8 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_photo)
 public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
+	private static final int[] VIEW_IDS = new int[]{R.id.shutter, R.id.settings, R.id.gallery};
+
 	private static final String VERS = "version";
 	private static final String PREFS = "PREFERENCE";
 	@InjectView(R.id.progress_bar)
@@ -54,6 +57,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private IntentFactory intentFactory;
 	@Inject
 	private MediaUpdater mediaUpdater;
+	@Inject
+	private GalleryOpener opener;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;
@@ -119,10 +124,11 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	private void registerViewsOrientationListener(){
-		if(orientationListener == null){
+		if (orientationListener == null) {
 			orientationListener = new ViewsOrientationListener(this);
-			orientationListener.addView(findViewById(R.id.shutter));
-			orientationListener.addView(findViewById(R.id.settings));
+			for (int id : VIEW_IDS) {
+				orientationListener.addView(findViewById(id));
+			}
 			orientationListener.enable();
 		}
 	}
@@ -156,6 +162,10 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	private ViewGroup getPreviewLayout() {
 		return (ViewGroup) findViewById(R.id.preview);
+	}
+
+	private void toast(int id) {
+		toast(getString(id));
 	}
 
 	private void toast(String msg) {
@@ -196,8 +206,9 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	 * @param enabled <code>true</code>: enables the elements.
 	 */
 	private void toggleInputs(boolean enabled) {
-		findViewById(R.id.shutter).setEnabled(enabled);
-		findViewById(R.id.settings).setEnabled(enabled);
+		for (int id : VIEW_IDS) {
+			findViewById(id).setEnabled(enabled);
+		}
 	}
 
 	/**
@@ -209,6 +220,11 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 		hideProgress();
 		startActivity(intent);
+	}
+
+	public void onGallery(View view) {
+		Uri last = mediaUpdater.getLastUpdated();
+		opener.open(last);
 	}
 
 	@Override
