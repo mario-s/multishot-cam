@@ -107,7 +107,7 @@ public class CameraControllerTest {
 
     @Test
     public void testReleaseCamera() {
-        classUnderTest.initialize();
+        classUnderTest.reinitialize();
         classUnderTest.releaseCamera();
         verify(camera).release();
     }
