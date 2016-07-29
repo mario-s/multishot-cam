@@ -18,7 +18,7 @@ import roboguice.util.Ln;
  * Opens the gallery of taken photos.
  */
 public class ImageOpener {
-    public static final String MODE = "r";
+    public static final String TYPE = "image/*";
     private final Context context;
 
     @Inject
@@ -43,7 +43,7 @@ public class ImageOpener {
         Intent intent = newIntent();
         if (file != null) {
             Uri uri = Uri.fromFile(file);
-            intent.setDataAndType(uri, "image/*");
+            intent.setDataAndType(uri, TYPE);
             Ln.d("set intent to show image");
         } else {
             intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
