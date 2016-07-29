@@ -23,6 +23,8 @@ import java.io.File;
 import de.mario.photo.controller.CameraControlable;
 import de.mario.photo.preview.CanvasView;
 import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.support.GalleryOpener;
+import de.mario.photo.support.MediaUpdater;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;

@@ -1,4 +1,4 @@
-package de.mario.photo.controller.support;
+package de.mario.photo.support;
 
 import android.hardware.Camera;
 

@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.support;
 
 import android.content.ComponentName;
 import android.content.Context;

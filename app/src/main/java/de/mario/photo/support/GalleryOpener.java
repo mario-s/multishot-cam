@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.support;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,22 +10,23 @@ import com.google.inject.Inject;
 
 import java.io.File;
 
+import de.mario.photo.R;
 import roboguice.util.Ln;
 
 
 /**
  * Opens the gallery of taken photos.
  */
-class GalleryOpener {
+public class GalleryOpener {
     public static final String MODE = "r";
     private final Context context;
 
     @Inject
-    GalleryOpener(Context context) {
+    public GalleryOpener(Context context) {
         this.context = context;
     }
 
-    void open(File file) {
+    public void open(File file) {
         showGallery(file);
     }
 
