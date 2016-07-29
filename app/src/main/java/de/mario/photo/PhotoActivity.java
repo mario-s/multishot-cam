@@ -6,7 +6,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -53,6 +52,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private CameraControlable cameraController;
 	@Inject
 	private IntentFactory intentFactory;
+	@Inject
+	private MediaUpdater mediaUpdater;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;
@@ -260,11 +261,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	void refreshPictureFolder(String path){
 		hideProgress();
 		File file = new File(path);
-		Uri uri = Uri.fromFile(file);
-		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-		sendBroadcast(intent);
 		imageToast.setImage(file).show();
+		mediaUpdater.sendUpdate(file);
 	}
-
-
 }
