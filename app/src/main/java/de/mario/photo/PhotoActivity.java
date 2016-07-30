@@ -26,6 +26,7 @@ import de.mario.photo.service.ExposureMergeService;
 import de.mario.photo.service.OpenCvService;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.settings.SettingsIntentFactory;
+import de.mario.photo.support.GalleryOpener;
 import de.mario.photo.support.ImageOpener;
 import de.mario.photo.support.MediaUpdater;
 import roboguice.activity.RoboActivity;
@@ -62,7 +63,9 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Inject
 	private MediaUpdater mediaUpdater;
 	@Inject
-	private ImageOpener opener;
+	private ImageOpener imageOpener;
+	@Inject
+	private GalleryOpener galleryOpener;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;
@@ -228,7 +231,12 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	public void onGallery(View view) {
 		File last = mediaUpdater.getLastUpdated();
-		opener.open(last);
+		//TODO assign to a new image button
+		if (last != null) {
+			imageOpener.open(last);
+		} else {
+			galleryOpener.open();
+		}
 	}
 
 	@Override

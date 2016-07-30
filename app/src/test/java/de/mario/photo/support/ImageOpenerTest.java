@@ -38,7 +38,7 @@ public class ImageOpenerTest {
     public void setUp() {
         classUnderTest = new ImageOpener(context) {
             @Override
-            Intent newIntent() {
+            protected Intent newIntent() {
                 return intent;
             }
         };
