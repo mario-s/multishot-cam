@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,15 +6,12 @@ import android.content.Intent;
 import com.google.inject.Inject;
 
 import de.mario.photo.controller.CameraControlable;
-import de.mario.photo.service.ExposureMergeService;
-import de.mario.photo.service.OpenCvService;
-import de.mario.photo.settings.SettingsAccess;
-import de.mario.photo.settings.SettingsActivity;
+
 
 /**
- *
+ * This factory creates an intent to launch the setting activity
  */
-class IntentFactory {
+public final class SettingsIntentFactory {
 
     static final String PICTURE_SIZES = "pictureSizes";
     static final String SELECTED_PICTURE_SIZE = "selectedPictureSize";
@@ -28,11 +25,11 @@ class IntentFactory {
     private SettingsAccess settingsAccess;
 
     @Inject
-    IntentFactory(Context context){
+    public SettingsIntentFactory(Context context) {
         this.context = context;
     }
 
-    Intent newSettingsIntent() {
+    public Intent create() {
         Intent intent = new Intent(context, SettingsActivity.class);
 
         intent.putExtra(PICTURE_SIZES, cameraController.getSupportedPicturesSizes());
@@ -57,9 +54,4 @@ class IntentFactory {
         return isoKey;
     }
 
-    Intent newOpenCvIntent(String [] pictures) {
-        Intent intent = new Intent(context, ExposureMergeService.class);
-        intent.putExtra(OpenCvService.PARAM_PICS, pictures);
-        return intent;
-    }
 }

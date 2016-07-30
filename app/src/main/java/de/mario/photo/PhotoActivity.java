@@ -22,7 +22,10 @@ import java.io.File;
 
 import de.mario.photo.controller.CameraControlable;
 import de.mario.photo.preview.CanvasView;
+import de.mario.photo.service.ExposureMergeService;
+import de.mario.photo.service.OpenCvService;
 import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.settings.SettingsIntentFactory;
 import de.mario.photo.support.ImageOpener;
 import de.mario.photo.support.MediaUpdater;
 import roboguice.activity.RoboActivity;
@@ -55,7 +58,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Inject
 	private CameraControlable cameraController;
 	@Inject
-	private IntentFactory intentFactory;
+	private SettingsIntentFactory intentFactory;
 	@Inject
 	private MediaUpdater mediaUpdater;
 	@Inject
@@ -217,7 +220,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	 * @param view the {@link View} for this action.
 	 */
 	public void onSettings(View view) {
-		Intent intent = intentFactory.newSettingsIntent();
+		Intent intent = intentFactory.create();
 
 		hideProgress();
 		startActivity(intent);
@@ -262,7 +265,9 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	void processHdr(String [] pictures){
 		if(settingsAccess.isProcessingEnabled()) {
 			showProgress();
-			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intentFactory.newOpenCvIntent(pictures));
+			Intent intent = new Intent(this, ExposureMergeService.class);
+			intent.putExtra(OpenCvService.PARAM_PICS, pictures);
+			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
 			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
 		}
 	}
