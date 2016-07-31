@@ -23,6 +23,7 @@
     <string name="startup_text">This App requires OpenCvManager 3.0.0 to create a HDR photo. Shall I look for an installation now?</string>
     <string name="exposure">Exposure</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_merge_process">Image Merge Process</string>
 
     <string name="prefs_shutter_title">Shutter</string>
     <string name="prefs_shutter_delay_enabled_title">Shutter Delay</string>

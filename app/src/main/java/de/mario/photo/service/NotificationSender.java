@@ -14,12 +14,13 @@ import de.mario.photo.R;
  */
 class NotificationSender {
 
+    private final String title;
     private Context context;
-
     private NotificationManager nManager;
 
     NotificationSender(Context context) {
         this.context = context;
+        this.title = context.getString(R.string.title_merge_process);
         nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -42,7 +43,7 @@ class NotificationSender {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Image Process")
+                        .setContentTitle(title)
                         .setContentText(text);
 
         return builder;
