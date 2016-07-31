@@ -1,7 +1,10 @@
 package de.mario.photo.service;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 
 import de.mario.photo.R;
@@ -22,7 +25,17 @@ class NotificationSender {
 
     void send(String text){
         NotificationCompat.Builder builder = createBuilder(text);
-        nManager.notify(12345, builder.build());
+
+        nManager.notify(12345, addIntent(builder).build());
+    }
+
+    private NotificationCompat.Builder addIntent(NotificationCompat.Builder builder) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return builder.setContentIntent(pendingIntent);
     }
 
     private NotificationCompat.Builder createBuilder(String text) {
@@ -31,6 +44,7 @@ class NotificationSender {
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Image Process")
                         .setContentText(text);
+
         return builder;
     }
 }
