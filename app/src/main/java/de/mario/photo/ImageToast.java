@@ -1,9 +1,6 @@
 package de.mario.photo;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ThumbnailUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,12 +8,14 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import de.mario.photo.support.BitmapLoader;
+
 /**
  */
 class ImageToast extends Toast{
 
-    private static final int THUMBSIZE = 96;
-    private final Matrix matrix;
+
+    private final BitmapLoader loader;
     private ImageView imageView;
     private TextView textView;
     private View toastView;
@@ -24,13 +23,11 @@ class ImageToast extends Toast{
     ImageToast(View toastView) {
         super(toastView.getContext());
         this.toastView = toastView;
-        this.matrix = new Matrix();
+        this.loader = new BitmapLoader();
         init();
     }
 
     private void init() {
-        matrix.postRotate(90);
-
         setDuration(Toast.LENGTH_LONG);
 
         imageView = (ImageView) toastView.findViewById(R.id.toast_image);
@@ -41,17 +38,8 @@ class ImageToast extends Toast{
         setView(toastView);
     }
 
-    private Bitmap getThumbnail(File file) {
-        Bitmap source = ThumbnailUtils.extractThumbnail(
-                BitmapFactory.decodeFile(file.getAbsolutePath()),
-                THUMBSIZE,
-                THUMBSIZE);
-
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
     ImageToast setImage(File file) {
-        imageView.setImageBitmap(getThumbnail(file));
+        imageView.setImageBitmap(loader.loadThumbnail(file));
         return this;
     }
 
