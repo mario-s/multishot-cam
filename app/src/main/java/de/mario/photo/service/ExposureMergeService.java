@@ -67,6 +67,7 @@ public class ExposureMergeService extends OpenCvService {
     }
 
     private void sendNotification(File file) {
+        //message for the app
         Intent intent = new Intent(PhotoActivable.EXPOSURE_MERGE);
         String path = file.getAbsolutePath();
         intent.putExtra(PhotoActivable.MERGED, path);

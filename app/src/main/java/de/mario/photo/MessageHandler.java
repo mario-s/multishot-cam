@@ -7,6 +7,7 @@ import android.os.Message;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 import de.mario.photo.exif.ExifTag;
@@ -60,8 +61,9 @@ class MessageHandler extends Handler {
 
         activity.processHdr(pictures);
 
-        activity.prepareForNextShot();
         informAboutPictures(pictures, folder);
+
+        activity.prepareForNextShot();
 
         Ln.d("ready for next photo session");
     }
@@ -73,17 +75,27 @@ class MessageHandler extends Handler {
     }
 
     private void updateExif(String [] pictures){
+        Map<ExifTag, String> tags = new HashMap<>();
+
+        addLocation(tags);
+
+        updateTags(pictures, tags);
+    }
+
+    private void addLocation(Map<ExifTag, String> tags) {
         Location location = activity.getCurrentLocation();
         Ln.d("location: %s", location);
         if(location != null) {
             GeoTagFactory tagFactory = new GeoTagFactory();
-            Map<ExifTag, String> tags = tagFactory.create(location);
-            ExifWriter writer = new ExifWriter();
-            for (String name : pictures) {
-                File file = new File(name);
-                writer.addTags(file, tags);
-            }
+            tags.putAll(tagFactory.create(location));
         }
     }
 
+    private void updateTags(String[] pictures, Map<ExifTag, String> tags) {
+        ExifWriter writer = new ExifWriter();
+        for (String name : pictures) {
+            File file = new File(name);
+            writer.addTags(file, tags);
+        }
+    }
 }

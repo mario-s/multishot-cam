@@ -206,6 +206,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
 	void prepareForNextShot() {
 		toggleInputs(true);
+		hideProgress();
 	}
 
 	/**
@@ -284,7 +285,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		progressBar.setVisibility(View.VISIBLE);
 	}
 
-	void hideProgress() {
+	private void hideProgress() {
 		progressBar.setVisibility(View.GONE);
 	}
 

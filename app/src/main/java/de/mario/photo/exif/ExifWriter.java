@@ -1,33 +1,34 @@
 package de.mario.photo.exif;
 
 import android.media.ExifInterface;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import de.mario.photo.PhotoActivable;
+import roboguice.util.Ln;
 
 /**
  */
 public class ExifWriter {
 
     public void addTags(File source, Map<ExifTag, String> tags) {
-        try {
-            ExifInterface sourceExif = getExifInterface(source);
-            ExifInterface targetExif = getExifInterface(source);
-            copy(sourceExif, targetExif); //no to loose the existing metadata
+        if (!tags.isEmpty()) {
+            try {
+                ExifInterface sourceExif = getExifInterface(source);
+                ExifInterface targetExif = getExifInterface(source);
+                copy(sourceExif, targetExif); //no to loose the existing metadata
 
-            for(Map.Entry<ExifTag, String> tag : tags.entrySet()) {
-                String key = tag.getKey().getValue();
-                String val = tag.getValue();
-                targetExif.setAttribute(key, val);
+                for (Map.Entry<ExifTag, String> tag : tags.entrySet()) {
+                    String key = tag.getKey().getValue();
+                    String val = tag.getValue();
+                    targetExif.setAttribute(key, val);
+                }
+
+                targetExif.saveAttributes();
+            } catch (IOException exc) {
+                Ln.w(exc);
             }
-
-            targetExif.saveAttributes();
-        }catch (IOException exc) {
-            Log.w(PhotoActivable.DEBUG_TAG, exc);
         }
     }
 
@@ -39,7 +40,7 @@ public class ExifWriter {
 
             targetExif.saveAttributes();
         }catch (IOException exc) {
-            Log.w(PhotoActivable.DEBUG_TAG, exc);
+            Ln.w(exc);
         }
     }
 
