@@ -30,6 +30,7 @@ class CameraOrientationListener extends AbstractOrientationListener{
         }
     }
 
+
     /**
      * Returns orientation of the device for the given angle as an int value from 0 to 3.
      * Surface.ROTATION_90 for an angle greater 315 or smaller 45,
