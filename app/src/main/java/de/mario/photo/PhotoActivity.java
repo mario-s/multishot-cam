@@ -284,12 +284,11 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		progressBar.setVisibility(View.VISIBLE);
 	}
 
-	private void hideProgress() {
+	void hideProgress() {
 		progressBar.setVisibility(View.GONE);
 	}
 
 	void refreshPictureFolder(String path){
-		hideProgress();
 		File file = new File(path);
 		imageToast.setImage(file).show();
 		mediaUpdater.sendUpdate(file);

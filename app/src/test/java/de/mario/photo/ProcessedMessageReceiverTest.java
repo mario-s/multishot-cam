@@ -39,5 +39,6 @@ public class ProcessedMessageReceiverTest {
         InOrder order = inOrder(intent, activity);
         order.verify(intent).getStringExtra(PhotoActivable.MERGED);
         order.verify(activity).refreshPictureFolder(anyString());
+        order.verify(activity).hideProgress();
     }
 }
