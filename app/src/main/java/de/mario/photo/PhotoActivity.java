@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -26,6 +28,7 @@ import de.mario.photo.service.ExposureMergeService;
 import de.mario.photo.service.OpenCvService;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.settings.SettingsIntentFactory;
+import de.mario.photo.support.BitmapLoader;
 import de.mario.photo.support.GalleryOpener;
 import de.mario.photo.support.ImageOpener;
 import de.mario.photo.support.MediaUpdater;
@@ -42,12 +45,15 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_photo)
 public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
-	private static final int[] VIEW_IDS = new int[]{R.id.shutter, R.id.settings, R.id.gallery};
+	private static final int IMG_BTN_THUMB = 46;
 
-	private static final String VERS = "version";
-	private static final String PREFS = "PREFERENCE";
+	private static final int[] VIEW_IDS = new int[]{R.id.shutter_button, R.id.settings_button,
+			R.id.gallery_button, R.id.image_button};
+
 	@InjectView(R.id.progress_bar)
 	private View progressBar;
+	@InjectView(R.id.image_button)
+	private ImageView imageButton;
 	@Inject
 	private CanvasView canvasView;
 	@Inject
@@ -66,6 +72,10 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private ImageOpener imageOpener;
 	@Inject
 	private GalleryOpener galleryOpener;
+	@Inject
+	private BitmapLoader bitmapLoader;
+	@Inject
+	private StartupDialog startupDialog;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;
@@ -93,8 +103,13 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 			toast(getString(R.string.no_cam));
 		} else {
-			showDialogWhenFirstRun();
+			onPostCreate();
 		}
+	}
+
+	private void onPostCreate() {
+		bitmapLoader.setThumbnailSize(IMG_BTN_THUMB);
+		startupDialog.showIfFirstRun();
 	}
 
 	private void createImageToast() {
@@ -110,13 +125,13 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		if (!hasCam) {
 			toast(getString(R.string.no_back_cam));
 		} else {
-			initialize();
+			onPostStart();
 		}
-
-		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
 	}
 
-	private void initialize() {
+	private void onPostStart() {
+		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
+
 		cameraController.initialize();
 
 		getPreviewLayout().addView(cameraController.getPreview(), 0);
@@ -152,19 +167,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		registerViewsOrientationListener();
 
 		cameraController.reinitialize();
-	}
-
-	private void showDialogWhenFirstRun() {
-		String current = getVersion();
-		String stored = getSharedPreferences(PREFS, MODE_PRIVATE).getString(VERS, "");
-		if (!stored.equals(current)){
-			new StartupDialog(this).show();
-			getSharedPreferences(PREFS, MODE_PRIVATE).edit().putString(VERS, current).apply();
-		}
-	}
-
-	private String getVersion() {
-		return BuildConfig.VERSION_NAME + BuildConfig.VERSION_CODE;
 	}
 
 	private ViewGroup getPreviewLayout() {
@@ -216,6 +218,10 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		for (int id : VIEW_IDS) {
 			findViewById(id).setEnabled(enabled);
 		}
+		//will be enabled after image ist processed
+		if (!enabled) {
+			imageButton.setVisibility(View.GONE);
+		}
 	}
 
 	/**
@@ -230,12 +236,30 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	public void onGallery(View view) {
+		galleryOpener.open();
+	}
+
+	public void onImage(View view) {
 		File last = mediaUpdater.getLastUpdated();
-		//TODO assign to a new image button
+
 		if (last != null) {
 			imageOpener.open(last);
+		}
+	}
+
+	/**
+	 * Activates or deactivates the button to view the merged image depending of the last result.
+	 * It also hides the progress bar.
+	 */
+	void toggleImageButton() {
+		hideProgress();
+		File last = mediaUpdater.getLastUpdated();
+		if (last != null) {
+			Bitmap bitmap = bitmapLoader.loadThumbnail(last);
+			imageButton.setImageBitmap(bitmap);
+			imageButton.setVisibility(View.VISIBLE);
 		} else {
-			galleryOpener.open();
+			imageButton.setVisibility(View.GONE);
 		}
 	}
 
@@ -284,7 +308,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		progressBar.setVisibility(View.VISIBLE);
 	}
 
-	void hideProgress() {
+	private void hideProgress() {
 		progressBar.setVisibility(View.GONE);
 	}
 

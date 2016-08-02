@@ -36,7 +36,7 @@ public class PhotoActivityTest {
 
     @Test
     public void testShutter() {
-        ImageButton btn = (ImageButton)classUnderTest.findViewById(R.id.shutter);
+        ImageButton btn = (ImageButton) classUnderTest.findViewById(R.id.shutter_button);
         btn.performClick();
         verify(cameraController).shot();
     }

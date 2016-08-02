@@ -3,6 +3,8 @@ package de.mario.photo.support;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
+import com.google.inject.Inject;
+
 import java.io.File;
 
 import static android.graphics.Bitmap.createBitmap;
@@ -18,6 +20,7 @@ public class BitmapLoader {
 
     private int thumbnailSize;
 
+    @Inject
     public BitmapLoader() {
         this.matrix = new Matrix();
         init();
