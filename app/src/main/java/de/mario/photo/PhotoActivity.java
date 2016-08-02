@@ -45,7 +45,7 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_photo)
 public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
-	private static final int IMG_BTN_THUMB = 46;
+	private static final int IMG_BTN_THUMB = 38;
 
 	private static final int[] VIEW_IDS = new int[]{R.id.shutter_button, R.id.settings_button,
 			R.id.gallery_button, R.id.image_button};
