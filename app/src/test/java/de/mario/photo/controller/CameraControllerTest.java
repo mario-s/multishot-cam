@@ -111,4 +111,19 @@ public class CameraControllerTest {
         classUnderTest.releaseCamera();
         verify(camera).release();
     }
+
+    @Test
+    public void testFocusCallBack_Success() {
+        classUnderTest.reinitialize();
+        CameraController.FocusCallBack instance = classUnderTest.new FocusCallBack();
+        instance.onAutoFocus(true, camera);
+        verify(settingsAccess).getDelay();
+    }
+
+    @Test
+    public void testFocusCallBack_Fails() {
+        classUnderTest.reinitialize();
+        CameraController.FocusCallBack instance = classUnderTest.new FocusCallBack();
+        instance.onAutoFocus(false, camera);
+    }
 }
