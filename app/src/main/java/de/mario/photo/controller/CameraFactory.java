@@ -21,7 +21,7 @@ class CameraFactory {
             cam = open(id);
 
             Camera.Parameters params = cam.getParameters();
-            params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             cam.setParameters(params);
         }catch (Exception e){
             Ln.w(e, e.getMessage());

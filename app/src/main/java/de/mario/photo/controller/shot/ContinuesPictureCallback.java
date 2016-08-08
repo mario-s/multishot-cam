@@ -25,17 +25,17 @@ import roboguice.util.Ln;
 class ContinuesPictureCallback extends DefaultPictureCallback {
 
     private final InternalMemoryAccessor memAccessor;
+    private final ShotParameters shotParams;
+    private final ParameterUpdater updater;
     private String [] names;
     private int [] exposures;
     private File pictureFileDir;
     private List<String> imagesNames = new ArrayList<>();
-    private final ShotParameters shotParams;
     private int imageCounter;
     private int max;
     private View preview;
     private Camera.ShutterCallback shutterCallback;
     private Camera.PictureCallback pictureCallback;
-    private final ParameterUpdater updater;
     //remember the state of the last flash. was it enabled?
     private boolean lastFlash;
 
@@ -113,6 +113,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
     }
 
     private void sendFinishedInfo(final String path) {
+        //TODO move this to controller to reset focus view
         new ScheduledThreadPoolExecutor(1).execute(new Runnable() {
             @Override
             public void run() {

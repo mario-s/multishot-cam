@@ -40,6 +40,6 @@ public class CameraFactoryTest {
     public void testGetCamera() {
         Camera cam = classUnderTest.getCamera(1);
         assertNotNull(cam);
-        verify(parameters).setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        verify(parameters).setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
     }
 }

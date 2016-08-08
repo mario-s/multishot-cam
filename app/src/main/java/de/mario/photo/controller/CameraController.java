@@ -156,7 +156,6 @@ public class CameraController implements CameraControlable{
     }
 
     private void prepareNextShot() {
-        focusView.resetFocus();
         send(PhotoActivable.PREPARE_FOR_NEXT);
     }
 
