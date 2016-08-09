@@ -1,6 +1,7 @@
 package de.mario.photo.controller;
 
 import android.hardware.Camera;
+import android.os.Message;
 
 import java.io.File;
 
@@ -48,5 +49,7 @@ public interface CameraControlable {
     Camera getCamera();
 
     File getPictureSaveDirectory();
+
+    void send(Message message);
 
 }

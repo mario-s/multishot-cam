@@ -207,7 +207,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	void prepareForNextShot() {
-		cameraController.getFocusView().resetFocus();
 		toggleInputs(true);
 	}
 

@@ -8,22 +8,15 @@ import java.io.File;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.controller.CameraControlable;
-import de.mario.photo.controller.MessageSender;
 
 /**
  */
 class ShotParameters {
 
-    private Shot[] shots;
-
-    private CameraControlable cameraController;
-
     private final PhotoActivable activity;
-
     private final ParameterUpdater updater;
-
-    private final MessageSender sender;
-
+    private Shot[] shots;
+    private CameraControlable cameraController;
     private boolean trace;
 
     private boolean extraFlash;
@@ -32,7 +25,6 @@ class ShotParameters {
         this.cameraController = cameraController;
         this.activity = activity;
         this.updater = updater;
-        this.sender = new MessageSender(activity.getHandler());
     }
 
     void setShots(Shot[] shots) {
@@ -91,12 +83,8 @@ class ShotParameters {
         return flash;
     }
 
-    void sendMessage(Message message) {
-        sender.send(message);
-    }
-
-    void sendMessage(String message){
-        sender.send(message);
+    void send(Message message) {
+        cameraController.send(message);
     }
 
     void setExtraFlash(boolean extraFlash) {

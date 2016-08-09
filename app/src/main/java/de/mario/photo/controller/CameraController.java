@@ -3,6 +3,7 @@ package de.mario.photo.controller;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 
 import java.io.File;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,6 +19,7 @@ import de.mario.photo.preview.FocusView;
 import de.mario.photo.preview.Preview;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.support.IsoSupport;
+import de.mario.photo.support.MessageWrapper;
 import de.mario.photo.support.PicturesSizeSupport;
 import roboguice.util.Ln;
 
@@ -150,15 +152,6 @@ public class CameraController implements CameraControlable{
         return folder != null && folder.exists();
     }
 
-    private void send(String msg) {
-        messageSender.send(msg);
-        Ln.d("sending message: %s", msg);
-    }
-
-    private void prepareNextShot() {
-        send(PhotoActivable.PREPARE_FOR_NEXT);
-    }
-
     private void enableShutterSound(boolean enable) {
         if(canDisableShutterSound) {
             camera.enableShutterSound(enable);
@@ -172,6 +165,20 @@ public class CameraController implements CameraControlable{
     @Override
     public File getPictureSaveDirectory() {
         return storageLookable.lookupSaveDirectory();
+    }
+
+    @Override
+    public void send(Message message) {
+        MessageWrapper wrapper = new MessageWrapper(message);
+        if (!wrapper.isDataEmpty() && wrapper.getStringArray(PhotoActivable.PICTURES) != null) {
+            focusView.resetFocus();
+        }
+        messageSender.send(message);
+    }
+
+    private void send(String msg) {
+        messageSender.send(msg);
+        Ln.d("sending message: %s", msg);
     }
 
     @Override
@@ -240,7 +247,7 @@ public class CameraController implements CameraControlable{
             if (success) {
                 execute(getSettings().getDelay());
             } else {
-                prepareNextShot();
+                send(PhotoActivable.PREPARE_FOR_NEXT);
             }
         }
     }

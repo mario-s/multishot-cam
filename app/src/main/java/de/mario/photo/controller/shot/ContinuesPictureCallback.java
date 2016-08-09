@@ -64,7 +64,9 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
     }
 
     private void send(final String message) {
-        shotParams.sendMessage(message);
+        Message msg = Message.obtain();
+        msg.obj = message;
+        shotParams.send(msg);
     }
 
     @Override
@@ -113,7 +115,6 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
     }
 
     private void sendFinishedInfo(final String path) {
-        //TODO move this to controller to reset focus view
         new ScheduledThreadPoolExecutor(1).execute(new Runnable() {
             @Override
             public void run() {
@@ -121,7 +122,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
                 Bundle bundle = msg.getData();
                 bundle.putStringArray(PhotoActivable.PICTURES, imagesNames.toArray(new String[imagesNames.size()]));
                 bundle.putString(PhotoActivable.SAVE_FOLDER, path);
-                shotParams.sendMessage(msg);
+                shotParams.send(msg);
             }
         });
     }
