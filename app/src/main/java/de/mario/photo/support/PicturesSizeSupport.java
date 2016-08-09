@@ -9,7 +9,7 @@ import de.mario.photo.PhotoActivable;
 /**
  * This class provides support for the images sizes supported by the camera.
  */
-public final class PicturesSizeSupport {
+public final class PicturesSizeSupport implements PictureSizeSupportable {
 
     private String[] sizes;
 
@@ -26,19 +26,12 @@ public final class PicturesSizeSupport {
         }
     }
 
-    /**
-     * Returns the supported pictures size for the given camera.
-     * @return an array of available size as string (width x height)
-     */
+    @Override
     public String[] getSupportedPicturesSizes() {
         return sizes;
     }
 
-    /**
-     * Return the selected picture size of the given camera.
-     * @param camera the camera to use
-     * @return size as string
-     */
+    @Override
     public String getSelectedPictureSize(Camera camera) {
         return getSelectedPictureSize(camera.getParameters());
     }
@@ -48,7 +41,7 @@ public final class PicturesSizeSupport {
      * @param params the parameters to use
      * @return size as string
      */
-    public String getSelectedPictureSize(Camera.Parameters params) {
+    String getSelectedPictureSize(Camera.Parameters params) {
         Camera.Size size = params.getPictureSize();
         return String.format(PhotoActivable.PIC_SIZE_KEY, size.width, size.height);
     }

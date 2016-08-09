@@ -7,7 +7,7 @@ import android.hardware.Camera;
  *
  * @see http://stackoverflow.com/questions/2978095/android-camera-api-iso-setting.
  */
-public final class IsoSupport {
+public final class IsoSupport implements IsoSupportable {
     private static final String[] ISO_KEYS = new String[]{"iso", "iso-mode", "iso-speed", "nv-picture-iso"};
 
     private static final String[] ISO_VALUES_KEYS = new String[]{"iso-values", "iso-mode-values", "iso-speed-values", "nv-picture-iso-values"};
@@ -20,11 +20,7 @@ public final class IsoSupport {
         this.params = params;
     }
 
-    /**
-     * Returns a list of support ISO values for this device. The array can also be empty.
-     *
-     * @return
-     */
+    @Override
     public String[] getIsoValues() {
         String[] isos;
         String isoValues = findIsoValues();
@@ -52,6 +48,7 @@ public final class IsoSupport {
         return null;
     }
 
+    @Override
     public String getSelectedIsoValue(String isoKey) {
 
         if(isoKey != null){
@@ -60,11 +57,7 @@ public final class IsoSupport {
         return null;
     }
 
-
-    /**
-     * This method tries to look for a parameter key to get the selected ISO value for the device.
-     * @return the key as a String or a empty String if it is not supported
-     */
+    @Override
     public String findIsoKey() {
         String isoKey = "";
         for(String key : ISO_KEYS) {
