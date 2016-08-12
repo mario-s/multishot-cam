@@ -6,8 +6,8 @@ import android.os.Message;
 import java.io.File;
 
 import de.mario.photo.PhotoActivable;
-import de.mario.photo.preview.FocusView;
-import de.mario.photo.preview.Preview;
+import de.mario.photo.view.FocusView;
+import de.mario.photo.view.Preview;
 
 /**
  */

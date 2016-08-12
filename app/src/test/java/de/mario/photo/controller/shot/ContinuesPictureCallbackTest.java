@@ -15,7 +15,7 @@ import java.io.File;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.controller.CameraController;
-import de.mario.photo.preview.Preview;
+import de.mario.photo.view.Preview;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;

@@ -14,13 +14,13 @@ import de.mario.photo.R;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.shot.PhotoCommand;
-import de.mario.photo.preview.FocusView;
-import de.mario.photo.preview.Preview;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.support.HandlerThreadFactory;
 import de.mario.photo.support.IsoSupport;
 import de.mario.photo.support.MessageWrapper;
 import de.mario.photo.support.PicturesSizeSupport;
+import de.mario.photo.view.FocusView;
+import de.mario.photo.view.Preview;
 import roboguice.util.Ln;
 
 /**
