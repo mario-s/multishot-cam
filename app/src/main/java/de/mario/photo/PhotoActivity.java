@@ -31,7 +31,7 @@ import de.mario.photo.support.BitmapLoader;
 import de.mario.photo.support.GalleryOpener;
 import de.mario.photo.support.ImageOpener;
 import de.mario.photo.support.MediaUpdater;
-import de.mario.photo.view.CanvasView;
+import de.mario.photo.view.GridView;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -55,7 +55,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@InjectView(R.id.image_button)
 	private ImageView imageButton;
 	@Inject
-	private CanvasView canvasView;
+	private GridView canvasView;
 	@Inject
 	private MyLocationListener locationListener;
 	@Inject

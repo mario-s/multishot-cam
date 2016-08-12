@@ -20,7 +20,7 @@ import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 /**
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CanvasViewTest {
+public class GridViewTest {
     @Mock
     private Context context;
     @Mock
@@ -30,13 +30,13 @@ public class CanvasViewTest {
     @Mock
     private PaintFactory paintFactory;
 
-    private CanvasView classUnderTest;
+    private GridView classUnderTest;
 
     private boolean showGrid;
 
     @Before
     public void setUp() {
-        classUnderTest = new CanvasView(context) {
+        classUnderTest = new GridView(context) {
             @Override
             boolean isShowGrid() {
                 return showGrid;
