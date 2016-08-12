@@ -3,6 +3,7 @@ package de.mario.photo.controller.shot;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
@@ -10,10 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.R;
+import de.mario.photo.support.HandlerThreadFactory;
 import roboguice.util.Ln;
 
 
@@ -36,6 +37,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
     private View preview;
     private Camera.ShutterCallback shutterCallback;
     private Camera.PictureCallback pictureCallback;
+    private Handler handler;
     //remember the state of the last flash. was it enabled?
     private boolean lastFlash;
 
@@ -55,6 +57,9 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
 
         shutterCallback = new DefaultShutterCallback();
         pictureCallback = new DefaultPictureCallback();
+
+        HandlerThreadFactory factory = new HandlerThreadFactory(getClass());
+        handler = factory.newHandler();
 
         start = System.currentTimeMillis();
     }
@@ -115,7 +120,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
     }
 
     private void sendFinishedInfo(final String path) {
-        new ScheduledThreadPoolExecutor(1).execute(new Runnable() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 Message msg = Message.obtain();

@@ -3,7 +3,6 @@ package de.mario.photo.controller;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Handler;
-import android.os.HandlerThread;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,8 +54,6 @@ public class CameraControllerTest {
     @Mock
     private StorageLookable storageLookable;
     @Mock
-    private HandlerThread handlerThread;
-    @Mock
     private CameraOrientationListener orientationListener;
     @InjectMocks
     private CameraController classUnderTest;
@@ -75,7 +72,6 @@ public class CameraControllerTest {
 
         setInternalState(classUnderTest, "focusView", focusView);
         setInternalState(classUnderTest, "messageSender", messageSender);
-        setInternalState(classUnderTest, "handlerThread", handlerThread);
         setInternalState(classUnderTest, "handler", handler);
         setInternalState(classUnderTest, "orientationListener", orientationListener);
     }

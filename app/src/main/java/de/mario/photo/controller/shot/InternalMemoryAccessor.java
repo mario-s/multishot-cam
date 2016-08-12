@@ -1,6 +1,7 @@
 package de.mario.photo.controller.shot;
 
 import android.content.Context;
+import android.os.Handler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import de.mario.photo.support.HandlerThreadFactory;
+
 
 /**
  * This class helps to write and read images to internal memory of the device.
@@ -23,7 +26,7 @@ class InternalMemoryAccessor {
 
     private final List<String> internalNames;
     private final Context context;
-    private final ScheduledExecutorService executor;
+    private Handler handler;
 
     InternalMemoryAccessor(Context context) {
         this(context, new ScheduledThreadPoolExecutor(1));
@@ -32,11 +35,13 @@ class InternalMemoryAccessor {
     InternalMemoryAccessor(Context context, ScheduledExecutorService executor){
         this.context = context;
         this.internalNames = new ArrayList<>();
-        this.executor = executor;
+
+        HandlerThreadFactory factory = new HandlerThreadFactory(getClass());
+        handler = factory.newHandler();
     }
 
     void save(byte[] data, String name) {
-        executor.execute(new SaveTask(context,data,name));
+        handler.post(new SaveTask(context, data, name));
     }
 
     /**

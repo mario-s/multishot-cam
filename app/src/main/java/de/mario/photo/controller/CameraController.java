@@ -2,7 +2,6 @@ package de.mario.photo.controller;
 
 import android.hardware.Camera;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 
 import java.io.File;
@@ -18,6 +17,7 @@ import de.mario.photo.controller.shot.PhotoCommand;
 import de.mario.photo.preview.FocusView;
 import de.mario.photo.preview.Preview;
 import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.support.HandlerThreadFactory;
 import de.mario.photo.support.IsoSupport;
 import de.mario.photo.support.MessageWrapper;
 import de.mario.photo.support.PicturesSizeSupport;
@@ -46,7 +46,6 @@ public class CameraController implements CameraControlable{
     private CameraFactory cameraFactory;
     private MessageSender messageSender;
 
-    private HandlerThread handlerThread;
     private Handler handler;
 
     public CameraController() {
@@ -58,9 +57,8 @@ public class CameraController implements CameraControlable{
         this.cameraFactory = cameraFactory;
 
         executor = new ScheduledThreadPoolExecutor(1);
-        handlerThread = new HandlerThread(getClass().getSimpleName());
-        handlerThread.start();
-        handler = new Handler(handlerThread.getLooper());
+        HandlerThreadFactory factory = new HandlerThreadFactory(getClass());
+        handler = factory.newHandler();
     }
 
     @Override
@@ -139,7 +137,7 @@ public class CameraController implements CameraControlable{
         Ln.d("delay for photo: %s", delay);
 
         Runnable command = new PhotoCommand(CameraController.this, activity);
-
+        //TODO replace executor with handler
         if (delay > MIN) {
             executor.schedule(command, delay, TimeUnit.SECONDS);
         } else {
