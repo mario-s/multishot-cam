@@ -1,4 +1,4 @@
-package de.mario.photo.preview;
+package de.mario.photo.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,4 +1,4 @@
-package de.mario.photo.preview;
+package de.mario.photo.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,10 +14,10 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 /**
  * This view is on top of the preview and provides painting capabilities for a better feedback.
  */
-public class CanvasView extends AbstractPaintView {
+public class GridView extends AbstractPaintView {
 
     @Inject
-    public CanvasView(Context context) {
+    public GridView(Context context) {
         super(context);
     }
 

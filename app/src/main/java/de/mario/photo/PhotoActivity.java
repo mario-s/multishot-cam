@@ -23,7 +23,6 @@ import org.opencv.android.OpenCVLoader;
 import java.io.File;
 
 import de.mario.photo.controller.CameraControlable;
-import de.mario.photo.preview.CanvasView;
 import de.mario.photo.service.ExposureMergeService;
 import de.mario.photo.service.OpenCvService;
 import de.mario.photo.settings.SettingsAccess;
@@ -32,6 +31,7 @@ import de.mario.photo.support.BitmapLoader;
 import de.mario.photo.support.GalleryOpener;
 import de.mario.photo.support.ImageOpener;
 import de.mario.photo.support.MediaUpdater;
+import de.mario.photo.view.GridView;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -55,7 +55,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@InjectView(R.id.image_button)
 	private ImageView imageButton;
 	@Inject
-	private CanvasView canvasView;
+	private GridView canvasView;
 	@Inject
 	private MyLocationListener locationListener;
 	@Inject

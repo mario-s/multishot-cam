@@ -3,7 +3,6 @@ package de.mario.photo.controller;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Handler;
-import android.os.HandlerThread;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +14,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
-import de.mario.photo.preview.FocusView;
 import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.view.FocusView;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -55,8 +54,6 @@ public class CameraControllerTest {
     @Mock
     private StorageLookable storageLookable;
     @Mock
-    private HandlerThread handlerThread;
-    @Mock
     private CameraOrientationListener orientationListener;
     @InjectMocks
     private CameraController classUnderTest;
@@ -75,7 +72,6 @@ public class CameraControllerTest {
 
         setInternalState(classUnderTest, "focusView", focusView);
         setInternalState(classUnderTest, "messageSender", messageSender);
-        setInternalState(classUnderTest, "handlerThread", handlerThread);
         setInternalState(classUnderTest, "handler", handler);
         setInternalState(classUnderTest, "orientationListener", orientationListener);
     }
