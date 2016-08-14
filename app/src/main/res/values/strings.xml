@@ -32,7 +32,9 @@
     <string name="prefs_shutter_delay_time_description">Time for the shutter delay in seconds.</string>
     <string name="prefs_process_hdr_title">HDR Processing</string>
     <string name="prefs_process_hdr_enabled_title">Enable HDR processing</string>
-    <string name="prefs_process_hdr_enabled_description">If enabled the software will try to create a HDR image.</string>
+    <string name="prefs_process_hdr_enabled_description">If enabled the app will try to create a HDR image.</string>
+    <string name="prefs_broadcast_hdr_enabled_title">System message for HDR process</string>
+    <string name="prefs_broadcast_hdr_enabled_description">If enabled the HDR service will send a general system notification when done.</string>
     <string name="prefs_shutter_sound_title">Shutter Sound</string>
     <string name="prefs_shutter_sound_disabled_description">When selected, there will be no sound when a photo is taken. It requires at least Android 4.2.</string>
     <string name="prefs_shutter_sound_disable_title">Disabled Shutter Sound</string>

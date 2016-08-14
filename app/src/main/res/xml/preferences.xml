@@ -71,6 +71,13 @@
             android:key="processHdr"
             android:summary="@string/prefs_process_hdr_enabled_description"
             android:title="@string/prefs_process_hdr_enabled_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="broadcastHdr"
+            android:summary="@string/prefs_broadcast_hdr_enabled_description"
+            android:title="@string/prefs_broadcast_hdr_enabled_title"
+            android:dependency="processHdr"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
