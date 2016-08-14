@@ -12,24 +12,45 @@ import static java.lang.Integer.parseInt;
  * This class provides easier access to settings values.
  */
 public class SettingsAccess {
+
+    public enum Value {
+        GEO_TAGGING("geotagging"), SHUTTER_SOUND("shutterSound"), PROCESS_HDR("processHdr"),
+        BROADCAST_HDR("broadcastHdr"),
+        SHUTTER_DELAY("shutterDelayTime"), GRID("grid"), TRACE("trace") ,
+        PICTURE_SIZE("pictureSize"), ISO_KEY("iso-key"), ISO_VALUE("iso-value"),
+        EXPOSURE_SEQ("evSequence"), FLASH("flashMode");
+
+        private String value;
+
+        Value(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+
+
     @Inject
     private Context context;
 
-    public boolean isTrace() { return getBoolean(SettingsValue.TRACE);}
+    public boolean isTrace() { return getBoolean(Value.TRACE);}
 
     /**
      * Returns the parameter key to set the ISO value. Use this method to check if the ISo can be
      * change at all. If it is empty it means the device is not supported.
      * @return parameter key as String
      */
-    public String getIsoKey() {return getString(SettingsValue.ISO_KEY);}
+    public String getIsoKey() {return getString(Value.ISO_KEY);}
 
     /**
      * Set the parameter key to change ISO value for the device.
      * @param key key as String
      */
     public void setIsoKey(String key) {
-        getPreferences().edit().putString(SettingsValue.ISO_KEY.getValue(), key).apply();
+        getPreferences().edit().putString(Value.ISO_KEY.getValue(), key).apply();
     }
 
     /**
@@ -37,18 +58,18 @@ public class SettingsAccess {
      * not support ISO settings.
      * @return ISO as String.
      */
-    public String getIsoValue() {return getString(SettingsValue.ISO_VALUE);}
+    public String getIsoValue() {return getString(Value.ISO_VALUE);}
 
     /**
      * Returns the selected size of a picture in the form width x height.
      * @return size as String.
      */
-    public String getPicSizeKey() {return getString(SettingsValue.PICTURE_SIZE);}
+    public String getPicSizeKey() {return getString(Value.PICTURE_SIZE);}
 
-    public int getExposureSequenceType() {return getInt(SettingsValue.EXPOSURE_SEQ);}
+    public int getExposureSequenceType() {return getInt(Value.EXPOSURE_SEQ);}
 
     public int getFlashMode() {
-        return getInt(SettingsValue.FLASH);
+        return getInt(Value.FLASH);
     }
 
     /**
@@ -63,19 +84,17 @@ public class SettingsAccess {
      */
     public boolean isLastFlash() {return getFlashMode() == 2;}
 
-    public int getDelay() {return getInt(SettingsValue.SHUTTER_DELAY); }
+    public int getDelay() {return getInt(Value.SHUTTER_DELAY); }
 
-    public boolean isProcessingEnabled() {return getBoolean(SettingsValue.PROCESS_HDR);}
+    public boolean isShutterSoundDisabled() {return getBoolean(Value.SHUTTER_SOUND);}
 
-    public boolean isShutterSoundDisabled() {return getBoolean(SettingsValue.SHUTTER_SOUND);}
+    public boolean isGeoTaggingEnabled() { return getBoolean(Value.GEO_TAGGING);}
 
-    public boolean isGeoTaggingEnabled() { return getBoolean(SettingsValue.GEO_TAGGING);}
+    public String getString(Value key){return getPreferences().getString(key.getValue(), "");}
 
-    private String getString(SettingsValue key){return getPreferences().getString(key.getValue(), "");}
+    public int getInt(Value key){ return parseInt(getPreferences().getString(key.getValue(), "0")); }
 
-    private int getInt(SettingsValue key){ return parseInt(getPreferences().getString(key.getValue(), "0")); }
-
-    private boolean getBoolean(SettingsValue key) { return getPreferences().getBoolean(key.getValue(), false); }
+    public boolean getBoolean(Value key) { return getPreferences().getBoolean(key.getValue(), false); }
 
     private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(context);	}
 }

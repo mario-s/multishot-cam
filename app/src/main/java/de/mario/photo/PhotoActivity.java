@@ -295,7 +295,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	void processHdr(String [] pictures){
-		if(settingsAccess.isProcessingEnabled()) {
+		if(settingsAccess.getBoolean(SettingsAccess.Value.PROCESS_HDR)) {
 			showProgress();
 			Intent intent = new Intent(this, ExposureMergeService.class);
 			intent.putExtra(OpenCvService.PARAM_PICS, pictures);

@@ -6,7 +6,7 @@ import android.graphics.Paint;
 
 import javax.inject.Inject;
 
-import de.mario.photo.settings.SettingsValue;
+import de.mario.photo.settings.SettingsAccess.Value;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
@@ -41,7 +41,7 @@ public class GridView extends AbstractPaintView {
     }
 
     boolean isShowGrid() {
-        return getDefaultSharedPreferences(getContext()).getBoolean(SettingsValue.GRID.getValue(), false);
+        return getDefaultSharedPreferences(getContext()).getBoolean(Value.GRID.getValue(), false);
     }
 
 }
