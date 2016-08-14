@@ -15,7 +15,7 @@ public class SettingsAccess {
 
     public enum Value {
         GEO_TAGGING("geotagging"), SHUTTER_SOUND("shutterSound"), PROCESS_HDR("processHdr"),
-        BROADCAST_HDR("broadcastHdr"),
+        NOTIFY_HDR("notifyHdr"),
         SHUTTER_DELAY("shutterDelayTime"), GRID("grid"), TRACE("trace") ,
         PICTURE_SIZE("pictureSize"), ISO_KEY("iso-key"), ISO_VALUE("iso-value"),
         EXPOSURE_SEQ("evSequence"), FLASH("flashMode");
@@ -31,12 +31,14 @@ public class SettingsAccess {
         }
     }
 
-
-
-    @Inject
     private Context context;
 
-    public boolean isTrace() { return getBoolean(Value.TRACE);}
+    @Inject
+    public SettingsAccess(Context context){
+        this.context = context;
+    }
+
+    public boolean isTrace() { return isEnabled(Value.TRACE);}
 
     /**
      * Returns the parameter key to set the ISO value. Use this method to check if the ISo can be
@@ -86,15 +88,15 @@ public class SettingsAccess {
 
     public int getDelay() {return getInt(Value.SHUTTER_DELAY); }
 
-    public boolean isShutterSoundDisabled() {return getBoolean(Value.SHUTTER_SOUND);}
+    public boolean isShutterSoundDisabled() {return isEnabled(Value.SHUTTER_SOUND);}
 
-    public boolean isGeoTaggingEnabled() { return getBoolean(Value.GEO_TAGGING);}
+    public boolean isGeoTaggingEnabled() { return isEnabled(Value.GEO_TAGGING);}
 
     public String getString(Value key){return getPreferences().getString(key.getValue(), "");}
 
     public int getInt(Value key){ return parseInt(getPreferences().getString(key.getValue(), "0")); }
 
-    public boolean getBoolean(Value key) { return getPreferences().getBoolean(key.getValue(), false); }
+    public boolean isEnabled(Value key) { return getPreferences().getBoolean(key.getValue(), false); }
 
     private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(context);	}
 }

@@ -14,6 +14,7 @@ import java.util.List;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.exif.ExifWriter;
+import de.mario.photo.settings.SettingsAccess;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -27,13 +28,16 @@ public class ExposureMergeService extends OpenCvService {
 
     private ExifWriter exifWriter;
 
+    private SettingsAccess settingsAccess;
+
     public ExposureMergeService() {
         this(new MertensMerger());
     }
 
     public ExposureMergeService(Merger merger) {
         super("ExposureMergeService");
-        exifWriter = new ExifWriter();
+        this.exifWriter = new ExifWriter();
+        this.settingsAccess = new SettingsAccess(this);
         this.merger = merger;
     }
 
@@ -74,8 +78,10 @@ public class ExposureMergeService extends OpenCvService {
         sendBroadcast(intent);
 
         //general notification
-        NotificationSender sender = new NotificationSender(this);
-        sender.send(path);
+        if(settingsAccess.isEnabled(SettingsAccess.Value.NOTIFY_HDR)) {
+            NotificationSender sender = new NotificationSender(this);
+            sender.send(path);
+        }
     }
 
     private String createFileName(String src) {

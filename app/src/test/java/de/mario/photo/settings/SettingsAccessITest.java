@@ -13,7 +13,6 @@ import de.mario.photo.BuildConfig;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 /**
  * Integration Test for {@link SettingsActivity} and {@link SettingsAccess}.
@@ -30,8 +29,7 @@ public class SettingsAccessITest {
         Bundle bundle = new Bundle();
         activity.onPostCreate(bundle);
 
-        classUnderTest = new SettingsAccess();
-        setInternalState(classUnderTest, "context", activity.getBaseContext());
+        classUnderTest = new SettingsAccess(activity.getBaseContext());
     }
 
     @Test

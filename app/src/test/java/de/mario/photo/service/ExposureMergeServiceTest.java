@@ -12,9 +12,12 @@ import org.opencv.core.Mat;
 
 import java.io.File;
 
+import de.mario.photo.settings.SettingsAccess;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExposureMergeServiceTest {
@@ -29,6 +32,9 @@ public class ExposureMergeServiceTest {
 
 	@Mock
 	private Mat mat;
+
+	@Mock
+	private SettingsAccess settingsAccess;
 
 	@Mock
 	private NotificationManager notificationManager;
@@ -50,13 +56,16 @@ public class ExposureMergeServiceTest {
 				return notificationManager;
 			}
 		};
+		setInternalState(classUnderTest, "settingsAccess", settingsAccess);
 	}
 
 
 	@Test
 	public void testOnHandleIntent() {
+
+		given(settingsAccess.isEnabled(SettingsAccess.Value.NOTIFY_HDR)).willReturn(true);
 		String[] files = new String[]{"a.jpg", "b.jpg", "c.jpg"};
-		when(intent.getStringArrayExtra(ExposureMergeService.PARAM_PICS)).thenReturn(files);
+		given(intent.getStringArrayExtra(ExposureMergeService.PARAM_PICS)).willReturn(files);
 		classUnderTest.onHandleIntent(intent);
 		verify(merger).merge(anyList());
 	}
