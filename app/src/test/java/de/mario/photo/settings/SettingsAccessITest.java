@@ -10,6 +10,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import de.mario.photo.BuildConfig;
+import de.mario.photo.R;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -39,6 +40,6 @@ public class SettingsAccessITest {
 
     @Test
     public void testIsGeoTagEnabled() {
-        assertThat(classUnderTest.isGeoTaggingEnabled(), is(false));
+        assertThat(classUnderTest.isEnabled(R.string.geotagging), is(false));
     }
 }

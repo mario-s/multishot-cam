@@ -127,7 +127,7 @@ public class CameraController implements CameraControlable{
         }
     }
 
-    private boolean isShutterSoundDisabled() { return getSettings().isShutterSoundDisabled();}
+    private boolean isShutterSoundDisabled() { return getSettings().isEnabled(R.string.shutterSoundDisabled);}
 
     private SettingsAccess getSettings() {
         return activity.getSettingsAccess();

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- keys for settings NO TRANSLATION -->
+    <string name="evSequence"><xliff:g id="preference_key">evSequence</xliff:g></string>
+    <string name="flashMode"><xliff:g id="preference_key">flashMode</xliff:g></string>
+    <string name="shutterDelayTime"><xliff:g id="preference_key">shutterDelayTime</xliff:g></string>
+    <string name="shutterSoundDisabled"><xliff:g id="preference_key">shutterSoundDisabled</xliff:g></string>
+    <string name="geotagging"><xliff:g id="preference_key">geotagging</xliff:g></string>
+    <string name="grid"><xliff:g id="preference_key">grid</xliff:g></string>
+    <string name="processHdr"><xliff:g id="preference_key">processHdr</xliff:g></string>
+    <string name="notifyHdr"><xliff:g id="preference_key">notifyHdr</xliff:g></string>
+    <string name="trace"><xliff:g id="preference_key">trace</xliff:g></string>
+    <!-- keys for settings -->
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -32,9 +44,9 @@
     <string name="prefs_shutter_delay_time_description">Time for the shutter delay in seconds.</string>
     <string name="prefs_process_hdr_title">HDR Processing</string>
     <string name="prefs_process_hdr_enabled_title">Enable HDR processing</string>
-    <string name="prefs_process_hdr_enabled_description">If enabled the app will try to create a HDR image.</string>
+    <string name="prefs_process_hdr_enabled_description">The app will try to create a HDR image.</string>
     <string name="prefs_broadcast_hdr_enabled_title">System message for HDR process</string>
-    <string name="prefs_broadcast_hdr_enabled_description">If enabled the HDR service will send a general system notification when done.</string>
+    <string name="prefs_broadcast_hdr_enabled_description">The HDR service will send a general system notification when done.</string>
     <string name="prefs_shutter_sound_title">Shutter Sound</string>
     <string name="prefs_shutter_sound_disabled_description">When selected, there will be no sound when a photo is taken. It requires at least Android 4.2.</string>
     <string name="prefs_shutter_sound_disable_title">Disabled Shutter Sound</string>
@@ -54,5 +66,4 @@
     <string name="prefs_el_title">Exposure Values</string>
     <string name="prefs_flash_description">Set the type of flash light for the photo sequence.</string>
     <string name="prefs_flash_title">Flash Mode</string>
-
 </resources>

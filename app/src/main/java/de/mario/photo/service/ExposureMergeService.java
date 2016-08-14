@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mario.photo.PhotoActivable;
+import de.mario.photo.R;
 import de.mario.photo.exif.ExifWriter;
 import de.mario.photo.settings.SettingsAccess;
 
@@ -78,7 +79,7 @@ public class ExposureMergeService extends OpenCvService {
         sendBroadcast(intent);
 
         //general notification
-        if(settingsAccess.isEnabled(SettingsAccess.Value.NOTIFY_HDR)) {
+        if(settingsAccess.isEnabled(R.string.notifyHdr)) {
             NotificationSender sender = new NotificationSender(this);
             sender.send(path);
         }

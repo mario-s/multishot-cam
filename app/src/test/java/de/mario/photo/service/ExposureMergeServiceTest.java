@@ -15,6 +15,7 @@ import java.io.File;
 import de.mario.photo.settings.SettingsAccess;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
@@ -63,7 +64,7 @@ public class ExposureMergeServiceTest {
 	@Test
 	public void testOnHandleIntent() {
 
-		given(settingsAccess.isEnabled(SettingsAccess.Value.NOTIFY_HDR)).willReturn(true);
+		given(settingsAccess.isEnabled(anyInt())).willReturn(true);
 		String[] files = new String[]{"a.jpg", "b.jpg", "c.jpg"};
 		given(intent.getStringArrayExtra(ExposureMergeService.PARAM_PICS)).willReturn(files);
 		classUnderTest.onHandleIntent(intent);

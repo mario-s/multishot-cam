@@ -9,7 +9,7 @@
             android:enabled="true"
             android:entries="@array/exposureArray"
             android:entryValues="@array/exposureValues"
-            android:key="evSequence"
+            android:key="@string/evSequence"
             android:summary="@string/prefs_exposure_description"
             android:title="@string/prefs_exposure_title"/>
 
@@ -18,7 +18,7 @@
             android:enabled="true"
             android:entries="@array/flashArray"
             android:entryValues="@array/flashValues"
-            android:key="flashMode"
+            android:key="@string/flashMode"
             android:summary="@string/prefs_flash_description"
             android:title="@string/prefs_flash_title"/>
 
@@ -38,26 +38,26 @@
                 android:enabled="true"
                 android:entries="@array/delayArray"
                 android:entryValues="@array/delayValues"
-                android:key="shutterDelayTime"
+                android:key="@string/shutterDelayTime"
                 android:summary="@string/prefs_shutter_delay_time_description"
                 android:title="@string/prefs_shutter_delay_time_title"/>
 
             <CheckBoxPreference
                 android:defaultValue="false"
-                android:key="shutterSound"
+                android:key="@string/shutterSoundDisabled"
                 android:summary="@string/prefs_shutter_sound_disabled_description"
                 android:title="@string/prefs_shutter_sound_disable_title" />
         </PreferenceScreen>
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="geotagging"
+            android:key="@string/geotagging"
             android:summary="@string/prefs_geo_tagging_enabled_description"
             android:title="@string/prefs_geo_tagging_enabled_title" />
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="grid"
+            android:key="@string/grid"
             android:summary="@string/prefs_grid_enabled_description"
             android:title="@string/prefs_grid_enabled_title" />
 
@@ -68,12 +68,12 @@
         android:title="@string/prefs_process_hdr_title">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="processHdr"
+            android:key="@string/processHdr"
             android:summary="@string/prefs_process_hdr_enabled_description"
             android:title="@string/prefs_process_hdr_enabled_title" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="notifyHdr"
+            android:key="@string/notifyHdr"
             android:summary="@string/prefs_broadcast_hdr_enabled_description"
             android:title="@string/prefs_broadcast_hdr_enabled_title"
             android:dependency="processHdr"/>
@@ -85,7 +85,7 @@
         android:title="@string/prefs_debug_title">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="trace"
+            android:key="@string/trace"
             android:summary="@string/prefs_trace_description"
             android:title="@string/prefs_trace_title" />
     </PreferenceCategory>

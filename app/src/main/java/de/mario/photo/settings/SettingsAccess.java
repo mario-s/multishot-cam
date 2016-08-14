@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 
 import com.google.inject.Inject;
 
+import de.mario.photo.R;
+
 import static java.lang.Integer.parseInt;
 
 /**
@@ -14,11 +16,7 @@ import static java.lang.Integer.parseInt;
 public class SettingsAccess {
 
     public enum Value {
-        GEO_TAGGING("geotagging"), SHUTTER_SOUND("shutterSound"), PROCESS_HDR("processHdr"),
-        NOTIFY_HDR("notifyHdr"),
-        SHUTTER_DELAY("shutterDelayTime"), GRID("grid"), TRACE("trace") ,
-        PICTURE_SIZE("pictureSize"), ISO_KEY("iso-key"), ISO_VALUE("iso-value"),
-        EXPOSURE_SEQ("evSequence"), FLASH("flashMode");
+        PICTURE_SIZE("pictureSize"), ISO_KEY("iso-key"), ISO_VALUE("iso-value");
 
         private String value;
 
@@ -38,7 +36,7 @@ public class SettingsAccess {
         this.context = context;
     }
 
-    public boolean isTrace() { return isEnabled(Value.TRACE);}
+    public boolean isTrace() { return isEnabled(R.string.trace);}
 
     /**
      * Returns the parameter key to set the ISO value. Use this method to check if the ISo can be
@@ -68,10 +66,10 @@ public class SettingsAccess {
      */
     public String getPicSizeKey() {return getString(Value.PICTURE_SIZE);}
 
-    public int getExposureSequenceType() {return getInt(Value.EXPOSURE_SEQ);}
+    public int getExposureSequenceType() {return getInt(R.string.evSequence);}
 
     public int getFlashMode() {
-        return getInt(Value.FLASH);
+        return getInt(R.string.flashMode);
     }
 
     /**
@@ -86,17 +84,33 @@ public class SettingsAccess {
      */
     public boolean isLastFlash() {return getFlashMode() == 2;}
 
-    public int getDelay() {return getInt(Value.SHUTTER_DELAY); }
+    public int getDelay() {return getInt(R.string.shutterDelayTime); }
 
-    public boolean isShutterSoundDisabled() {return isEnabled(Value.SHUTTER_SOUND);}
+    public String getString(Value key){return getString(key.getValue());}
 
-    public boolean isGeoTaggingEnabled() { return isEnabled(Value.GEO_TAGGING);}
+    public String getString(int key) {
+        return getString(context.getString(key));
+    }
 
-    public String getString(Value key){return getPreferences().getString(key.getValue(), "");}
+    public String getString(String key) {
+        return getPreferences().getString(key, "");
+    }
 
-    public int getInt(Value key){ return parseInt(getPreferences().getString(key.getValue(), "0")); }
+    public int getInt(Value key){ return getInt(key.getValue()); }
 
-    public boolean isEnabled(Value key) { return getPreferences().getBoolean(key.getValue(), false); }
+    public int getInt(int key){
+        return getInt(context.getString(key));
+    }
+
+    public int getInt(String key) {
+        return parseInt(getPreferences().getString(key, "0"));
+    }
+
+    public boolean isEnabled(int key) { return isEnabled(context.getString(key)); }
+
+    public boolean isEnabled(Value key) { return isEnabled(key.getValue()); }
+
+    public boolean isEnabled(String key) { return getPreferences().getBoolean(key, false); }
 
     private SharedPreferences getPreferences() {return PreferenceManager.getDefaultSharedPreferences(context);	}
 }

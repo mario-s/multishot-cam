@@ -275,7 +275,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	//combined settings values
-	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && settingsAccess.isGeoTaggingEnabled();}
+	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && settingsAccess.isEnabled(R.string.geotagging);}
 
 	private boolean isGpsEnabled() { return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}
 	//end settings values
@@ -295,7 +295,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	void processHdr(String [] pictures){
-		if(settingsAccess.isEnabled(SettingsAccess.Value.PROCESS_HDR)) {
+		if(settingsAccess.isEnabled(R.string.processHdr)) {
 			showProgress();
 			Intent intent = new Intent(this, ExposureMergeService.class);
 			intent.putExtra(OpenCvService.PARAM_PICS, pictures);
