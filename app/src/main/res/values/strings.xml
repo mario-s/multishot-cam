@@ -16,7 +16,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
 
     <string name="app_name">Multishot Camera</string>
     <string name="open_cv_present">OpenCV Package is present.</string>
@@ -28,7 +27,6 @@
     <string name="no_back_cam">No back facing camera found.</string>
     <string name="no_directory">No directory to save image.</string>
     <string name="no_gallery_app">No gallery app available</string>
-    <string name="no_pic">No Picture taken yet.</string>
     <string name="save_error">"Image could not be saved."</string>
     <string name="photos_saved" formatted="false">%s photos saved to %s.</string>
     <string name="photo_progress">Taking photo please wait.</string>
