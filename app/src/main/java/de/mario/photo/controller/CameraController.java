@@ -5,9 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import java.io.File;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import de.mario.photo.PhotoActivable;
 import de.mario.photo.R;
@@ -40,7 +37,6 @@ public class CameraController implements CameraControlable{
 
     private IsoSupport isoSupport;
     private PicturesSizeSupport sizeSupport;
-    private ScheduledExecutorService executor;
     private CameraOrientationListener orientationListener;
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
@@ -56,7 +52,6 @@ public class CameraController implements CameraControlable{
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
 
-        executor = new ScheduledThreadPoolExecutor(1);
         HandlerThreadFactory factory = new HandlerThreadFactory(getClass());
         handler = factory.newHandler();
     }
@@ -137,11 +132,10 @@ public class CameraController implements CameraControlable{
         Ln.d("delay for photo: %s", delay);
 
         Runnable command = new PhotoCommand(CameraController.this, activity);
-        //TODO replace executor with handler
         if (delay > MIN) {
-            executor.schedule(command, delay, TimeUnit.SECONDS);
+            handler.postDelayed(command, delay * 1000);
         } else {
-            executor.execute(command);
+            handler.post(command);
         }
     }
 
