@@ -1,15 +1,13 @@
-package de.mario.photo.controller;
+package de.mario.photo.controller.lookup;
 
 import android.content.Context;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import de.mario.photo.controller.lookup.StorageLookup;
-
 /**
  */
-class StorageLookupProvider implements Provider<StorageLookup>{
+public class StorageLookupProvider implements Provider<StorageLookup> {
 
     @Inject
     private Context context;

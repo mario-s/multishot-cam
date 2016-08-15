@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.controller;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import org.opencv.android.LoaderCallbackInterface;
 /**
  * Callback when OpenCv is loaded.
  */
-class OpenCvLoaderCallback extends BaseLoaderCallback {
+public class OpenCvLoaderCallback extends BaseLoaderCallback {
     private final Intent intent;
 
     OpenCvLoaderCallback(Context context, Intent intent){

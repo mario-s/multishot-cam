@@ -18,13 +18,10 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 
-import org.opencv.android.OpenCVLoader;
-
 import java.io.File;
 
 import de.mario.photo.controller.CameraControlable;
-import de.mario.photo.service.ExposureMergeService;
-import de.mario.photo.service.OpenCvService;
+import de.mario.photo.controller.HdrProcessControlable;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.settings.SettingsIntentFactory;
 import de.mario.photo.support.BitmapLoader;
@@ -76,6 +73,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private BitmapLoader bitmapLoader;
 	@Inject
 	private StartupDialog startupDialog;
+	@Inject
+	private HdrProcessControlable processHdrController;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;
@@ -297,10 +296,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	void processHdr(String [] pictures){
 		if(settingsAccess.isEnabled(R.string.processHdr)) {
 			showProgress();
-			Intent intent = new Intent(this, ExposureMergeService.class);
-			intent.putExtra(OpenCvService.PARAM_PICS, pictures);
-			OpenCvLoaderCallback callback = new OpenCvLoaderCallback(this, intent);
-			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, callback);
+			processHdrController.process(pictures);
 		}
 	}
 

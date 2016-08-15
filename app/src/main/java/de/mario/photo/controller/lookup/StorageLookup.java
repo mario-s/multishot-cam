@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * This class encapsulates the search for directories where to store files.
  */
-public class StorageLookup implements StorageLookable {
+class StorageLookup implements StorageLookable {
     public static final String MULTI = "100_MULTI";
     private final Context context;
 
