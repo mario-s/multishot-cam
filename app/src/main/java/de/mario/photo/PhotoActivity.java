@@ -22,12 +22,9 @@ import java.io.File;
 
 import de.mario.photo.controller.CameraControlable;
 import de.mario.photo.controller.HdrProcessControlable;
+import de.mario.photo.controller.MediaUpdateController;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.settings.SettingsIntentFactory;
-import de.mario.photo.support.BitmapLoader;
-import de.mario.photo.support.GalleryOpener;
-import de.mario.photo.support.ImageOpener;
-import de.mario.photo.support.MediaUpdater;
 import de.mario.photo.view.GridView;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -42,7 +39,7 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_photo)
 public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
-	private static final int IMG_BTN_THUMB = 38;
+
 
 	private static final int[] VIEW_IDS = new int[]{R.id.shutter_button, R.id.settings_button,
 			R.id.gallery_button, R.id.image_button};
@@ -64,13 +61,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@Inject
 	private SettingsIntentFactory intentFactory;
 	@Inject
-	private MediaUpdater mediaUpdater;
-	@Inject
-	private ImageOpener imageOpener;
-	@Inject
-	private GalleryOpener galleryOpener;
-	@Inject
-	private BitmapLoader bitmapLoader;
+	private MediaUpdateController mediaUpdateController;
 	@Inject
 	private StartupDialog startupDialog;
 	@Inject
@@ -107,7 +98,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	private void onPostCreate() {
-		bitmapLoader.setThumbnailSize(IMG_BTN_THUMB);
+		mediaUpdateController.initialize();
 		startupDialog.showIfFirstRun();
 	}
 
@@ -235,15 +226,11 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	public void onGallery(View view) {
-		galleryOpener.open();
+		mediaUpdateController.openGallery();
 	}
 
 	public void onImage(View view) {
-		File last = mediaUpdater.getLastUpdated();
-
-		if (last != null) {
-			imageOpener.open(last);
-		}
+		mediaUpdateController.openImage();
 	}
 
 	/**
@@ -252,10 +239,10 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	 */
 	void toggleImageButton() {
 		hideProgress();
-		File last = mediaUpdater.getLastUpdated();
+
+		Bitmap last = mediaUpdateController.getLastUpdated();
 		if (last != null) {
-			Bitmap bitmap = bitmapLoader.loadThumbnail(last);
-			imageButton.setImageBitmap(bitmap);
+			imageButton.setImageBitmap(last);
 			imageButton.setVisibility(View.VISIBLE);
 		} else {
 			imageButton.setVisibility(View.GONE);
@@ -311,6 +298,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	void refreshPictureFolder(String path){
 		File file = new File(path);
 		imageToast.setImage(file).show();
-		mediaUpdater.sendUpdate(file);
+		mediaUpdateController.sendUpdate(file);
 	}
 }
