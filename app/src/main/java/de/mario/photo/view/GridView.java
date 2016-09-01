@@ -7,20 +7,16 @@ import android.graphics.Paint;
 import javax.inject.Inject;
 
 import de.mario.photo.R;
-import de.mario.photo.settings.SettingsAccess;
 
 
 /**
  * This view is on top of the preview and provides painting capabilities for a better feedback.
  */
-public class GridView extends AbstractPaintView {
-
-    private final SettingsAccess settingsAccess;
+public class GridView extends AbstractSettingsAccessPaintView {
 
     @Inject
     public GridView(Context context) {
         super(context);
-        this.settingsAccess = new SettingsAccess(context);
     }
 
     @Override

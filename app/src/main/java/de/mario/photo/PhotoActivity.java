@@ -26,6 +26,7 @@ import de.mario.photo.controller.MediaUpdateController;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.settings.SettingsIntentFactory;
 import de.mario.photo.view.GridView;
+import de.mario.photo.view.LevelView;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -39,8 +40,6 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_photo)
 public class PhotoActivity extends RoboActivity implements PhotoActivable{
 
-
-
 	private static final int[] VIEW_IDS = new int[]{R.id.shutter_button, R.id.settings_button,
 			R.id.gallery_button, R.id.image_button};
 
@@ -49,7 +48,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	@InjectView(R.id.image_button)
 	private ImageView imageButton;
 	@Inject
-	private GridView canvasView;
+	private GridView gridView;
 	@Inject
 	private MyLocationListener locationListener;
 	@Inject
@@ -66,6 +65,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private StartupDialog startupDialog;
 	@Inject
 	private HdrProcessControlable processHdrController;
+	@Inject
+	private LevelView levelView;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;
@@ -125,8 +126,9 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		cameraController.initialize();
 
 		getPreviewLayout().addView(cameraController.getPreview(), 0);
-		getPreviewLayout().addView(canvasView, 1);
-		getPreviewLayout().addView(cameraController.getFocusView(), 2);
+		getPreviewLayout().addView(gridView, 1);
+		getPreviewLayout().addView(levelView, 2);
+		getPreviewLayout().addView(cameraController.getFocusView(), 3);
 	}
 
 	private void registerLocationListener() {
@@ -135,7 +137,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		}
 	}
 
-	private void registerViewsOrientationListener(){
+	private void registerOrientationListeners() {
 		if (orientationListener == null) {
 			orientationListener = new ViewsOrientationListener(this);
 			for (int id : VIEW_IDS) {
@@ -143,6 +145,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 			}
 			orientationListener.enable();
 		}
+		levelView.enable();
 	}
 
 	private void unregisterLocationListener() {
@@ -154,7 +157,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		super.onResume();
 
 		registerLocationListener();
-		registerViewsOrientationListener();
+		registerOrientationListeners();
 
 		cameraController.reinitialize();
 	}
