@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import de.mario.photo.controller.lookup.StorageLookable;
+import de.mario.photo.glue.CameraControlable;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;

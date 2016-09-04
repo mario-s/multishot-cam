@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.lookup.StorageLookupProvider;
+import de.mario.photo.glue.CameraControlable;
 
 /**
  */

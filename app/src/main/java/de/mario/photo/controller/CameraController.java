@@ -6,11 +6,12 @@ import android.os.Message;
 
 import java.io.File;
 
-import de.mario.photo.PhotoActivable;
 import de.mario.photo.R;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.shot.PhotoCommand;
+import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.support.HandlerThreadFactory;
 import de.mario.photo.support.MessageWrapper;
@@ -20,7 +21,7 @@ import roboguice.util.Ln;
 
 /**
  */
-public class CameraController implements CameraControlable{
+public class CameraController implements CameraControlable {
     private static final int MIN = 0;
 
     private StorageLookable storageLookable;

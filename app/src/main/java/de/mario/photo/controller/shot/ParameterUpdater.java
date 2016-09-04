@@ -4,7 +4,7 @@ import android.hardware.Camera;
 
 import java.util.List;
 
-import de.mario.photo.PhotoActivable;
+import de.mario.photo.glue.PhotoActivable;
 
 /**
  * Updates the parameters of the camera without getting them each time a single parameter

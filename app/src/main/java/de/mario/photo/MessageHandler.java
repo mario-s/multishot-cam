@@ -13,6 +13,7 @@ import java.util.Map;
 import de.mario.photo.exif.ExifTag;
 import de.mario.photo.exif.ExifWriter;
 import de.mario.photo.exif.GeoTagFactory;
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.support.MessageWrapper;
 import roboguice.util.Ln;
 

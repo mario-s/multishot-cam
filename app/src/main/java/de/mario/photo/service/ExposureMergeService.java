@@ -12,9 +12,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mario.photo.PhotoActivable;
 import de.mario.photo.R;
 import de.mario.photo.exif.ExifWriter;
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.settings.SettingsAccess;
 
 /**

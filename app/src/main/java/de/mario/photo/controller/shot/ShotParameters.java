@@ -6,8 +6,8 @@ import android.view.View;
 
 import java.io.File;
 
-import de.mario.photo.PhotoActivable;
-import de.mario.photo.controller.CameraControlable;
+import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.PhotoActivable;
 
 /**
  */

@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.glue;
 
 import android.content.Context;
 import android.os.Handler;

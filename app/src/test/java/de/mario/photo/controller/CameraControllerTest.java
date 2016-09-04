@@ -11,9 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import de.mario.photo.PhotoActivable;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.view.FocusView;
 

@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.support.MessageWrapper;
 
 import static org.mockito.BDDMockito.given;

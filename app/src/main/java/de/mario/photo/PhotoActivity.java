@@ -20,9 +20,10 @@ import com.google.inject.Inject;
 
 import java.io.File;
 
-import de.mario.photo.controller.CameraControlable;
 import de.mario.photo.controller.HdrProcessControlable;
 import de.mario.photo.controller.MediaUpdateController;
+import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.settings.SettingsIntentFactory;
 import de.mario.photo.view.GridView;
@@ -38,7 +39,7 @@ import roboguice.inject.InjectView;
  * 
  */
 @ContentView(R.layout.activity_photo)
-public class PhotoActivity extends RoboActivity implements PhotoActivable{
+public class PhotoActivity extends RoboActivity implements PhotoActivable {
 
 	private static final int[] VIEW_IDS = new int[]{R.id.shutter_button, R.id.settings_button,
 			R.id.gallery_button, R.id.image_button};
@@ -53,8 +54,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	private MyLocationListener locationListener;
 	@Inject
 	private LocationManager locationManager;
-	@Inject
-	private SettingsAccess settingsAccess;
 	@Inject
 	private CameraControlable cameraController;
 	@Inject
@@ -264,7 +263,9 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	//combined settings values
-	private boolean isGeoTaggingEnabled() { return isGpsEnabled() && settingsAccess.isEnabled(R.string.geotagging);}
+	private boolean isGeoTaggingEnabled() {
+		return isGpsEnabled() && isEnabled(R.string.geotagging);
+	}
 
 	private boolean isGpsEnabled() { return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}
 	//end settings values
@@ -279,10 +280,18 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 	}
 
 	void processHdr(String [] pictures){
-		if(settingsAccess.isEnabled(R.string.processHdr)) {
+		if (isEnabled(R.string.processHdr)) {
 			showProgress();
 			processHdrController.process(pictures);
 		}
+	}
+
+	private boolean isEnabled(int key) {
+		return getSettingsAccess().isEnabled(key);
+	}
+
+	private SettingsAccess getSettingsAccess() {
+		return cameraController.getSettingsAccess();
 	}
 
 	private void showProgress() {

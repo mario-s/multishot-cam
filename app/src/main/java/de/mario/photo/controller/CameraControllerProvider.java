@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import de.mario.photo.controller.lookup.StorageLookable;
+import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.settings.SettingsAccess;
 
 /**

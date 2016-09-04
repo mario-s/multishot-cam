@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mario.photo.PhotoActivable;
+import de.mario.photo.glue.PhotoActivable;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 

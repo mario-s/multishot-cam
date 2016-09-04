@@ -1,11 +1,10 @@
-package de.mario.photo.controller;
+package de.mario.photo.glue;
 
 import android.hardware.Camera;
 import android.os.Message;
 
 import java.io.File;
 
-import de.mario.photo.PhotoActivable;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.view.FocusView;
 import de.mario.photo.view.Preview;

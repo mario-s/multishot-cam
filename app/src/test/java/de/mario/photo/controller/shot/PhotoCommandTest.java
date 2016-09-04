@@ -11,8 +11,8 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import de.mario.photo.PhotoActivable;
 import de.mario.photo.controller.CameraController;
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.settings.SettingsAccess;
 
 import static org.mockito.BDDMockito.given;

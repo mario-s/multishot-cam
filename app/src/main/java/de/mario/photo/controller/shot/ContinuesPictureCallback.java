@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mario.photo.PhotoActivable;
 import de.mario.photo.R;
+import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.support.HandlerThreadFactory;
 import roboguice.util.Ln;
 

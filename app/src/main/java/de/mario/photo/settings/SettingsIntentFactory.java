@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.google.inject.Inject;
 
-import de.mario.photo.controller.CameraControlable;
+import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.support.IsoSupport;
 import de.mario.photo.support.PicturesSizeSupport;
 

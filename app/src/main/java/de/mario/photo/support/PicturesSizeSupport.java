@@ -4,7 +4,7 @@ import android.hardware.Camera;
 
 import java.util.List;
 
-import de.mario.photo.PhotoActivable;
+import de.mario.photo.glue.PhotoActivable;
 
 /**
  * This class provides support for the images sizes supported by the camera.
