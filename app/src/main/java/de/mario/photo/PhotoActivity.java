@@ -278,11 +278,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable{
 		return handler;
 	}
 
-	@Override
-	public SettingsAccess getSettingsAccess() {
-		return settingsAccess;
-	}
-
 	void processHdr(String [] pictures){
 		if(settingsAccess.isEnabled(R.string.processHdr)) {
 			showProgress();

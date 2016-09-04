@@ -65,9 +65,9 @@ public class CameraControllerTest {
         given(camera.getParameters()).willReturn(parameters);
         given(activity.getContext()).willReturn(context);
         given(activity.getHandler()).willReturn(handler);
-        given(activity.getSettingsAccess()).willReturn(settingsAccess);
 
         classUnderTest.setActivity(activity);
+        classUnderTest.setSettingsAccess(settingsAccess);
         classUnderTest.setStorageLookup(storageLookable);
 
         setInternalState(classUnderTest, "focusView", focusView);

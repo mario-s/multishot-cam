@@ -46,7 +46,7 @@ public class PhotoCommandTest {
     @Before
     public void setUp() {
         given(cameraController.getCamera()).willReturn(camera);
-        given(photoActivable.getSettingsAccess()).willReturn(settings);
+        given(cameraController.getSettingsAccess()).willReturn(settings);
         given(settings.getPicSizeKey()).willReturn("");
         given(photoShotsFactory.create(settings)).willReturn(new Shot[]{new Shot("test")});
 

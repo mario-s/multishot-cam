@@ -41,6 +41,7 @@ public class CameraController implements CameraControlable{
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
     private MessageSender messageSender;
+    private SettingsAccess settingsAccess;
 
     private Handler handler;
 
@@ -125,7 +126,7 @@ public class CameraController implements CameraControlable{
     private boolean isShutterSoundDisabled() { return getSettings().isEnabled(R.string.shutterSoundDisabled);}
 
     private SettingsAccess getSettings() {
-        return activity.getSettingsAccess();
+        return settingsAccess;
     }
 
     private void execute(int delay) {
@@ -216,6 +217,15 @@ public class CameraController implements CameraControlable{
     @Override
     public void shot() {
         handler.post(new ShotRunner());
+    }
+
+    @Override
+    public SettingsAccess getSettingsAccess() {
+        return settingsAccess;
+    }
+
+    void setSettingsAccess(SettingsAccess settingsAccess) {
+        this.settingsAccess = settingsAccess;
     }
 
     class ShotRunner implements Runnable{

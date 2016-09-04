@@ -16,16 +16,15 @@ public class PhotoCommand implements Runnable{
 
     private final PhotoActivable activity;
     private final Camera camera;
-
-    private ParameterUpdater parameterUpdater;
     private final ShotParameters shotParams;
     private final SettingsAccess settings;
+    private ParameterUpdater parameterUpdater;
     private PhotoShotsFactory photoShotsFactory;
 
     public PhotoCommand(CameraControlable cameraController, PhotoActivable activity){
         this.activity = activity;
         this.camera = cameraController.getCamera();
-        this.settings = activity.getSettingsAccess();
+        this.settings = cameraController.getSettingsAccess();
 
         this.photoShotsFactory = new PhotoShotsFactory(camera);
         this.parameterUpdater = new ParameterUpdater(camera);
