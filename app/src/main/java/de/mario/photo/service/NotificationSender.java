@@ -42,7 +42,7 @@ class NotificationSender {
     private NotificationCompat.Builder createBuilder(String text) {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setSmallIcon(R.drawable.camera_burst_white_36dp)
                         .setContentTitle(title)
                         .setContentText(text);
 
