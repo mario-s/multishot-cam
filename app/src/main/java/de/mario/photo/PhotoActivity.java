@@ -165,10 +165,6 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable {
 		return (ViewGroup) findViewById(R.id.preview);
 	}
 
-	private void toast(int id) {
-		toast(getString(id));
-	}
-
 	private void toast(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}

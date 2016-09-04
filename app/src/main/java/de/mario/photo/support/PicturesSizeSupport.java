@@ -2,6 +2,7 @@ package de.mario.photo.support;
 
 import android.hardware.Camera;
 
+import java.util.Arrays;
 import java.util.List;
 
 import de.mario.photo.glue.PhotoActivable;
@@ -11,7 +12,7 @@ import de.mario.photo.glue.PhotoActivable;
  */
 public final class PicturesSizeSupport implements PictureSizeSupportable {
 
-    private String[] sizes;
+    private String[] sizes = new String[0];
 
     public PicturesSizeSupport(Camera.Parameters params) {
         initSizes(params);
@@ -28,7 +29,7 @@ public final class PicturesSizeSupport implements PictureSizeSupportable {
 
     @Override
     public String[] getSupportedPicturesSizes() {
-        return sizes;
+        return Arrays.copyOf(sizes, sizes.length);
     }
 
     @Override
