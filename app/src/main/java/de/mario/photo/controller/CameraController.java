@@ -13,9 +13,7 @@ import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.shot.PhotoCommand;
 import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.support.HandlerThreadFactory;
-import de.mario.photo.support.IsoSupport;
 import de.mario.photo.support.MessageWrapper;
-import de.mario.photo.support.PicturesSizeSupport;
 import de.mario.photo.view.FocusView;
 import de.mario.photo.view.Preview;
 import roboguice.util.Ln;
@@ -35,8 +33,7 @@ public class CameraController implements CameraControlable{
     private Preview preview;
     private FocusView focusView;
 
-    private IsoSupport isoSupport;
-    private PicturesSizeSupport sizeSupport;
+
     private CameraOrientationListener orientationListener;
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
@@ -82,9 +79,6 @@ public class CameraController implements CameraControlable{
         handler.post(new Runnable() {
             @Override
             public void run() {
-
-                sizeSupport = new PicturesSizeSupport(camera.getParameters());
-                isoSupport = new IsoSupport(camera.getParameters());
 
                 orientationListener = new CameraOrientationListener(activity.getContext());
                 if (orientationListener.canDetectOrientation()) {
@@ -182,31 +176,6 @@ public class CameraController implements CameraControlable{
     @Override
     public FocusView getFocusView() {
         return focusView;
-    }
-
-    @Override
-    public String[] getIsoValues() {
-        return isoSupport.getIsoValues();
-    }
-
-    @Override
-    public String getSelectedIsoValue(String isoKey) {
-        return isoSupport.getSelectedIsoValue(isoKey);
-    }
-
-    @Override
-    public String[] getSupportedPicturesSizes(){
-        return sizeSupport.getSupportedPicturesSizes();
-    }
-
-    @Override
-    public String getSelectedPictureSize() {
-        return sizeSupport.getSelectedPictureSize(camera);
-    }
-
-    @Override
-    public String findIsoKey(){
-        return isoSupport.findIsoKey();
     }
 
     @Override

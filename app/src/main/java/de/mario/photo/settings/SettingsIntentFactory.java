@@ -6,6 +6,8 @@ import android.content.Intent;
 import com.google.inject.Inject;
 
 import de.mario.photo.controller.CameraControlable;
+import de.mario.photo.support.IsoSupport;
+import de.mario.photo.support.PicturesSizeSupport;
 
 
 /**
@@ -17,6 +19,9 @@ public final class SettingsIntentFactory {
     static final String SELECTED_PICTURE_SIZE = "selectedPictureSize";
     static final String SELECTED_ISO = "selectedIso";
     static final String ISOS = "isos";
+
+    private IsoSupport isoSupport;
+    private PicturesSizeSupport sizeSupport;
 
     private Context context;
     @Inject
@@ -32,15 +37,34 @@ public final class SettingsIntentFactory {
     public Intent create() {
         Intent intent = new Intent(context, SettingsActivity.class);
 
-        intent.putExtra(PICTURE_SIZES, cameraController.getSupportedPicturesSizes());
-        intent.putExtra(SELECTED_PICTURE_SIZE, cameraController.getSelectedPictureSize());
+        prepareSupport();
 
-        String isoKey = findIsoKey();
-        if(!isoKey.isEmpty()) {
-            intent.putExtra(SELECTED_ISO, cameraController.getSelectedIsoValue(isoKey));
-            intent.putExtra(ISOS, cameraController.getIsoValues());
-        }
+        addPictureSizes(intent);
+        addIsos(intent);
+
         return intent;
+    }
+
+    private void prepareSupport() {
+        if (isoSupport == null) {
+            isoSupport = new IsoSupport(cameraController.getCamera().getParameters());
+        }
+        if (sizeSupport == null) {
+            sizeSupport = new PicturesSizeSupport(cameraController.getCamera().getParameters());
+        }
+    }
+
+    private void addIsos(Intent intent) {
+        String isoKey = findIsoKey();
+        if (!isoKey.isEmpty()) {
+            intent.putExtra(SELECTED_ISO, isoSupport.getSelectedIsoValue(isoKey));
+            intent.putExtra(ISOS, isoSupport.getIsoValues());
+        }
+    }
+
+    private void addPictureSizes(Intent intent) {
+        intent.putExtra(PICTURE_SIZES, sizeSupport.getSupportedPicturesSizes());
+        intent.putExtra(SELECTED_PICTURE_SIZE, sizeSupport.getSelectedPictureSize(cameraController.getCamera()));
     }
 
     private String findIsoKey() {
@@ -48,7 +72,7 @@ public final class SettingsIntentFactory {
         String isoKey = settingsAccess.getIsoKey();
         if(isoKey.isEmpty()) {
             //if not look for it
-            isoKey = cameraController.findIsoKey();
+            isoKey = isoSupport.findIsoKey();
             settingsAccess.setIsoKey(isoKey);
         }
         return isoKey;

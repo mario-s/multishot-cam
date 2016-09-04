@@ -35,16 +35,6 @@ public interface CameraControlable {
 
     FocusView getFocusView();
 
-    String[] getIsoValues();
-
-    String getSelectedIsoValue(String isoKey);
-
-    String[] getSupportedPicturesSizes();
-
-    String getSelectedPictureSize();
-
-    String findIsoKey();
-
     void setActivity(PhotoActivable activity);
 
     Camera getCamera();
