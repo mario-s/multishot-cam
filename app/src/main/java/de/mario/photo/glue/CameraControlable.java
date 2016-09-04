@@ -5,7 +5,6 @@ import android.os.Message;
 
 import java.io.File;
 
-import de.mario.photo.settings.SettingsAccess;
 import de.mario.photo.view.FocusView;
 import de.mario.photo.view.Preview;
 
@@ -42,5 +41,5 @@ public interface CameraControlable {
 
     void send(Message message);
 
-    SettingsAccess getSettingsAccess();
+    SettingsAccessable getSettingsAccess();
 }

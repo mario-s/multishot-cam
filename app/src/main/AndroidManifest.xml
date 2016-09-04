@@ -52,7 +52,7 @@
         </service>
 
         <meta-data android:name="roboguice.modules"
-            android:value="de.mario.photo.controller.ControllerModule" />
+                   android:value="de.mario.photo.controller.ControllerModule, de.mario.photo.settings.SettingsModule"/>
     </application>
 
 </manifest>

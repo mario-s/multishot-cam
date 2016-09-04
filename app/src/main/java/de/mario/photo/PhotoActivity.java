@@ -24,7 +24,7 @@ import de.mario.photo.controller.HdrProcessControlable;
 import de.mario.photo.controller.MediaUpdateController;
 import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.glue.PhotoActivable;
-import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.glue.SettingsAccessable;
 import de.mario.photo.settings.SettingsIntentFactory;
 import de.mario.photo.view.GridView;
 import de.mario.photo.view.LevelView;
@@ -290,7 +290,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable {
 		return getSettingsAccess().isEnabled(key);
 	}
 
-	private SettingsAccess getSettingsAccess() {
+	private SettingsAccessable getSettingsAccess() {
 		return cameraController.getSettingsAccess();
 	}
 

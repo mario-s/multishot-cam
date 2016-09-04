@@ -5,7 +5,7 @@ import com.google.inject.Provider;
 
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.glue.CameraControlable;
-import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.glue.SettingsAccessable;
 
 /**
  * Provides an implementation of {@link CameraControlable}
@@ -16,7 +16,7 @@ class CameraControllerProvider implements Provider<CameraControlable> {
     private StorageLookable storageLookable;
 
     @Inject
-    private SettingsAccess settingsAccess;
+    private SettingsAccessable settingsAccess;
 
     @Override
     public CameraControlable get() {

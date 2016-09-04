@@ -12,7 +12,7 @@ import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.shot.PhotoCommand;
 import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.glue.PhotoActivable;
-import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.glue.SettingsAccessable;
 import de.mario.photo.support.HandlerThreadFactory;
 import de.mario.photo.support.MessageWrapper;
 import de.mario.photo.view.FocusView;
@@ -39,7 +39,7 @@ public class CameraController implements CameraControlable {
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
     private MessageSender messageSender;
-    private SettingsAccess settingsAccess;
+    private SettingsAccessable settingsAccess;
 
     private Handler handler;
 
@@ -120,7 +120,7 @@ public class CameraController implements CameraControlable {
 
     private boolean isShutterSoundDisabled() { return getSettings().isEnabled(R.string.shutterSoundDisabled);}
 
-    private SettingsAccess getSettings() {
+    private SettingsAccessable getSettings() {
         return settingsAccess;
     }
 
@@ -190,11 +190,11 @@ public class CameraController implements CameraControlable {
     }
 
     @Override
-    public SettingsAccess getSettingsAccess() {
+    public SettingsAccessable getSettingsAccess() {
         return settingsAccess;
     }
 
-    void setSettingsAccess(SettingsAccess settingsAccess) {
+    void setSettingsAccess(SettingsAccessable settingsAccess) {
         this.settingsAccess = settingsAccess;
     }
 

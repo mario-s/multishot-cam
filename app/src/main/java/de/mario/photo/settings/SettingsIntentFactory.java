@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.google.inject.Inject;
 
 import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.SettingsAccessable;
 import de.mario.photo.support.IsoSupport;
 import de.mario.photo.support.PicturesSizeSupport;
 
@@ -27,7 +28,7 @@ public final class SettingsIntentFactory {
     @Inject
     private CameraControlable cameraController;
     @Inject
-    private SettingsAccess settingsAccess;
+    private SettingsAccessable settingsAccess;
 
     @Inject
     public SettingsIntentFactory(Context context) {

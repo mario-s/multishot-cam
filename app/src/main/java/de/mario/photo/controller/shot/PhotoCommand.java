@@ -6,7 +6,7 @@ import android.os.Debug;
 
 import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.glue.PhotoActivable;
-import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.glue.SettingsAccessable;
 
 
 /**
@@ -17,7 +17,7 @@ public class PhotoCommand implements Runnable{
     private final PhotoActivable activity;
     private final Camera camera;
     private final ShotParameters shotParams;
-    private final SettingsAccess settings;
+    private final SettingsAccessable settings;
     private ParameterUpdater parameterUpdater;
     private PhotoShotsFactory photoShotsFactory;
 

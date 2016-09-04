@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import de.mario.photo.settings.SettingsAccess;
+import de.mario.photo.glue.SettingsAccessable;
 
 /**
  * This exposureValuesFactory creates a sequence of {@link Shot}.
@@ -25,7 +25,7 @@ class PhotoShotsFactory {
         exposureValuesFactory = new ExposureValuesFactory(parameters);
     }
 
-    Shot[] create(SettingsAccess settings) {
+    Shot[] create(SettingsAccessable settings) {
 
         int seqType = settings.getExposureSequenceType();
         LinkedList<Integer> els = exposureValuesFactory.getValues(seqType);
