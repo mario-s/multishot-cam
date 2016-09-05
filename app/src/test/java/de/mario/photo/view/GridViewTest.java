@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -29,27 +30,18 @@ public class GridViewTest {
     private Canvas canvas;
     @Mock
     private PaintFactory paintFactory;
-
+    @InjectMocks
     private GridView classUnderTest;
-
-    private boolean showGrid;
 
     @Before
     public void setUp() {
-        classUnderTest = new GridView(context) {
-            @Override
-            boolean isShowGrid() {
-                return showGrid;
-            }
-        };
-
         given(paintFactory.create()).willReturn(paint);
         setInternalState(classUnderTest, "paintFactory", paintFactory);
     }
 
     @Test
     public void testDrawGrid() {
-        showGrid = true;
+        classUnderTest.setShowGrid(true);
         classUnderTest.drawGrid(canvas);
         verify(canvas, times(4)).drawLine(anyFloat(), anyFloat(), anyFloat(), anyFloat(), eq(paint));
     }

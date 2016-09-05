@@ -6,13 +6,13 @@ import android.graphics.Paint;
 
 import javax.inject.Inject;
 
-import de.mario.photo.R;
-
 
 /**
  * This view is on top of the preview and provides painting capabilities for a better feedback.
  */
-public class GridView extends AbstractSettingsAccessPaintView {
+public class GridView extends AbstractPaintView {
+
+    private boolean showGrid;
 
     @Inject
     public GridView(Context context) {
@@ -26,7 +26,7 @@ public class GridView extends AbstractSettingsAccessPaintView {
     }
 
     void drawGrid(Canvas canvas) {
-        if (isShowGrid()) {
+        if (showGrid) {
             int width = canvas.getWidth();
             int height = canvas.getHeight();
             Paint gridPaint = getPaint();
@@ -38,8 +38,7 @@ public class GridView extends AbstractSettingsAccessPaintView {
         }
     }
 
-    boolean isShowGrid() {
-        return settingsAccess.isEnabled(R.string.grid);
+    public void setShowGrid(boolean showGrid) {
+        this.showGrid = showGrid;
     }
-
 }

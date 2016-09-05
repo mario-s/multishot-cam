@@ -9,18 +9,18 @@ import android.view.OrientationEventListener;
 
 import javax.inject.Inject;
 
-import de.mario.photo.R;
-
 /**
  * This view draws an indicator when the device is near horizontal or vertical.
  */
-public class LevelView extends AbstractSettingsAccessPaintView {
+public class LevelView extends AbstractPaintView {
 
     private static final int TOLERANCE = 1;
 
     private final OrientationEventListener listener;
 
     private int orientation;
+
+    private boolean showLevel;
 
     @Inject
     public LevelView(Context context) {
@@ -35,7 +35,7 @@ public class LevelView extends AbstractSettingsAccessPaintView {
     }
 
     void drawLevel(Canvas canvas) {
-        if (isShowLevel()) {
+        if (showLevel) {
             Paint paint = getPaint();
             if (isHorizontal(orientation) || isVertical(orientation)) {
                 paint.setColor(Color.GREEN);
@@ -62,12 +62,9 @@ public class LevelView extends AbstractSettingsAccessPaintView {
         return Math.abs(0 - orientation) <= TOLERANCE || Math.abs(180 - orientation) <= TOLERANCE;
     }
 
-    boolean isShowLevel() {
-        return settingsAccess.isEnabled(R.string.level);
-    }
-
-    public void enable() {
-        if (isShowLevel()) {
+    public void enable(boolean enabled) {
+        this.showLevel = enabled;
+        if (showLevel) {
             listener.enable();
         } else {
             listener.disable();

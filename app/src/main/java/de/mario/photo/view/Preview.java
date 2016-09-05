@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Camera;
-import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -15,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mario.photo.glue.PhotoActivable;
+import roboguice.util.Ln;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -74,7 +73,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
             camera.setPreviewDisplay(holder);
             camera.startPreview();
         } catch (IOException e) {
-            Log.e(PhotoActivable.DEBUG_TAG, e.getMessage(), e);
+            Ln.w(e, e.getMessage());
         }
     }
 

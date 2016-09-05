@@ -144,11 +144,15 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable {
 			}
 			orientationListener.enable();
 		}
-		levelView.enable();
 	}
 
 	private void unregisterLocationListener() {
 		locationManager.removeUpdates(locationListener);
+	}
+
+	private void updatePaintViews() {
+		levelView.enable(isEnabled(R.string.level));
+		gridView.setShowGrid(isEnabled(R.string.grid));
 	}
 
 	@Override
@@ -157,6 +161,8 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable {
 
 		registerLocationListener();
 		registerOrientationListeners();
+
+		updatePaintViews();
 
 		cameraController.reinitialize();
 	}

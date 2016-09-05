@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -27,17 +28,13 @@ public class LevelViewTest {
     private Canvas canvas;
     @Mock
     private PaintFactory paintFactory;
-
+    @InjectMocks
     private LevelView classUnderTest;
 
     @Before
     public void setUp() {
-        classUnderTest = new LevelView(context) {
-            @Override
-            boolean isShowLevel() {
-                return true;
-            }
-        };
+        classUnderTest = new LevelView(context);
+        classUnderTest.enable(true);
 
         given(paintFactory.create()).willReturn(paint);
         setInternalState(classUnderTest, "paintFactory", paintFactory);
