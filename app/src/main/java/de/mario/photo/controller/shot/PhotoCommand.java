@@ -4,7 +4,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Debug;
 
-import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.CameraProvideable;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.glue.SettingsAccessable;
 
@@ -21,7 +21,7 @@ public class PhotoCommand implements Runnable{
     private ParameterUpdater parameterUpdater;
     private PhotoShotsFactory photoShotsFactory;
 
-    public PhotoCommand(CameraControlable cameraController, PhotoActivable activity){
+    public PhotoCommand(CameraProvideable cameraController, PhotoActivable activity) {
         this.activity = activity;
         this.camera = cameraController.getCamera();
         this.settings = cameraController.getSettingsAccess();

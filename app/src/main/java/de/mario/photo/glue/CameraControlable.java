@@ -1,6 +1,5 @@
 package de.mario.photo.glue;
 
-import android.hardware.Camera;
 import android.os.Message;
 
 import java.io.File;
@@ -34,8 +33,6 @@ public interface CameraControlable {
     FocusView getFocusView();
 
     void setActivity(PhotoActivable activity);
-
-    Camera getCamera();
 
     File getPictureSaveDirectory();
 

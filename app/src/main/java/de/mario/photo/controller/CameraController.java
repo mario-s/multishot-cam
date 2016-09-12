@@ -1,7 +1,6 @@
 package de.mario.photo.controller;
 
 import android.hardware.Camera;
-import android.os.Handler;
 import android.os.Message;
 
 import java.io.File;
@@ -10,10 +9,8 @@ import de.mario.photo.R;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.shot.PhotoCommand;
-import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.CameraProvideable;
 import de.mario.photo.glue.PhotoActivable;
-import de.mario.photo.glue.SettingsAccessable;
-import de.mario.photo.support.HandlerThreadFactory;
 import de.mario.photo.support.MessageWrapper;
 import de.mario.photo.view.FocusView;
 import de.mario.photo.view.Preview;
@@ -21,12 +18,11 @@ import roboguice.util.Ln;
 
 /**
  */
-public class CameraController implements CameraControlable {
+public class CameraController extends AbstractCameraController implements CameraProvideable {
     private static final int MIN = 0;
 
     private StorageLookable storageLookable;
 
-    private PhotoActivable activity;
     private int camId = CameraLookup.NO_CAM_ID;
     private boolean canDisableShutterSound;
 
@@ -38,10 +34,6 @@ public class CameraController implements CameraControlable {
     private CameraOrientationListener orientationListener;
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
-    private MessageSender messageSender;
-    private SettingsAccessable settingsAccess;
-
-    private Handler handler;
 
     public CameraController() {
         this(new CameraLookup(), new CameraFactory());
@@ -51,14 +43,6 @@ public class CameraController implements CameraControlable {
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
 
-        HandlerThreadFactory factory = new HandlerThreadFactory(getClass());
-        handler = factory.newHandler();
-    }
-
-    @Override
-    public void setActivity(PhotoActivable activity) {
-        this.activity = activity;
-        messageSender = new MessageSender(activity.getHandler());
     }
 
     @Override
@@ -118,10 +102,8 @@ public class CameraController implements CameraControlable {
         }
     }
 
-    private boolean isShutterSoundDisabled() { return getSettings().isEnabled(R.string.shutterSoundDisabled);}
-
-    private SettingsAccessable getSettings() {
-        return settingsAccess;
+    private boolean isShutterSoundDisabled() {
+        return getSettingsAccess().isEnabled(R.string.shutterSoundDisabled);
     }
 
     private void execute(int delay) {
@@ -161,12 +143,7 @@ public class CameraController implements CameraControlable {
         if (!wrapper.isDataEmpty() && wrapper.getStringArray(PhotoActivable.PICTURES) != null) {
             focusView.resetFocus();
         }
-        messageSender.send(message);
-    }
-
-    private void send(String msg) {
-        messageSender.send(msg);
-        Ln.d("sending message: %s", msg);
+        super.send(message);
     }
 
     @Override
@@ -189,15 +166,6 @@ public class CameraController implements CameraControlable {
         handler.post(new ShotRunner());
     }
 
-    @Override
-    public SettingsAccessable getSettingsAccess() {
-        return settingsAccess;
-    }
-
-    void setSettingsAccess(SettingsAccessable settingsAccess) {
-        this.settingsAccess = settingsAccess;
-    }
-
     class ShotRunner implements Runnable{
         @Override
         public void run() {
@@ -217,7 +185,7 @@ public class CameraController implements CameraControlable {
         public void onAutoFocus(boolean success, Camera camera) {
             focusView.focused(success);
             if (success) {
-                execute(getSettings().getDelay());
+                execute(getSettingsAccess().getDelay());
             } else {
                 send(PhotoActivable.PREPARE_FOR_NEXT);
             }

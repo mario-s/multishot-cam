@@ -2,10 +2,12 @@ package de.mario.photo.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 
 import com.google.inject.Inject;
 
 import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.CameraProvideable;
 import de.mario.photo.glue.SettingsAccessable;
 import de.mario.photo.support.IsoSupport;
 import de.mario.photo.support.PicturesSizeSupport;
@@ -30,6 +32,8 @@ public final class SettingsIntentFactory {
     @Inject
     private SettingsAccessable settingsAccess;
 
+    private Camera camera;
+
     @Inject
     public SettingsIntentFactory(Context context) {
         this.context = context;
@@ -47,11 +51,12 @@ public final class SettingsIntentFactory {
     }
 
     private void prepareSupport() {
+        camera = ((CameraProvideable) cameraController).getCamera();
         if (isoSupport == null) {
-            isoSupport = new IsoSupport(cameraController.getCamera().getParameters());
+            isoSupport = new IsoSupport(camera.getParameters());
         }
         if (sizeSupport == null) {
-            sizeSupport = new PicturesSizeSupport(cameraController.getCamera().getParameters());
+            sizeSupport = new PicturesSizeSupport(camera.getParameters());
         }
     }
 
@@ -65,7 +70,7 @@ public final class SettingsIntentFactory {
 
     private void addPictureSizes(Intent intent) {
         intent.putExtra(PICTURE_SIZES, sizeSupport.getSupportedPicturesSizes());
-        intent.putExtra(SELECTED_PICTURE_SIZE, sizeSupport.getSelectedPictureSize(cameraController.getCamera()));
+        intent.putExtra(SELECTED_PICTURE_SIZE, sizeSupport.getSelectedPictureSize(camera));
     }
 
     private String findIsoKey() {
