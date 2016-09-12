@@ -94,6 +94,12 @@
             android:key="@string/trace"
             android:summary="@string/prefs_trace_description"
             android:title="@string/prefs_trace_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/use_api1"
+            android:summary="@string/prefs_api1_description"
+            android:title="@string/prefs_api1_title"/>
     </PreferenceCategory>
 
 

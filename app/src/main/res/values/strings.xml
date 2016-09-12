@@ -12,6 +12,7 @@
     <string name="notifyHdr"><xliff:g id="preference_key">notifyHdr</xliff:g></string>
     <string name="trace"><xliff:g id="preference_key">trace</xliff:g></string>
     <string name="level"><xliff:g id="preference_key">level</xliff:g></string>
+    <string name="use_api1"><xliff:g id="preference_key">use_api</xliff:g></string>
     <!-- keys for settings -->
 
     <string name="yes">Yes</string>
@@ -58,6 +59,8 @@
     <string name="prefs_debug_title">Debugging</string>
     <string name="prefs_trace_description">If enabled, a trace file for the photo shooting will be saved.</string>
     <string name="prefs_trace_title">Save Trace File</string>
+    <string name="prefs_api1_description">If enabled, the device will use the old camera API.</string>
+    <string name="prefs_api1_title">Use old API</string>
     <string name="prefs_picture_size_description">Set the size for the images.</string>
     <string name="prefs_picture_size_title">Picture Size</string>
     <string name="prefs_iso_description">Set the ISO value for the images.</string>
