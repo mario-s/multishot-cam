@@ -3,6 +3,9 @@ package de.mario.photo.controller;
 import android.os.Handler;
 import android.os.Message;
 
+import java.io.File;
+
+import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.glue.SettingsAccessable;
@@ -18,6 +21,7 @@ public abstract class AbstractCameraController implements CameraControlable {
     protected PhotoActivable activity;
     private SettingsAccessable settingsAccess;
     private MessageSender messageSender;
+    private StorageLookable storageLookable;
 
     public AbstractCameraController() {
         HandlerThreadFactory factory = new HandlerThreadFactory(getClass());
@@ -46,5 +50,14 @@ public abstract class AbstractCameraController implements CameraControlable {
 
     public void send(Message message) {
         messageSender.send(message);
+    }
+
+    void setStorageLookup(StorageLookable storageLookup) {
+        this.storageLookable = storageLookup;
+    }
+
+    @Override
+    public File getPictureSaveDirectory() {
+        return storageLookable.lookupSaveDirectory();
     }
 }

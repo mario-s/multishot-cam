@@ -21,7 +21,7 @@ public class CameraControllerProviderTest {
     @Mock
     private StorageLookable storageLookable;
     @Mock
-    private CameraController controller;
+    private CameraApi1Controller controller;
 
     private CameraControllerProvider classUnderTest;
 
@@ -29,7 +29,7 @@ public class CameraControllerProviderTest {
     public void setUp() {
         classUnderTest = new CameraControllerProvider(){
             @Override
-            CameraController newController() {
+            AbstractCameraController newController() {
                 return controller;
             }
         };

@@ -7,7 +7,6 @@ import java.io.File;
 
 import de.mario.photo.R;
 import de.mario.photo.controller.lookup.CameraLookup;
-import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.shot.PhotoCommand;
 import de.mario.photo.glue.IsoSupportable;
 import de.mario.photo.glue.PhotoActivable;
@@ -19,10 +18,8 @@ import roboguice.util.Ln;
 
 /**
  */
-public class CameraController extends AbstractCameraController {
+public class CameraApi1Controller extends AbstractCameraController {
     private static final int MIN = 0;
-
-    private StorageLookable storageLookable;
 
     private int camId = CameraLookup.NO_CAM_ID;
     private boolean canDisableShutterSound;
@@ -31,7 +28,6 @@ public class CameraController extends AbstractCameraController {
     private Preview preview;
     private FocusView focusView;
 
-
     private CameraOrientationListener orientationListener;
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
@@ -39,11 +35,11 @@ public class CameraController extends AbstractCameraController {
     private IsoSupport isoSupport;
     private PictureSizeSupport sizeSupport;
 
-    public CameraController() {
+    public CameraApi1Controller() {
         this(new CameraLookup(), new CameraFactory());
     }
 
-    CameraController(CameraLookup cameraLookup, CameraFactory cameraFactory) {
+    CameraApi1Controller(CameraLookup cameraLookup, CameraFactory cameraFactory) {
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
     }
@@ -114,7 +110,7 @@ public class CameraController extends AbstractCameraController {
     private void execute(int delay) {
         Ln.d("delay for photo: %s", delay);
 
-        Runnable command = new PhotoCommand(camera, CameraController.this, activity);
+        Runnable command = new PhotoCommand(camera, CameraApi1Controller.this, activity);
         if (delay > MIN) {
             handler.postDelayed(command, delay * 1000);
         } else {
@@ -131,15 +127,6 @@ public class CameraController extends AbstractCameraController {
         if(canDisableShutterSound) {
             camera.enableShutterSound(enable);
         }
-    }
-
-    void setStorageLookup(StorageLookable storageLookup) {
-        this.storageLookable = storageLookup;
-    }
-
-    @Override
-    public File getPictureSaveDirectory() {
-        return storageLookable.lookupSaveDirectory();
     }
 
     @Override

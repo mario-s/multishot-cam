@@ -11,7 +11,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import de.mario.photo.controller.CameraController;
+import de.mario.photo.controller.CameraApi1Controller;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.settings.SettingsAccess;
 
@@ -29,7 +29,7 @@ public class PhotoCommandTest {
     private PhotoCommand classUnderTest;
 
     @Mock
-    private CameraController cameraController;
+    private CameraApi1Controller cameraController;
     @Mock
     private PhotoActivable photoActivable;
     @Mock

@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
 
-import de.mario.photo.controller.CameraController;
+import de.mario.photo.controller.CameraApi1Controller;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.view.Preview;
 
@@ -42,7 +42,7 @@ public class ContinuesPictureCallbackTest {
     @Mock
     private Preview preview;
     @Mock
-    private CameraController cameraController;
+    private CameraApi1Controller cameraController;
 
     private ParameterUpdater updater;
 

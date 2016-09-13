@@ -20,13 +20,13 @@ class CameraControllerProvider implements Provider<CameraControlable> {
 
     @Override
     public CameraControlable get() {
-        CameraController controller = newController();
+        AbstractCameraController controller = newController();
         controller.setSettingsAccess(settingsAccess);
         controller.setStorageLookup(storageLookable);
         return controller;
     }
 
-    CameraController newController() {
-        return new CameraController();
+    AbstractCameraController newController() {
+        return new CameraApi1Controller();
     }
 }

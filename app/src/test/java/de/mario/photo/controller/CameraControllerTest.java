@@ -56,7 +56,7 @@ public class CameraControllerTest {
     @Mock
     private CameraOrientationListener orientationListener;
     @InjectMocks
-    private CameraController classUnderTest;
+    private CameraApi1Controller classUnderTest;
 
     @Before
     public void setUp() {
@@ -98,7 +98,7 @@ public class CameraControllerTest {
     @Test
     public void testShot() {
         classUnderTest.shot();
-        verify(handler).post(any(CameraController.ShotRunner.class));
+        verify(handler).post(any(CameraApi1Controller.ShotRunner.class));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class CameraControllerTest {
     @Test
     public void testFocusCallBack_Success() {
         classUnderTest.reinitialize();
-        CameraController.FocusCallBack instance = classUnderTest.new FocusCallBack();
+        CameraApi1Controller.FocusCallBack instance = classUnderTest.new FocusCallBack();
         instance.onAutoFocus(true, camera);
         verify(settingsAccess).getDelay();
     }
@@ -119,7 +119,7 @@ public class CameraControllerTest {
     @Test
     public void testFocusCallBack_Fails() {
         classUnderTest.reinitialize();
-        CameraController.FocusCallBack instance = classUnderTest.new FocusCallBack();
+        CameraApi1Controller.FocusCallBack instance = classUnderTest.new FocusCallBack();
         instance.onAutoFocus(false, camera);
     }
 }
