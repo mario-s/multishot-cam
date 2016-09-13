@@ -1,6 +1,8 @@
-package de.mario.photo.support;
+package de.mario.photo.controller;
 
 import android.hardware.Camera;
+
+import de.mario.photo.glue.IsoSupportable;
 
 /**
  * This class handles the ISO support. However there is no standard in the Android API.

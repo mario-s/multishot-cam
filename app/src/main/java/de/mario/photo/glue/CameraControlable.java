@@ -39,4 +39,8 @@ public interface CameraControlable {
     void send(Message message);
 
     SettingsAccessable getSettingsAccess();
+
+    IsoSupportable getIsoSupport();
+
+    PictureSizeSupportable getPictureSizeSupport();
 }

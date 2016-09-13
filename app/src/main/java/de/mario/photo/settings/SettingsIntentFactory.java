@@ -2,15 +2,13 @@ package de.mario.photo.settings;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Camera;
 
 import com.google.inject.Inject;
 
 import de.mario.photo.glue.CameraControlable;
-import de.mario.photo.glue.CameraProvideable;
+import de.mario.photo.glue.IsoSupportable;
+import de.mario.photo.glue.PictureSizeSupportable;
 import de.mario.photo.glue.SettingsAccessable;
-import de.mario.photo.support.IsoSupport;
-import de.mario.photo.support.PicturesSizeSupport;
 
 
 /**
@@ -23,16 +21,14 @@ public final class SettingsIntentFactory {
     static final String SELECTED_ISO = "selectedIso";
     static final String ISOS = "isos";
 
-    private IsoSupport isoSupport;
-    private PicturesSizeSupport sizeSupport;
+    private IsoSupportable isoSupport;
+    private PictureSizeSupportable sizeSupport;
 
     private Context context;
     @Inject
     private CameraControlable cameraController;
     @Inject
     private SettingsAccessable settingsAccess;
-
-    private Camera camera;
 
     @Inject
     public SettingsIntentFactory(Context context) {
@@ -51,12 +47,11 @@ public final class SettingsIntentFactory {
     }
 
     private void prepareSupport() {
-        camera = ((CameraProvideable) cameraController).getCamera();
         if (isoSupport == null) {
-            isoSupport = new IsoSupport(camera.getParameters());
+            isoSupport = cameraController.getIsoSupport();
         }
         if (sizeSupport == null) {
-            sizeSupport = new PicturesSizeSupport(camera.getParameters());
+            sizeSupport = cameraController.getPictureSizeSupport();
         }
     }
 
@@ -70,7 +65,7 @@ public final class SettingsIntentFactory {
 
     private void addPictureSizes(Intent intent) {
         intent.putExtra(PICTURE_SIZES, sizeSupport.getSupportedPicturesSizes());
-        intent.putExtra(SELECTED_PICTURE_SIZE, sizeSupport.getSelectedPictureSize(camera));
+        intent.putExtra(SELECTED_PICTURE_SIZE, sizeSupport.getSelectedPictureSize());
     }
 
     private String findIsoKey() {

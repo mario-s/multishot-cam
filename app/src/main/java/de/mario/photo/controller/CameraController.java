@@ -9,8 +9,9 @@ import de.mario.photo.R;
 import de.mario.photo.controller.lookup.CameraLookup;
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.shot.PhotoCommand;
-import de.mario.photo.glue.CameraProvideable;
+import de.mario.photo.glue.IsoSupportable;
 import de.mario.photo.glue.PhotoActivable;
+import de.mario.photo.glue.PictureSizeSupportable;
 import de.mario.photo.support.MessageWrapper;
 import de.mario.photo.view.FocusView;
 import de.mario.photo.view.Preview;
@@ -18,7 +19,7 @@ import roboguice.util.Ln;
 
 /**
  */
-public class CameraController extends AbstractCameraController implements CameraProvideable {
+public class CameraController extends AbstractCameraController {
     private static final int MIN = 0;
 
     private StorageLookable storageLookable;
@@ -35,6 +36,9 @@ public class CameraController extends AbstractCameraController implements Camera
     private CameraLookup cameraLookup;
     private CameraFactory cameraFactory;
 
+    private IsoSupport isoSupport;
+    private PictureSizeSupport sizeSupport;
+
     public CameraController() {
         this(new CameraLookup(), new CameraFactory());
     }
@@ -42,7 +46,6 @@ public class CameraController extends AbstractCameraController implements Camera
     CameraController(CameraLookup cameraLookup, CameraFactory cameraFactory) {
         this.cameraLookup = cameraLookup;
         this.cameraFactory = cameraFactory;
-
     }
 
     @Override
@@ -58,6 +61,8 @@ public class CameraController extends AbstractCameraController implements Camera
     @Override
     public void initialize() {
         camera = cameraFactory.getCamera(camId);
+        sizeSupport = new PictureSizeSupport(camera.getParameters());
+        isoSupport = new IsoSupport(camera.getParameters());
 
         createViews();
 
@@ -109,7 +114,7 @@ public class CameraController extends AbstractCameraController implements Camera
     private void execute(int delay) {
         Ln.d("delay for photo: %s", delay);
 
-        Runnable command = new PhotoCommand(CameraController.this, activity);
+        Runnable command = new PhotoCommand(camera, CameraController.this, activity);
         if (delay > MIN) {
             handler.postDelayed(command, delay * 1000);
         } else {
@@ -147,6 +152,16 @@ public class CameraController extends AbstractCameraController implements Camera
     }
 
     @Override
+    public IsoSupportable getIsoSupport() {
+        return isoSupport;
+    }
+
+    @Override
+    public PictureSizeSupportable getPictureSizeSupport() {
+        return sizeSupport;
+    }
+
+    @Override
     public Preview getPreview() {
         return preview;
     }
@@ -154,11 +169,6 @@ public class CameraController extends AbstractCameraController implements Camera
     @Override
     public FocusView getFocusView() {
         return focusView;
-    }
-
-    @Override
-    public Camera getCamera() {
-        return camera;
     }
 
     @Override

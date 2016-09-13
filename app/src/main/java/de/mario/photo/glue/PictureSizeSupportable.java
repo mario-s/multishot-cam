@@ -1,6 +1,4 @@
-package de.mario.photo.support;
-
-import android.hardware.Camera;
+package de.mario.photo.glue;
 
 /**
  *
@@ -17,9 +15,8 @@ public interface PictureSizeSupportable {
     /**
      * Return the selected picture size of the given camera.
      *
-     * @param camera the camera to use
      * @return size as string
      */
-    String getSelectedPictureSize(Camera camera);
+    String getSelectedPictureSize();
 
 }

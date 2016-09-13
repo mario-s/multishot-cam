@@ -1,4 +1,4 @@
-package de.mario.photo.support;
+package de.mario.photo.controller;
 
 import android.hardware.Camera;
 
@@ -25,7 +25,7 @@ public class PictureSizeSupportTest {
     @Mock
     private Camera.Parameters parameters;
 
-    private PicturesSizeSupport classUnderTest;
+    private PictureSizeSupport classUnderTest;
 
     private Camera.Size size;
 
@@ -33,7 +33,7 @@ public class PictureSizeSupportTest {
     public void setUp() {
         size = camera.new Size(10, 10);
         given(parameters.getSupportedPictureSizes()).willReturn(singletonList(size));
-        classUnderTest = new PicturesSizeSupport(parameters);
+        classUnderTest = new PictureSizeSupport(parameters);
     }
 
     @Test
@@ -45,8 +45,7 @@ public class PictureSizeSupportTest {
     @Test
     public void testGetSelectedPictureSize() {
         given(parameters.getPictureSize()).willReturn(size);
-        given(camera.getParameters()).willReturn(parameters);
-        String result = classUnderTest.getSelectedPictureSize(camera);
+        String result = classUnderTest.getSelectedPictureSize();
         assertThat(result, containsString("x"));
     }
 }

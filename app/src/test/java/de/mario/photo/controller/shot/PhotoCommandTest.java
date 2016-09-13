@@ -45,12 +45,11 @@ public class PhotoCommandTest {
 
     @Before
     public void setUp() {
-        given(cameraController.getCamera()).willReturn(camera);
         given(cameraController.getSettingsAccess()).willReturn(settings);
         given(settings.getPicSizeKey()).willReturn("");
         given(photoShotsFactory.create(settings)).willReturn(new Shot[]{new Shot("test")});
 
-        classUnderTest = new PhotoCommand(cameraController, photoActivable){
+        classUnderTest = new PhotoCommand(camera, cameraController, photoActivable) {
             @Override
             PictureCallback newPictureCallback() {
                 return pictureCallback;

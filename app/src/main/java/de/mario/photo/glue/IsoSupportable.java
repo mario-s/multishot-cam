@@ -1,4 +1,4 @@
-package de.mario.photo.support;
+package de.mario.photo.glue;
 
 /**
  *
