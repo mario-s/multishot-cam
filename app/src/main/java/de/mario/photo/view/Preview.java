@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -181,7 +182,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
         float fact = getFactor(availableWidth, availableHeight, tmpLayoutHeight, tmpLayoutWidth);
 
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) getLayoutParams();
 
         int layoutHeight = (int) (tmpLayoutHeight * fact);
         int layoutWidth = (int) (tmpLayoutWidth * fact);
@@ -190,6 +191,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         if ((layoutWidth != this.getWidth()) || (layoutHeight != this.getHeight())) {
             layoutParams.height = layoutHeight;
             layoutParams.width = layoutWidth;
+            layoutParams.gravity = Gravity.CENTER;
             setLayoutParams(layoutParams);
             layoutChanged = true;
         } else {
