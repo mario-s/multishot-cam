@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.mario.photo.exif.ExifTag;
 import de.mario.photo.exif.ExifWriter;
 import de.mario.photo.exif.GeoTagFactory;
 import de.mario.photo.glue.PhotoActivable;
@@ -77,14 +76,14 @@ class MessageHandler extends Handler {
     }
 
     private void updateExif(String [] pictures){
-        Map<ExifTag, String> tags = new HashMap<>();
+        Map<String, String> tags = new HashMap<>();
 
         addLocation(tags);
 
         updateTags(pictures, tags);
     }
 
-    private void addLocation(Map<ExifTag, String> tags) {
+    private void addLocation(Map<String, String> tags) {
         Location location = activity.getCurrentLocation();
         Ln.d("location: %s", location);
         if(location != null) {
@@ -93,7 +92,7 @@ class MessageHandler extends Handler {
         }
     }
 
-    private void updateTags(String[] pictures, Map<ExifTag, String> tags) {
+    private void updateTags(String[] pictures, Map<String, String> tags) {
         ExifWriter writer = new ExifWriter();
         for (String name : pictures) {
             File file = new File(name);

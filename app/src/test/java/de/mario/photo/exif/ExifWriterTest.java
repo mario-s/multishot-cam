@@ -24,7 +24,7 @@ public class ExifWriterTest {
 
     private File src;
 
-    private Map<ExifTag, String> map;
+    private Map<String, String> map;
 
     private ExifWriter classUnderTest;
 

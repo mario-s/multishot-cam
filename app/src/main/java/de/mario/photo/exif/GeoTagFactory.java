@@ -15,8 +15,8 @@ public class GeoTagFactory {
     static final String W = "W";
 
 
-    public Map<ExifTag, String> create(Location location) {
-        Map<ExifTag, String> tags = new HashMap<>();
+    public Map<String, String> create(Location location) {
+        Map<String, String> tags = new HashMap<>();
         if(location != null) {
             double latitude = Math.abs(location.getLatitude());
             double longitude = Math.abs(location.getLongitude());

@@ -27,7 +27,7 @@ public class BitmapLoader {
     }
 
     private void init() {
-        matrix.postRotate(DEF);
+        //matrix.postRotate(DEF);
         thumbnailSize = THUMBSIZE;
     }
 

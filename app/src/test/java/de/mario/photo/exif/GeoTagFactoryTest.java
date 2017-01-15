@@ -32,7 +32,7 @@ public class GeoTagFactoryTest {
 
     @Test
     public void create() throws IOException {
-        Map<ExifTag, String> result = classUnderTest.create(location);
+        Map<String, String> result = classUnderTest.create(location);
         assertThat(result.isEmpty(), is(false));
     }
 }
