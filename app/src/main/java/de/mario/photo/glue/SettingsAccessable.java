@@ -4,6 +4,10 @@ package de.mario.photo.glue;
  */
 public interface SettingsAccessable {
 
+    String PICTURE_SIZE = "pictureSize";
+    String ISO_KEY = "iso-key";
+    String ISO_VALUE = "iso-value";
+
     /**
      * Returns the selected size of a picture in the form width x height.
      *
@@ -55,18 +59,4 @@ public interface SettingsAccessable {
     boolean isTrace();
 
     boolean isEnabled(int key);
-
-    enum Value {
-        PICTURE_SIZE("pictureSize"), ISO_KEY("iso-key"), ISO_VALUE("iso-value");
-
-        private String value;
-
-        Value(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
 }

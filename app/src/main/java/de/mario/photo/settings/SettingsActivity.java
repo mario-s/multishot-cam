@@ -40,7 +40,7 @@ public class SettingsActivity extends PreferenceActivity {
         String selected = intent.getStringExtra("selectedPictureSize");
 
         ListPreference customListPref = createListPreference(resolutions, selected);
-        customListPref.setKey(SettingsAccess.Value.PICTURE_SIZE.getValue());
+        customListPref.setKey(SettingsAccess.PICTURE_SIZE);
         customListPref.setTitle(R.string.prefs_picture_size_title);
         customListPref.setSummary(R.string.prefs_picture_size_description);
 
@@ -54,7 +54,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 
             ListPreference customListPref = createListPreference(isos, selected);
-            customListPref.setKey(SettingsAccess.Value.ISO_VALUE.getValue());
+            customListPref.setKey(SettingsAccess.ISO_VALUE);
             customListPref.setTitle(R.string.prefs_iso_title);
             customListPref.setSummary(R.string.prefs_iso_description);
 

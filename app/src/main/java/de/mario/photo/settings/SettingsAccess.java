@@ -23,18 +23,24 @@ public class SettingsAccess implements SettingsAccessable {
     public boolean isTrace() { return isEnabled(R.string.trace);}
 
     @Override
-    public String getIsoKey() {return getString(Value.ISO_KEY);}
-
-    @Override
-    public void setIsoKey(String key) {
-        getPreferences().edit().putString(Value.ISO_KEY.getValue(), key).apply();
+    public String getIsoKey() {
+        return getString(ISO_KEY);
     }
 
     @Override
-    public String getIsoValue() {return getString(Value.ISO_VALUE);}
+    public void setIsoKey(String key) {
+        getPreferences().edit().putString(ISO_KEY, key).apply();
+    }
 
     @Override
-    public String getPicSizeKey() {return getString(Value.PICTURE_SIZE);}
+    public String getIsoValue() {
+        return getString(ISO_VALUE);
+    }
+
+    @Override
+    public String getPicSizeKey() {
+        return getString(PICTURE_SIZE);
+    }
 
     @Override
     public int getExposureSequenceType() {return getInt(R.string.evSequence);}
@@ -51,8 +57,6 @@ public class SettingsAccess implements SettingsAccessable {
 
     @Override
     public int getDelay() {return getInt(R.string.shutterDelayTime); }
-
-    public String getString(Value key){return getString(key.getValue());}
 
     public String getString(int key) {
         return getString(context.getString(key));
