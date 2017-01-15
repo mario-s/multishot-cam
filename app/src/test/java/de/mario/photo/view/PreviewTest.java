@@ -8,7 +8,7 @@ import android.hardware.Camera.Size;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class PreviewTest {
     private Display display;
 
     @Mock
-    private RelativeLayout.LayoutParams layoutParams;
+    private FrameLayout.LayoutParams layoutParams;
 
     private Preview classUnderTest;
 
