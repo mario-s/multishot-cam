@@ -25,7 +25,7 @@ import roboguice.util.Ln;
  */
 class ContinuesPictureCallback extends DefaultPictureCallback {
 
-    private final InternalMemoryAccessor memAccessor;
+    private final RawDataIO io;
     private final ShotParameters shotParams;
     private final ParameterUpdater updater;
     private String [] names;
@@ -48,7 +48,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
         this.names = params.getNames();
         this.exposures = params.getExposures();
         this.pictureFileDir = params.getPictureFileDir();
-        this.memAccessor = new InternalMemoryAccessor(params.getContext());
+        this.io = new RawDataIO(params.getContext());
         this.preview = params.getPreview();
         this.updater = params.getUpdater();
 
@@ -100,7 +100,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
 
         String name = names[imageCounter];
         try {
-            memAccessor.save(data, name);
+            io.save(data, name);
         } catch (IllegalStateException e) {
             Ln.w(e, "File %s not saved: %s", name, e.getMessage());
             send(getResource(R.string.save_error));
@@ -111,7 +111,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
 
         try {
             String path = pictureFileDir.getAbsolutePath();
-            imagesNames.addAll(memAccessor.moveAll(path));
+            imagesNames.addAll(io.moveAll(path));
             sendFinishedInfo(path);
         } catch (IOException exc) {
             Ln.w(exc, exc.getMessage());

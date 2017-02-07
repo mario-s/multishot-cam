@@ -1,7 +1,7 @@
 package de.mario.photo.controller.shot;
 
 import android.content.Context;
-import android.os.Handler;
+import android.os.AsyncTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,10 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-
-import de.mario.photo.support.HandlerThreadFactory;
 
 
 /**
@@ -22,26 +18,18 @@ import de.mario.photo.support.HandlerThreadFactory;
  *
  * @author Mario
  */
-class InternalMemoryAccessor {
-
+class RawDataIO {
+    @Deprecated
     private final List<String> internalNames;
     private final Context context;
-    private Handler handler;
 
-    InternalMemoryAccessor(Context context) {
-        this(context, new ScheduledThreadPoolExecutor(1));
-    }
-
-    InternalMemoryAccessor(Context context, ScheduledExecutorService executor){
+    RawDataIO(Context context) {
         this.context = context;
         this.internalNames = new ArrayList<>();
-
-        HandlerThreadFactory factory = new HandlerThreadFactory(getClass());
-        handler = factory.newHandler();
     }
 
     void save(byte[] data, String name) {
-        handler.post(new SaveTask(context, data, name));
+        new SaveTask(context, data, name).execute();
     }
 
     /**
@@ -54,8 +42,8 @@ class InternalMemoryAccessor {
 
         FileInputStream inputStream = context.openFileInput(name);
         ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
-        byte[] read = new byte[1024]; //buffer size.
-        for (int i; -1 != (i = inputStream.read(read)); os.write(read, 0, i));
+        byte[] buff = new byte[1024]; //buffer size.
+        for (int i; -1 != (i = inputStream.read(buff)); os.write(buff, 0, i)) ;
         inputStream.close();
         return os.toByteArray();
     }
@@ -64,8 +52,9 @@ class InternalMemoryAccessor {
      * Moves all internal saved images to the given directory. This can be on an external storage.
      *
      * @param targetDirectory directory on an external storage
-     * @return the pathes of the images
+     * @return the paths of the images
      */
+    @Deprecated
     Collection<String> moveAll(String targetDirectory) throws IOException{
         List<String> imageNames = new ArrayList<>(internalNames.size());
         for (String name : internalNames) {
@@ -94,32 +83,41 @@ class InternalMemoryAccessor {
         return target;
     }
 
-    private class SaveTask implements Runnable {
+    private class SaveTask extends AsyncTask<Void, Void, Void> {
 
         private Context context;
         private byte[] data;
         private String name;
 
-        SaveTask(Context context, byte[] data, String name){
+        SaveTask(Context context, byte[] data, String name) {
             this.context = context;
             this.data = data;
             this.name = name;
         }
 
+        private synchronized void addName(String name) {
+            internalNames.add(name);
+        }
+
         @Override
-        public void run() {
+        protected Void doInBackground(Void... params) {
             try {
+                //TODO save in the picture file directory
                 FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
                 fos.write(data);
                 fos.close();
                 addName(name);
-            }catch (IOException exc){
+            } catch (IOException exc) {
                 throw new IllegalStateException(exc);
             }
+
+            return null;
         }
 
-        private synchronized void addName(String name) {
-            internalNames.add(name);
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            //TODO call interface
         }
     }
 

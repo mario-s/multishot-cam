@@ -2,7 +2,6 @@ package de.mario.photo.controller.shot;
 
 
 import android.content.Context;
-import android.os.Handler;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,11 +15,9 @@ import java.io.IOException;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 @RunWith(MockitoJUnitRunner.class)
-public class InternalMemoryAccessorTest {
+public class RawDataIOTest {
 	private static final String NAME = "test";
 
 	@Mock
@@ -29,17 +26,13 @@ public class InternalMemoryAccessorTest {
 	@Mock
 	private FileInputStream inputStream;
 
-	@Mock
-	private Handler handler;
-
 	@InjectMocks
-	private InternalMemoryAccessor classUnderTest;
+	private RawDataIO classUnderTest;
 
 	@Before
 	public void setUp() throws IOException {
 		given(context.openFileInput(NAME)).willReturn(inputStream);
 		given(inputStream.read(any(byte[].class))).willReturn(-1);
-		setInternalState(classUnderTest, "handler", handler);
 	}
 
 
@@ -51,7 +44,7 @@ public class InternalMemoryAccessorTest {
 	@Test
 	public void testSave() throws IOException {
 		classUnderTest.save(NAME.getBytes(), NAME);
-		verify(handler).post(any(Runnable.class));
+		//TODO verify if interface was called
 	}
 
 }

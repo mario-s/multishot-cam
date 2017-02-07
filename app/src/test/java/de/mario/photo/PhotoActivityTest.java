@@ -1,6 +1,7 @@
 package de.mario.photo;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,8 @@ public class PhotoActivityTest {
         classUnderTest = controller.attach().create().get();
         cameraController = mock(CameraController.class);
         setInternalState(classUnderTest, "cameraController", cameraController);
+        ImageView imageButton = mock(ImageView.class);
+        setInternalState(classUnderTest, "imageButton", imageButton);
     }
 
     @Test
