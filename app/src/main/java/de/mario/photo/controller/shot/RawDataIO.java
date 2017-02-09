@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.mario.photo.glue.TaskListener;
+
 
 /**
  * This class helps to write and read images to internal memory of the device.
@@ -22,6 +24,8 @@ class RawDataIO {
     @Deprecated
     private final List<String> internalNames;
     private final Context context;
+    //TODO set in constructor
+    private TaskListener listener;
 
     RawDataIO(Context context) {
         this.context = context;
@@ -83,7 +87,7 @@ class RawDataIO {
         return target;
     }
 
-    private class SaveTask extends AsyncTask<Void, Void, Void> {
+    private class SaveTask extends AsyncTask<Void, Void, String> {
 
         private Context context;
         private byte[] data;
@@ -100,7 +104,7 @@ class RawDataIO {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
                 //TODO save in the picture file directory
                 FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
@@ -111,13 +115,14 @@ class RawDataIO {
                 throw new IllegalStateException(exc);
             }
 
-            return null;
+            return name;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            //TODO call interface
+        protected void onPostExecute(String name) {
+            if (listener != null) {
+                listener.onFinish(name);
+            }
         }
     }
 

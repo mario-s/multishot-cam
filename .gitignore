@@ -13,3 +13,5 @@ build/
 /.nb-gradle/
 
 **/Thumbs.db
+
+gradle-app.setting
