@@ -21,14 +21,13 @@ import de.mario.photo.glue.TaskListener;
  * @author Mario
  */
 class RawDataIO {
-    @Deprecated
     private final List<String> internalNames;
     private final Context context;
-    //TODO set in constructor
-    private TaskListener listener;
+    private final TaskListener listener;
 
-    RawDataIO(Context context) {
+    RawDataIO(Context context, TaskListener listener) {
         this.context = context;
+        this.listener = listener;
         this.internalNames = new ArrayList<>();
     }
 
@@ -58,7 +57,6 @@ class RawDataIO {
      * @param targetDirectory directory on an external storage
      * @return the paths of the images
      */
-    @Deprecated
     Collection<String> moveAll(String targetDirectory) throws IOException{
         List<String> imageNames = new ArrayList<>(internalNames.size());
         for (String name : internalNames) {
@@ -99,7 +97,7 @@ class RawDataIO {
             this.name = name;
         }
 
-        private synchronized void addName(String name) {
+        private void addName(String name) {
             internalNames.add(name);
         }
 
@@ -110,7 +108,7 @@ class RawDataIO {
                 FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
                 fos.write(data);
                 fos.close();
-                addName(name);
+
             } catch (IOException exc) {
                 throw new IllegalStateException(exc);
             }
@@ -120,6 +118,7 @@ class RawDataIO {
 
         @Override
         protected void onPostExecute(String name) {
+            addName(name);
             if (listener != null) {
                 listener.onFinish(name);
             }

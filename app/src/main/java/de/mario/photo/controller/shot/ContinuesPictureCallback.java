@@ -14,6 +14,7 @@ import java.util.List;
 
 import de.mario.photo.R;
 import de.mario.photo.glue.PhotoActivable;
+import de.mario.photo.glue.TaskListener;
 import de.mario.photo.support.HandlerThreadFactory;
 import roboguice.util.Ln;
 
@@ -23,7 +24,7 @@ import roboguice.util.Ln;
  *
  * @author Mario
  */
-class ContinuesPictureCallback extends DefaultPictureCallback {
+class ContinuesPictureCallback extends DefaultPictureCallback implements TaskListener {
 
     private final RawDataIO io;
     private final ShotParameters shotParams;
@@ -48,7 +49,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
         this.names = params.getNames();
         this.exposures = params.getExposures();
         this.pictureFileDir = params.getPictureFileDir();
-        this.io = new RawDataIO(params.getContext());
+        this.io = new RawDataIO(params.getContext(), this);
         this.preview = params.getPreview();
         this.updater = params.getUpdater();
 
@@ -88,16 +89,12 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
                 Ln.d("duration: %s", duration);
                 Debug.stopMethodTracing();
             }
-
-            moveExternal();
-
             updater.reset();
             updater.update(camera);
         }
     }
 
     private void saveInternal(byte[] data) {
-
         String name = names[imageCounter];
         try {
             io.save(data, name);
@@ -107,8 +104,14 @@ class ContinuesPictureCallback extends DefaultPictureCallback {
         }
     }
 
-    private void moveExternal() {
+    @Override
+    public void onFinish(Object param) {
+        if(imageCounter == max) {
+            moveExternal();
+        }
+    }
 
+    private void moveExternal() {
         try {
             String path = pictureFileDir.getAbsolutePath();
             imagesNames.addAll(io.moveAll(path));
