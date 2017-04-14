@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.hardware.SensorManager;
 import android.view.OrientationEventListener;
 
 import javax.inject.Inject;
@@ -15,6 +14,8 @@ import javax.inject.Inject;
 public class LevelView extends AbstractPaintView {
 
     private static final int TOLERANCE = 1;
+
+    private static final float UPDATE_RATE = .3f;
 
     private final OrientationEventListener listener;
 
@@ -74,13 +75,13 @@ public class LevelView extends AbstractPaintView {
     private class LevelOrientationListener extends OrientationEventListener {
 
         LevelOrientationListener(Context context) {
-            super(context, SensorManager.SENSOR_DELAY_UI);
+            super(context);
         }
 
         @Override
-        public void onOrientationChanged(int orientation) {
-            if (orientation != OrientationEventListener.ORIENTATION_UNKNOWN) {
-                LevelView.this.orientation = orientation;
+        public void onOrientationChanged(int arg) {
+            if (arg != OrientationEventListener.ORIENTATION_UNKNOWN) {
+                orientation = (int)(orientation * (1f - UPDATE_RATE) + arg * UPDATE_RATE);
                 invalidate();
             }
         }

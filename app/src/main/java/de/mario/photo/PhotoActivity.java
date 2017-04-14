@@ -212,7 +212,7 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable {
 		for (int id : VIEW_IDS) {
 			findViewById(id).setEnabled(enabled);
 		}
-		//will be enabled after image ist processed
+		//will be enabled after image is processed
 		if (!enabled) {
 			imageButton.setVisibility(View.GONE);
 		}
