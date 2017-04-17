@@ -17,18 +17,18 @@ public class OrientationNoiseReductionTest {
     @Test
     public void test_horizontal() {
         int result = classUnderTest.reduce(275, 270);
-        assertEquals(273, result);
+        assertEquals(271, result);
     }
 
     @Test
     public void test_vertical_toLeft() {
         int result = classUnderTest.reduce(358, 6);
-        assertEquals(0, result);
+        assertEquals(3, result);
     }
 
     @Test
     public void test_vertical_toRight() {
         int result = classUnderTest.reduce(6, 358);
-        assertEquals(3, result);
+        assertEquals(0, result);
     }
 }
