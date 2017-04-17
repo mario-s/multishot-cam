@@ -3,7 +3,9 @@ jdk: oraclejdk8
 
 android:
   components:
-    - build-tools-25
+    - build-tools-25.0.0
     - android-19
+  licenses:
+    - 'android-sdk-license-.+'
 
 script: ./gradlew check
