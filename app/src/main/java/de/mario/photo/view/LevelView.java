@@ -15,7 +15,7 @@ public class LevelView extends AbstractPaintView {
 
     private static final int TOLERANCE = 1;
 
-    private static final float UPDATE_RATE = .3f;
+    private final OrientationNoiseReduction noiseReduction;
 
     private final OrientationEventListener listener;
 
@@ -26,6 +26,7 @@ public class LevelView extends AbstractPaintView {
     @Inject
     public LevelView(Context context) {
         super(context);
+        this.noiseReduction = new OrientationNoiseReduction();
         this.listener = new LevelOrientationListener(context);
     }
 
@@ -81,7 +82,7 @@ public class LevelView extends AbstractPaintView {
         @Override
         public void onOrientationChanged(int arg) {
             if (arg != OrientationEventListener.ORIENTATION_UNKNOWN) {
-                orientation = (int)(orientation * (1f - UPDATE_RATE) + arg * UPDATE_RATE);
+                orientation = noiseReduction.reduce(arg, orientation);
                 invalidate();
             }
         }
