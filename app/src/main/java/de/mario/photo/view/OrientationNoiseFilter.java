@@ -6,7 +6,7 @@ package de.mario.photo.view;
 
 class OrientationNoiseFilter {
 
-    private static final float UPDATE_RATE = .3f;
+    private static final float ALPHA = .3f;
 
     private static final int MAX = 360;
 
@@ -36,6 +36,6 @@ class OrientationNoiseFilter {
     }
 
     private int calc(int newValue, int oldValue) {
-        return (int)(oldValue * (1f - UPDATE_RATE) + newValue * UPDATE_RATE);
+        return (int)(oldValue + ALPHA * (newValue - oldValue));
     }
 }
