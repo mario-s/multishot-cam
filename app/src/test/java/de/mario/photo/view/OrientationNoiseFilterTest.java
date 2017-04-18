@@ -5,30 +5,30 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-public class OrientationNoiseReductionTest {
+public class OrientationNoiseFilterTest {
 
-    private OrientationNoiseReduction classUnderTest;
+    private OrientationNoiseFilter classUnderTest;
 
     @Before
     public void setUp() {
-        classUnderTest = new OrientationNoiseReduction();
+        classUnderTest = new OrientationNoiseFilter();
     }
 
     @Test
     public void test_horizontal() {
-        int result = classUnderTest.reduce(275, 270);
+        int result = classUnderTest.filter(275, 270);
         assertEquals(271, result);
     }
 
     @Test
     public void test_vertical_toLeft() {
-        int result = classUnderTest.reduce(358, 6);
+        int result = classUnderTest.filter(358, 6);
         assertEquals(3, result);
     }
 
     @Test
     public void test_vertical_toRight() {
-        int result = classUnderTest.reduce(6, 358);
+        int result = classUnderTest.filter(6, 358);
         assertEquals(0, result);
     }
 }

@@ -4,13 +4,13 @@ package de.mario.photo.view;
  * Noise reduction for the values of the device orientation
  */
 
-class OrientationNoiseReduction {
+class OrientationNoiseFilter {
 
     private static final float UPDATE_RATE = .3f;
 
     private static final int MAX = 360;
 
-    int reduce(int newValue, int oldValue) {
+    int filter(int newValue, int oldValue) {
         //upright slightly from left to right
         if(inLast(oldValue) && inFirst(newValue)){
             return norm(calc(newValue + MAX, oldValue));
