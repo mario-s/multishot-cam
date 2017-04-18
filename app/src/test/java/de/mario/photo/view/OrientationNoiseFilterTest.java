@@ -16,19 +16,19 @@ public class OrientationNoiseFilterTest {
 
     @Test
     public void test_horizontal() {
-        int result = classUnderTest.filter(275, 270);
+        int result = classUnderTest.filter(270, 275);
         assertEquals(271, result);
     }
 
     @Test
     public void test_vertical_toLeft() {
-        int result = classUnderTest.filter(358, 6);
+        int result = classUnderTest.filter(6, 358);
         assertEquals(3, result);
     }
 
     @Test
     public void test_vertical_toRight() {
-        int result = classUnderTest.filter(6, 358);
+        int result = classUnderTest.filter(358, 6);
         assertEquals(0, result);
     }
 }

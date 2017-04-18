@@ -82,7 +82,7 @@ public class LevelView extends AbstractPaintView {
         @Override
         public void onOrientationChanged(int arg) {
             if (arg != OrientationEventListener.ORIENTATION_UNKNOWN) {
-                orientation = noiseFilter.filter(arg, orientation);
+                orientation = noiseFilter.filter(orientation, arg);
                 invalidate();
             }
         }
