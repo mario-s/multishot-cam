@@ -13,11 +13,11 @@ class OrientationNoiseFilter {
     int filter(int previous, int current) {
         //upright slightly from left to right
         if(inLast(previous) && inFirst(current)){
-            return norm(calc(current + MAX, previous));
+            return calc(current + MAX, previous) % MAX;
         }
         //upright slightly from right to left
         if(inFirst(previous) && inLast(current)) {
-            return norm(calc(current, previous + MAX));
+            return calc(current, previous + MAX) % 360;
         }
 
         return calc(current, previous);
@@ -29,10 +29,6 @@ class OrientationNoiseFilter {
 
     private boolean inLast(int val) {
         return val >= 270 && val < MAX;
-    }
-
-    private int norm(int val) {
-        return (val >= MAX) ? val - MAX : val;
     }
 
     private int calc(int current, int previous) {
