@@ -17,7 +17,7 @@ class OrientationNoiseFilter {
         }
         //upright slightly from right to left
         if(inFirst(previous) && inLast(current)) {
-            return calc(current, previous + MAX) % 360;
+            return calc(current, previous + MAX) % MAX;
         }
 
         return calc(current, previous);
