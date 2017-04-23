@@ -15,8 +15,6 @@ public class LevelView extends AbstractPaintView {
 
     private static final int TOLERANCE = 1;
 
-    private final OrientationNoiseFilter noiseFilter;
-
     private final OrientationEventListener listener;
 
     private int orientation;
@@ -26,7 +24,6 @@ public class LevelView extends AbstractPaintView {
     @Inject
     public LevelView(Context context) {
         super(context);
-        this.noiseFilter = new OrientationNoiseFilter();
         this.listener = new LevelOrientationListener(context);
     }
 
@@ -75,8 +72,11 @@ public class LevelView extends AbstractPaintView {
 
     private class LevelOrientationListener extends OrientationEventListener {
 
+        private final OrientationNoiseFilter noiseFilter;
+
         LevelOrientationListener(Context context) {
             super(context);
+            this.noiseFilter = new OrientationNoiseFilter();
         }
 
         @Override
