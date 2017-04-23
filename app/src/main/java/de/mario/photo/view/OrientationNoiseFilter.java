@@ -6,7 +6,7 @@ package de.mario.photo.view;
  */
 class OrientationNoiseFilter {
 
-    private static final float ALPHA = .3f;
+    private static final float ALPHA = .2f;
 
     private static final int MAX = 360;
 
