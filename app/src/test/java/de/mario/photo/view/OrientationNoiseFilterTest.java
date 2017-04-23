@@ -14,21 +14,25 @@ public class OrientationNoiseFilterTest {
         classUnderTest = new OrientationNoiseFilter();
     }
 
+
     @Test
-    public void test_horizontal() {
-        int result = classUnderTest.filter(270, 275);
+    public void testFilter_horizontal() {
+        classUnderTest.filter(270);
+        int result = classUnderTest.filter(275);
         assertEquals(271, result);
     }
 
     @Test
-    public void test_vertical_toLeft() {
-        int result = classUnderTest.filter(6, 358);
+    public void testFilter_vertical_toLeft() {
+        classUnderTest.filter(6);
+        int result = classUnderTest.filter(358);
         assertEquals(3, result);
     }
 
     @Test
-    public void test_vertical_toRight() {
-        int result = classUnderTest.filter(358, 6);
+    public void testFilter_vertical_toRight() {
+        classUnderTest.filter(358);
+        int result = classUnderTest.filter(6);
         assertEquals(0, result);
     }
 }

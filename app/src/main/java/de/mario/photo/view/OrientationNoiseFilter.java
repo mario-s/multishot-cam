@@ -1,16 +1,33 @@
 package de.mario.photo.view;
 
 /**
- * Noise reduction for the values of the device orientation
+ * Noise reduction for the values of the device orientation.<br/>
+ * It uses a low pass filter.
  */
-
 class OrientationNoiseFilter {
 
     private static final float ALPHA = .3f;
 
     private static final int MAX = 360;
 
-    int filter(int previous, int current) {
+    private int values[] = new int[0];
+
+    int filter(int input) {
+        //there is no need to filter if we have only one
+        if(values.length == 0) {
+            values = new int[] {0, input};
+            return input;
+        }
+
+        //filter based on last element from array and input
+        int filtered = filter(values[1], input);
+        //new array based on previous result and filter
+        values = new int[] {values[1], filtered};
+
+        return filtered;
+    }
+
+    private int filter(int previous, int current) {
         //upright slightly from left to right
         if(inLast(previous) && inFirst(current)){
             return calc(current + MAX, previous) % MAX;
