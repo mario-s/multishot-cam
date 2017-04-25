@@ -39,6 +39,7 @@ public class OrientationNoiseFilterTest {
     public void testFilter_vertical_toRight() {
         classUnderTest.filter(358);
         int result = classUnderTest.filter(6);
-        assertThat(new BigDecimal(result), is(closeTo(new BigDecimal(360), ERROR)));
+        BigDecimal expected = new BigDecimal(result % OrientationNoiseFilter.MAX);
+        assertThat(new BigDecimal(result), is(closeTo(expected, ERROR)));
     }
 }
