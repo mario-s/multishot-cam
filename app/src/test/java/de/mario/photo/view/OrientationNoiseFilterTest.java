@@ -16,7 +16,7 @@ public class OrientationNoiseFilterTest {
     private OrientationNoiseFilter classUnderTest;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         classUnderTest = new OrientationNoiseFilter();
     }
 
@@ -25,14 +25,15 @@ public class OrientationNoiseFilterTest {
     public void testFilter_horizontal() {
         classUnderTest.filter(270);
         int result = classUnderTest.filter(275);
-        assertEquals(271, result);
+        assertEquals(0, result);
     }
 
     @Test
     public void testFilter_vertical_toLeft() {
-        classUnderTest.filter(6);
-        int result = classUnderTest.filter(358);
-        assertThat(new BigDecimal(result), is(closeTo(new BigDecimal(3), ERROR)));
+        classUnderTest.filter(4);
+        classUnderTest.filter(2);
+        int result = classUnderTest.filter(359);
+        assertThat(new BigDecimal(result), is(closeTo(new BigDecimal(0), ERROR)));
     }
 
     @Test
