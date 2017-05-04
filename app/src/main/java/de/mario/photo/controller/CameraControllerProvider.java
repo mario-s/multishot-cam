@@ -1,7 +1,8 @@
 package de.mario.photo.controller;
 
-import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import javax.inject.Inject;
 
 import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.glue.CameraControlable;

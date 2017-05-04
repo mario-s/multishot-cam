@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.google.inject.Inject;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 /**
  * Opens the gallery of taken photos.

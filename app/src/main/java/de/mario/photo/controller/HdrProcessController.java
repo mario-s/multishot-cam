@@ -3,7 +3,7 @@ package de.mario.photo.controller;
 import android.content.Context;
 import android.content.Intent;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 import org.opencv.android.OpenCVLoader;
 

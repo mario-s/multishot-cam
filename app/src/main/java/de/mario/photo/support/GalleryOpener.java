@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 
 /**

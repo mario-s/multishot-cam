@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 import java.io.File;
 

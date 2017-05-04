@@ -2,7 +2,7 @@ package de.mario.photo.controller.lookup;
 
 import android.content.Context;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.google.inject.Provider;
 
 /**

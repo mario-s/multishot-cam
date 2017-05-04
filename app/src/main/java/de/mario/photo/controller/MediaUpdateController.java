@@ -2,7 +2,7 @@ package de.mario.photo.controller;
 
 import android.graphics.Bitmap;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 import java.io.File;
 

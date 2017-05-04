@@ -2,8 +2,9 @@ package de.mario.photo.settings;
 
 import android.content.Context;
 
-import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import javax.inject.Inject;
 
 import de.mario.photo.glue.SettingsAccessable;
 

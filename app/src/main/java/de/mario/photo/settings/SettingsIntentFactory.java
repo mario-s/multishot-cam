@@ -3,7 +3,8 @@ package de.mario.photo.settings;
 import android.content.Context;
 import android.content.Intent;
 
-import com.google.inject.Inject;
+
+import javax.inject.Inject;
 
 import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.glue.SettingsAccessable;
