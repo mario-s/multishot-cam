@@ -36,6 +36,13 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:19.0.0'
     compile 'org.roboguice:roboguice:3.0.1'
+
+    compile 'com.google.dagger:dagger:2.10'
+    compile 'com.google.dagger:dagger-android:2.10'
+    compile 'com.google.dagger:dagger-android-support:2.10' // if you use the support libraries
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.10'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
+
     provided 'org.roboguice:roboblender:3.0.1'
     compile files('libs/opencv-3.0.0.jar')
     testCompile 'junit:junit:4.12'
