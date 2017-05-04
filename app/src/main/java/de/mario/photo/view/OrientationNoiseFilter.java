@@ -1,7 +1,5 @@
 package de.mario.photo.view;
 
-import roboguice.util.Ln;
-
 import static java.lang.Math.*;
 
 /**
@@ -46,8 +44,6 @@ class OrientationNoiseFilter {
         int filtered = filter(values[1], input);
         //new array based on previous result and filter
         values = new int[] {values[1], filtered};
-
-        Ln.d("filtered values: %s, %s", values[0], values[1]);
 
         return filtered;
     }

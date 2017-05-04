@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Surface;
@@ -15,9 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import roboguice.util.Ln;
-
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
+
+    private static final String TAG = Preview.class.getSimpleName();
 
     private Camera camera;
     private List<Dim> previewSizeList;
@@ -74,7 +75,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
             camera.setPreviewDisplay(holder);
             camera.startPreview();
         } catch (IOException e) {
-            Ln.w(e, e.getMessage());
+            Log.w(TAG, e.getMessage(), e);
         }
     }
 

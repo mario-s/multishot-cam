@@ -3,6 +3,7 @@ package de.mario.photo.controller;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.File;
 
@@ -17,11 +18,11 @@ import de.mario.photo.support.HandlerThreadFactory;
 import de.mario.photo.support.MessageWrapper;
 import de.mario.photo.view.FocusView;
 import de.mario.photo.view.Preview;
-import roboguice.util.Ln;
 
 /**
  */
 public class CameraController implements CameraControlable {
+    private static final String TAG = CameraController.class.getSimpleName();
     private static final int MIN = 0;
 
     private StorageLookable storageLookable;
@@ -125,7 +126,7 @@ public class CameraController implements CameraControlable {
     }
 
     private void execute(int delay) {
-        Ln.d("delay for photo: %s", delay);
+        Log.d(TAG, String.format("delay for photo: %s", delay));
 
         Runnable command = new PhotoCommand(CameraController.this, activity);
         if (delay > MIN) {
@@ -166,7 +167,7 @@ public class CameraController implements CameraControlable {
 
     private void send(String msg) {
         messageSender.send(msg);
-        Ln.d("sending message: %s", msg);
+        Log.d(TAG, String.format("sending message: %s", msg));
     }
 
     @Override

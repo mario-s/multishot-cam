@@ -3,18 +3,19 @@ package de.mario.photo.support;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.inject.Inject;
 
 import java.io.File;
 
-import roboguice.util.Ln;
-
-
 /**
  * Opens the gallery of taken photos.
  */
 public class ImageOpener extends AbstractOpener {
+
+    private static final String TAG = ImageOpener.class.getSimpleName();
+
     public static final String TYPE = "image/*";
 
     @Inject
@@ -34,7 +35,7 @@ public class ImageOpener extends AbstractOpener {
 
         Uri uri = Uri.fromFile(file);
         intent.setDataAndType(uri, TYPE);
-        Ln.d("set intent to show image");
+        Log.d(TAG, "set intent to show image");
 
         return intent;
     }

@@ -2,14 +2,14 @@ package de.mario.photo.controller;
 
 
 import android.hardware.Camera;
+import android.util.Log;
 
-import roboguice.util.Ln;
 
 /**
  * Class to open the camera and get required features.
  */
 class CameraFactory {
-
+    private static final String TAG = CameraFactory.class.getSimpleName();
     /**
      * Opens the camera identified by the ID.
      * @param id
@@ -24,7 +24,7 @@ class CameraFactory {
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             cam.setParameters(params);
         }catch (Exception e){
-            Ln.w(e, e.getMessage());
+            Log.w(TAG, e.getMessage(), e);
         }
         return cam;
     }

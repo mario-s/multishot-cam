@@ -1,16 +1,17 @@
 package de.mario.photo.exif;
 
 import android.media.ExifInterface;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import roboguice.util.Ln;
-
 /**
  */
 public class ExifWriter {
+
+    private static final String TAG = ExifWriter.class.getSimpleName();
 
     public void addTags(File source, Map<String, String> tags) {
         if (!tags.isEmpty()) {
@@ -27,7 +28,7 @@ public class ExifWriter {
 
                 targetExif.saveAttributes();
             } catch (IOException exc) {
-                Ln.w(exc);
+                Log.w(TAG, exc);
             }
         }
     }
@@ -40,7 +41,7 @@ public class ExifWriter {
 
             targetExif.saveAttributes();
         }catch (IOException exc) {
-            Ln.w(exc);
+            Log.w(TAG, exc);
         }
     }
 

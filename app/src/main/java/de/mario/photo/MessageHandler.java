@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -14,12 +15,12 @@ import de.mario.photo.exif.ExifWriter;
 import de.mario.photo.exif.GeoTagFactory;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.support.MessageWrapper;
-import roboguice.util.Ln;
 
 /**
  * This class handles incoming messages from the sub parts.
  */
 class MessageHandler extends Handler {
+    private static final String TAG = MessageHandler.class.getSimpleName();
 
     private static final int PHOTOS_SAVED = R.string.photos_saved;
     private final PhotoActivity activity;
@@ -66,7 +67,7 @@ class MessageHandler extends Handler {
 
         activity.prepareForNextShot();
 
-        Ln.d("ready for next photo session");
+        Log.d(TAG, "ready for next photo session");
     }
 
     private void informAboutPictures(String[] pictures, String folder) {
@@ -85,7 +86,7 @@ class MessageHandler extends Handler {
 
     private void addLocation(Map<String, String> tags) {
         Location location = activity.getCurrentLocation();
-        Ln.d("location: %s", location);
+        Log.d(TAG, String.format("location: %s", location));
         if(location != null) {
             GeoTagFactory tagFactory = new GeoTagFactory();
             tags.putAll(tagFactory.create(location));

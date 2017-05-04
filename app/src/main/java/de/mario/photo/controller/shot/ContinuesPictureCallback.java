@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 import java.io.File;
@@ -16,7 +17,6 @@ import de.mario.photo.R;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.glue.TaskListener;
 import de.mario.photo.support.HandlerThreadFactory;
-import roboguice.util.Ln;
 
 
 /**
@@ -25,6 +25,8 @@ import roboguice.util.Ln;
  * @author Mario
  */
 class ContinuesPictureCallback extends DefaultPictureCallback implements TaskListener {
+
+    private static final String TAG = ContinuesPictureCallback.class.getSimpleName();
 
     private final RawDataIO io;
     private final ShotParameters shotParams;
@@ -86,7 +88,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback implements TaskLis
             if(shotParams.isTrace()) {
                 long end = System.currentTimeMillis();
                 long duration = end - start;
-                Ln.d("duration: %s", duration);
+                Log.d(TAG, String.format("duration: %s", duration));
                 Debug.stopMethodTracing();
             }
             updater.reset();
@@ -99,7 +101,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback implements TaskLis
         try {
             io.save(data, name);
         } catch (IllegalStateException e) {
-            Ln.w(e, "File %s not saved: %s", name, e.getMessage());
+            Log.w(TAG, e.getMessage(), e);
             send(getResource(R.string.save_error));
         }
     }
@@ -117,7 +119,7 @@ class ContinuesPictureCallback extends DefaultPictureCallback implements TaskLis
             imagesNames.addAll(io.moveAll(path));
             sendFinishedInfo(path);
         } catch (IOException exc) {
-            Ln.w(exc, exc.getMessage());
+            Log.w(TAG, exc.getMessage(), exc);
             send(getResource(R.string.save_error));
         }
     }
