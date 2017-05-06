@@ -5,14 +5,15 @@ import android.graphics.Matrix;
 
 import java.io.File;
 
+import de.mario.photo.glue.BitmapLoadable;
+
 import static android.graphics.Bitmap.createBitmap;
 import static android.graphics.BitmapFactory.decodeFile;
 import static android.media.ThumbnailUtils.extractThumbnail;
 
 /**
  */
-public class BitmapLoader {
-    public static final int DEF = 90;
+public class BitmapLoader implements BitmapLoadable {
     private static final int THUMBSIZE = 96;
     private final Matrix matrix;
 
@@ -33,6 +34,7 @@ public class BitmapLoader {
      *
      * @param thumbnailSize size as int
      */
+    @Override
     public void setThumbnailSize(int thumbnailSize) {
         this.thumbnailSize = thumbnailSize;
     }
@@ -52,6 +54,7 @@ public class BitmapLoader {
      * @param file source file
      * @return the bitmap
      */
+    @Override
     public Bitmap loadThumbnail(File file) {
         Bitmap source = extractThumbnail(
                 decodeFile(file.getAbsolutePath()),

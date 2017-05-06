@@ -6,6 +6,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import de.mario.photo.glue.BitmapLoadable;
+import de.mario.photo.glue.GalleryOpenable;
+import de.mario.photo.glue.ImageOpenable;
+import de.mario.photo.glue.MediaUpdateable;
 
 /**
  *
@@ -15,24 +19,24 @@ public class SupportModule {
 
     @Provides
     @Singleton
-    public ImageOpener provideImageOpener(Context context) {
+    public ImageOpenable provideImageOpener(Context context) {
         return new ImageOpener(context);
     }
 
     @Provides
     @Singleton
-    public GalleryOpener provideGalleryOpener(Context context) {
+    public GalleryOpenable provideGalleryOpener(Context context) {
         return new GalleryOpener(context);
     }
 
     @Provides
     @Singleton
-    public MediaUpdater provideMediaUpdater(Context context) {
+    public MediaUpdateable provideMediaUpdater(Context context) {
         return new MediaUpdater(context);
     }
 
     @Provides
-    public BitmapLoader provideBitmapLoader() {
+    public BitmapLoadable provideBitmapLoader() {
         return new BitmapLoader();
     }
 }

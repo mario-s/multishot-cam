@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import de.mario.photo.glue.GalleryOpenable;
 
 
 /**
  */
-public class GalleryOpener extends AbstractOpener {
+public class GalleryOpener extends AbstractOpener implements GalleryOpenable{
 
     private static final String TAG = GalleryOpener.class.getSimpleName();
 

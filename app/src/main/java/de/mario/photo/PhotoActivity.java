@@ -21,10 +21,9 @@ import javax.inject.Inject;
 
 import java.io.File;
 
-import dagger.android.AndroidInjection;
 import de.mario.photo.controller.HdrProcessControlable;
-import de.mario.photo.controller.MediaUpdateController;
 import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.MediaUpdateControlable;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.glue.SettingsAccessable;
 import de.mario.photo.settings.SettingsIntentFactory;
@@ -58,7 +57,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	@Inject
 	SettingsIntentFactory intentFactory;
 	@Inject
-	MediaUpdateController mediaUpdateController;
+	MediaUpdateControlable mediaUpdateController;
 	@Inject
 	StartupDialog startupDialog;
 	@Inject
@@ -104,7 +103,6 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	}
 
 	private void onPostCreate() {
-		mediaUpdateController.initialize();
 		startupDialog.showIfFirstRun();
 	}
 

@@ -6,10 +6,12 @@ import android.net.Uri;
 
 import java.io.File;
 
+import de.mario.photo.glue.MediaUpdateable;
+
 /**
  * Send and broadcast to force update of media gallery
  */
-final public class MediaUpdater {
+final public class MediaUpdater implements MediaUpdateable {
     private final Context context;
     private File lastUpdated;
 
@@ -17,6 +19,7 @@ final public class MediaUpdater {
         this.context = context;
     }
 
+    @Override
     public void sendUpdate(File file) {
         lastUpdated = file;
         Uri uri = Uri.fromFile(file);
@@ -24,6 +27,7 @@ final public class MediaUpdater {
         context.sendBroadcast(intent);
     }
 
+    @Override
     public File getLastUpdated() {
         return lastUpdated;
     }

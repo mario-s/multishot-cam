@@ -10,10 +10,12 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import de.mario.photo.glue.ImageOpenable;
+
 /**
  * Opens the gallery of taken photos.
  */
-public class ImageOpener extends AbstractOpener {
+public class ImageOpener extends AbstractOpener implements ImageOpenable{
 
     private static final String TAG = ImageOpener.class.getSimpleName();
 
@@ -23,6 +25,7 @@ public class ImageOpener extends AbstractOpener {
         super(context);
     }
 
+    @Override
     public void open(File file) {
         if (file != null) {
             Intent intent = resolve(file);
