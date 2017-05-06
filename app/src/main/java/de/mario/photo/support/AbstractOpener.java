@@ -21,7 +21,9 @@ abstract class AbstractOpener {
     }
 
     protected Intent newIntent() {
-        return new Intent(Intent.ACTION_VIEW);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
     }
 
     protected String getText(int id) {
