@@ -6,5 +6,9 @@ android:
     - build-tools-22.0.1
     - android-19
     - extra-google-m2repository
+  licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'intel-android-extra-license.+'
 
 script: ./gradlew check
