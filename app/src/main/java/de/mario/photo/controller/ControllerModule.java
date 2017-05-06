@@ -1,20 +1,42 @@
 package de.mario.photo.controller;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
+import android.content.Context;
 
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import de.mario.photo.controller.lookup.StorageLookable;
-import de.mario.photo.controller.lookup.StorageLookupProvider;
 import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.SettingsAccessable;
 
 /**
  */
-public class ControllerModule extends AbstractModule{
+@Module
+public class ControllerModule {
+    private Context context;
 
-    @Override
-    protected void configure() {
-        bind(StorageLookable.class).toProvider(StorageLookupProvider.class).in(Singleton.class);
-        bind(CameraControlable.class).toProvider(CameraControllerProvider.class).in(Singleton.class);
-        bind(HdrProcessControlable.class).to(HdrProcessController.class).in(Singleton.class);
+
+    @Provides
+    @Singleton
+    public CameraControlable provideCameraController(StorageLookable storageLookup, SettingsAccessable settingsAccess) {
+        CameraController controller =  new CameraController();
+        controller.setStorageLookup(storageLookup);
+        controller.setSettingsAccess(settingsAccess);
+        return controller;
+    }
+
+    @Provides
+    @Singleton
+    public HdrProcessControlable provideHdrProcessController(Context context) {
+        return new HdrProcessController(context);
+    }
+
+    @Provides
+    @Singleton
+    public MediaUpdateController provideMediaUpdateController() {
+        return new MediaUpdateController();
     }
 }

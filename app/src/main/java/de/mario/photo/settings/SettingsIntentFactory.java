@@ -27,9 +27,9 @@ public final class SettingsIntentFactory {
 
     private Context context;
     @Inject
-    private CameraControlable cameraController;
+    CameraControlable cameraController;
     @Inject
-    private SettingsAccessable settingsAccess;
+    SettingsAccessable settingsAccess;
 
     @Inject
     public SettingsIntentFactory(Context context) {

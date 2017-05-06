@@ -1,17 +1,22 @@
 package de.mario.photo.settings;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
+import android.content.Context;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import de.mario.photo.glue.SettingsAccessable;
 
 
 /**
  */
-public class SettingsModule extends AbstractModule {
+@Module
+public class SettingsModule {
 
-    @Override
-    protected void configure() {
-        bind(SettingsAccessable.class).toProvider(SettingsAccessProvider.class).in(Singleton.class);
+    @Provides
+    @Singleton
+    public SettingsAccessable provideSettingsAccess(Context context) {
+        return new SettingsAccess(context);
     }
 }

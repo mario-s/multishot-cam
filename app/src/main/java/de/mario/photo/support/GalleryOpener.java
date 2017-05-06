@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import javax.inject.Inject;
 
 
 /**
@@ -14,7 +13,6 @@ public class GalleryOpener extends AbstractOpener {
 
     private static final String TAG = GalleryOpener.class.getSimpleName();
 
-    @Inject
     public GalleryOpener(Context context) {
         super(context);
     }

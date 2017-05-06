@@ -18,13 +18,13 @@ public class MediaUpdateController {
     private static final int IMG_BTN_THUMB = 38;
 
     @Inject
-    private MediaUpdater mediaUpdater;
+    MediaUpdater mediaUpdater;
     @Inject
-    private ImageOpener imageOpener;
+    ImageOpener imageOpener;
     @Inject
-    private GalleryOpener galleryOpener;
+    GalleryOpener galleryOpener;
     @Inject
-    private BitmapLoader bitmapLoader;
+    BitmapLoader bitmapLoader;
 
     public void initialize() {
         bitmapLoader.setThumbnailSize(IMG_BTN_THUMB);

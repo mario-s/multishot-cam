@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.google.inject.Inject;
-
 import java.io.File;
 
 /**
@@ -15,7 +13,6 @@ final public class MediaUpdater {
     private final Context context;
     private File lastUpdated;
 
-    @Inject
     MediaUpdater(Context context) {
         this.context = context;
     }

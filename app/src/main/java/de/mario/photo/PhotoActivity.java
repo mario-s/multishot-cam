@@ -1,5 +1,6 @@
 package de.mario.photo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 
 import java.io.File;
 
+import dagger.android.AndroidInjection;
 import de.mario.photo.controller.HdrProcessControlable;
 import de.mario.photo.controller.MediaUpdateController;
 import de.mario.photo.glue.CameraControlable;
@@ -28,9 +30,7 @@ import de.mario.photo.glue.SettingsAccessable;
 import de.mario.photo.settings.SettingsIntentFactory;
 import de.mario.photo.view.GridView;
 import de.mario.photo.view.LevelView;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
+
 
 /**
  * Main activity.
@@ -38,34 +38,33 @@ import roboguice.inject.InjectView;
  * @author Mario
  * 
  */
-@ContentView(R.layout.activity_photo)
-public class PhotoActivity extends RoboActivity implements PhotoActivable {
+public class PhotoActivity extends Activity implements PhotoActivable {
 
 	private static final int[] VIEW_IDS = new int[]{R.id.shutter_button, R.id.settings_button,
 			R.id.gallery_button, R.id.image_button};
 
-	@InjectView(R.id.progress_bar)
 	private View progressBar;
-	@InjectView(R.id.image_button)
+
 	private ImageView imageButton;
+
 	@Inject
-	private GridView gridView;
+	GridView gridView;
 	@Inject
-	private MyLocationListener locationListener;
+	MyLocationListener locationListener;
 	@Inject
-	private LocationManager locationManager;
+	LocationManager locationManager;
 	@Inject
-	private CameraControlable cameraController;
+	CameraControlable cameraController;
 	@Inject
-	private SettingsIntentFactory intentFactory;
+	SettingsIntentFactory intentFactory;
 	@Inject
-	private MediaUpdateController mediaUpdateController;
+	MediaUpdateController mediaUpdateController;
 	@Inject
-	private StartupDialog startupDialog;
+	StartupDialog startupDialog;
 	@Inject
-	private HdrProcessControlable processHdrController;
+	HdrProcessControlable processHdrController;
 	@Inject
-	private LevelView levelView;
+	LevelView levelView;
 
 	private MessageHandler handler;
 	private ProcessedMessageReceiver receiver;
@@ -86,7 +85,13 @@ public class PhotoActivity extends RoboActivity implements PhotoActivable {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_photo);
+
+		progressBar =  findViewById(R.id.progress_bar);
+		imageButton = (ImageView) findViewById(R.id.image_button);
+
 		createImageToast();
 
 		if (!getPackageManager()

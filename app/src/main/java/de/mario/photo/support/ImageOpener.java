@@ -19,7 +19,6 @@ public class ImageOpener extends AbstractOpener {
 
     public static final String TYPE = "image/*";
 
-    @Inject
     public ImageOpener(Context context) {
         super(context);
     }
