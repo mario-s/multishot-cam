@@ -7,12 +7,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import de.mario.photo.controller.lookup.StorageLookable;
+import de.mario.photo.controller.media.MediaUpdateController;
 import de.mario.photo.glue.BitmapLoadable;
 import de.mario.photo.glue.CameraControlable;
-import de.mario.photo.glue.GalleryOpenable;
-import de.mario.photo.glue.ImageOpenable;
 import de.mario.photo.glue.MediaUpdateControlable;
-import de.mario.photo.glue.MediaUpdateable;
 import de.mario.photo.glue.SettingsAccessable;
 
 /**
@@ -37,16 +35,7 @@ public class ControllerModule {
 
     @Provides
     @Singleton
-    public MediaUpdateControlable provideMediaUpdateController(MediaUpdateable mediaUpdater,
-                                                               ImageOpenable imageOpener,
-                                                               GalleryOpenable galleryOpener,
-                                                               BitmapLoadable bitmapLoader) {
-        MediaUpdateController controller = new MediaUpdateController();
-        controller.setMediaUpdater(mediaUpdater);
-        controller.setImageOpener(imageOpener);
-        controller.setGalleryOpener(galleryOpener);
-        controller.setBitmapLoader(bitmapLoader);
-        controller.initialize();
-        return controller;
+    public MediaUpdateControlable provideMediaUpdateController(Context context, BitmapLoadable bitmapLoader) {
+        return new MediaUpdateController(context, bitmapLoader);
     }
 }

@@ -1,4 +1,4 @@
-package de.mario.photo.support;
+package de.mario.photo.controller.media;
 
 import android.content.Context;
 import android.content.Intent;

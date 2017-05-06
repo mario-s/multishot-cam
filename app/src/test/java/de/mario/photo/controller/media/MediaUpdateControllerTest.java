@@ -1,7 +1,8 @@
-package de.mario.photo.controller;
+package de.mario.photo.controller.media;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import org.junit.Before;
@@ -13,14 +14,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
 
+import de.mario.photo.controller.media.MediaUpdateController;
 import de.mario.photo.support.BitmapLoader;
-import de.mario.photo.support.GalleryOpener;
-import de.mario.photo.support.ImageOpener;
-import de.mario.photo.support.MediaUpdater;
+import de.mario.photo.controller.media.GalleryOpener;
+import de.mario.photo.controller.media.ImageOpener;
+import de.mario.photo.controller.media.MediaUpdater;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
@@ -45,11 +48,18 @@ public class MediaUpdateControllerTest {
     private File file;
     @Mock
     private Bitmap bitmap;
+    @Mock
+    private Intent intent;
 
     @Before
     public void setUp() {
+        given(context.getString(anyInt())).willReturn("Foo");
+        given(galleryOpener.newIntent()).willReturn(intent);
+        given(imageOpener.newIntent()).willReturn(intent);
+
         setInternalState(classUnderTest, "mediaUpdater", mediaUpdater);
-        classUnderTest.initialize();
+        setInternalState(classUnderTest, "imageOpener", imageOpener);
+        setInternalState(classUnderTest, "galleryOpener", galleryOpener);
         classUnderTest.sendUpdate(file);
     }
 

@@ -1,4 +1,4 @@
-package de.mario.photo.support;
+package de.mario.photo.controller.media;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,25 +8,21 @@ import android.util.Log;
 
 import java.io.File;
 
-import javax.inject.Inject;
-
-import de.mario.photo.glue.ImageOpenable;
 
 /**
  * Opens the gallery of taken photos.
  */
-public class ImageOpener extends AbstractOpener implements ImageOpenable{
+class ImageOpener extends AbstractOpener {
 
     private static final String TAG = ImageOpener.class.getSimpleName();
 
     public static final String TYPE = "image/*";
 
-    public ImageOpener(Context context) {
+    ImageOpener(Context context) {
         super(context);
     }
 
-    @Override
-    public void open(File file) {
+    void open(File file) {
         if (file != null) {
             Intent intent = resolve(file);
             tryOpen(intent);

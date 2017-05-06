@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 import java.io.File;
 
 /**
+ *
  */
-
 public interface BitmapLoadable {
     void setThumbnailSize(int thumbnailSize);
 

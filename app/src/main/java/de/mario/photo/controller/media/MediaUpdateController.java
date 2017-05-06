@@ -1,14 +1,12 @@
-package de.mario.photo.controller;
+package de.mario.photo.controller.media;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import java.io.File;
 
 import de.mario.photo.glue.BitmapLoadable;
-import de.mario.photo.glue.GalleryOpenable;
-import de.mario.photo.glue.ImageOpenable;
 import de.mario.photo.glue.MediaUpdateControlable;
-import de.mario.photo.glue.MediaUpdateable;
 
 /**
  * This class handles the update for the media
@@ -16,13 +14,18 @@ import de.mario.photo.glue.MediaUpdateable;
 public class MediaUpdateController implements MediaUpdateControlable {
     private static final int IMG_BTN_THUMB = 38;
 
-    private MediaUpdateable mediaUpdater;
-    private ImageOpenable imageOpener;
-    private GalleryOpenable galleryOpener;
+    private MediaUpdater mediaUpdater;
+    private ImageOpener imageOpener;
+    private GalleryOpener galleryOpener;
+
     private BitmapLoadable bitmapLoader;
 
-    void initialize() {
-        bitmapLoader.setThumbnailSize(IMG_BTN_THUMB);
+    public MediaUpdateController(Context context, BitmapLoadable bitmapLoader) {
+        mediaUpdater = new MediaUpdater(context);
+        imageOpener = new ImageOpener(context);
+        galleryOpener = new GalleryOpener(context);
+
+        setBitmapLoader(bitmapLoader);
     }
 
     @Override
@@ -54,19 +57,8 @@ public class MediaUpdateController implements MediaUpdateControlable {
         mediaUpdater.sendUpdate(file);
     }
 
-    void setMediaUpdater(MediaUpdateable mediaUpdater) {
-        this.mediaUpdater = mediaUpdater;
-    }
-
-    void setImageOpener(ImageOpenable imageOpener) {
-        this.imageOpener = imageOpener;
-    }
-
-    void setGalleryOpener(GalleryOpenable galleryOpener) {
-        this.galleryOpener = galleryOpener;
-    }
-
-    void setBitmapLoader(BitmapLoadable bitmapLoader) {
+    private void setBitmapLoader(BitmapLoadable bitmapLoader) {
         this.bitmapLoader = bitmapLoader;
+        this.bitmapLoader.setThumbnailSize(IMG_BTN_THUMB);
     }
 }

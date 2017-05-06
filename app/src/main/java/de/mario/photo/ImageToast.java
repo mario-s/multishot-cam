@@ -9,13 +9,13 @@ import android.widget.Toast;
 import java.io.File;
 
 import de.mario.photo.support.BitmapLoader;
+import de.mario.photo.glue.BitmapLoadable;
 
 /**
  */
 class ImageToast extends Toast{
 
-
-    private final BitmapLoader loader;
+    private final BitmapLoadable loader;
     private ImageView imageView;
     private TextView textView;
     private View toastView;

@@ -1,24 +1,22 @@
-package de.mario.photo.support;
+package de.mario.photo.controller.media;
 
 import android.content.Context;
 import android.content.Intent;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import de.mario.photo.glue.GalleryOpenable;
-
 
 /**
  */
-public class GalleryOpener extends AbstractOpener implements GalleryOpenable{
+class GalleryOpener extends AbstractOpener {
 
     private static final String TAG = GalleryOpener.class.getSimpleName();
 
-    public GalleryOpener(Context context) {
+    GalleryOpener(Context context) {
         super(context);
     }
 
-    public void open() {
+    void open() {
         Intent intent = resolve();
         tryOpen(intent);
     }

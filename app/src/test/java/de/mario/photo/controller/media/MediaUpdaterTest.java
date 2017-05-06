@@ -1,4 +1,4 @@
-package de.mario.photo.support;
+package de.mario.photo.controller.media;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
+
+import de.mario.photo.controller.media.MediaUpdater;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
