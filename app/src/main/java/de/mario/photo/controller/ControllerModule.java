@@ -2,8 +2,6 @@ package de.mario.photo.controller;
 
 import android.content.Context;
 
-
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -16,8 +14,6 @@ import de.mario.photo.glue.ImageOpenable;
 import de.mario.photo.glue.MediaUpdateControlable;
 import de.mario.photo.glue.MediaUpdateable;
 import de.mario.photo.glue.SettingsAccessable;
-import de.mario.photo.support.BitmapLoader;
-import de.mario.photo.support.MediaUpdater;
 
 /**
  */
