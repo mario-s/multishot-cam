@@ -7,7 +7,7 @@ import android.content.Intent;
 import de.mario.photo.glue.PhotoActivable;
 
 /**
- *
+ * Receiver for messages when the processing of an image is completed.
  */
 final class ProcessedMessageReceiver extends BroadcastReceiver {
 
