@@ -85,9 +85,10 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo);
+
+		((PhotoApp)getApplication()).getAppComponent().inject(this);
 
 		progressBar =  findViewById(R.id.progress_bar);
 		imageButton = (ImageView) findViewById(R.id.image_button);

@@ -20,7 +20,7 @@ import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 /**
  */
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 18)
+@Config(constants = BuildConfig.class, sdk = 18, application = PhotoApp.class)
 public class PhotoActivityTest {
 
     private PhotoActivity classUnderTest;
