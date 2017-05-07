@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Handler.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +66,8 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	@Inject
 	LevelView levelView;
 
-	private MessageHandler handler;
+	private MessageHandler messageHandler;
+	private Callback updateCallback;
 	private ProcessedMessageReceiver receiver;
 
 	private ViewsOrientationListener orientationListener;
@@ -73,7 +75,8 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	private ImageToast imageToast;
 
 	public PhotoActivity() {
-		handler = new MessageHandler(this);
+		messageHandler = new MessageHandler(this);
+		updateCallback = new UpdateCallback(this);
 		receiver = new ProcessedMessageReceiver(this);
 	}
 
@@ -104,6 +107,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 	private void onPostCreate() {
 		startupDialog.showIfFirstRun();
+		mediaUpdateController.addUpdateCallback(updateCallback);
 	}
 
 	private void createImageToast() {
@@ -196,7 +200,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	}
 
 	/**
-	 * Action handler for shutter button.
+	 * Action messageHandler for shutter button.
 	 * @param view the {@link View} for this action.
 	 */
 	public void onShutter(View view) {
@@ -223,7 +227,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	}
 
 	/**
-	 * Action handler for settings button.
+	 * Action messageHandler for settings button.
 	 * @param view the {@link View} for this action.
 	 */
 	public void onSettings(View view) {
@@ -280,9 +284,8 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 		return locationListener.getCurrentLocation();
 	}
 
-	@Override
-	public Handler getHandler() {
-		return handler;
+	public Handler getMessageHandler() {
+		return messageHandler;
 	}
 
 	void processHdr(String [] pictures){

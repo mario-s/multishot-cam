@@ -18,7 +18,7 @@ public interface PhotoActivable {
 
     String PREPARE_FOR_NEXT = "prepareForNext";
 
-    Handler getHandler();
+    Handler getMessageHandler();
 
     Context getContext();
 }

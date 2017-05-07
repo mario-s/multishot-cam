@@ -64,7 +64,7 @@ public class CameraControllerTest {
         given(cameraFactory.getCamera(anyInt())).willReturn(camera);
         given(camera.getParameters()).willReturn(parameters);
         given(activity.getContext()).willReturn(context);
-        given(activity.getHandler()).willReturn(handler);
+        given(activity.getMessageHandler()).willReturn(handler);
 
         classUnderTest.setActivity(activity);
         classUnderTest.setSettingsAccess(settingsAccess);

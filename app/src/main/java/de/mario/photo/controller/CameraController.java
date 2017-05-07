@@ -59,7 +59,7 @@ public class CameraController implements CameraControlable {
     @Override
     public void setActivity(PhotoActivable activity) {
         this.activity = activity;
-        messageSender = new MessageSender(activity.getHandler());
+        messageSender = new MessageSender(activity.getMessageHandler());
     }
 
     @Override

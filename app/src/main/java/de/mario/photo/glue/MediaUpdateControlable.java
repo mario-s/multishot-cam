@@ -1,6 +1,7 @@
 package de.mario.photo.glue;
 
 import android.graphics.Bitmap;
+import android.os.Handler.Callback;
 
 import java.io.File;
 
@@ -16,4 +17,6 @@ public interface MediaUpdateControlable {
     Bitmap getLastUpdated();
 
     void sendUpdate(File file);
+
+    void addUpdateCallback(Callback callback);
 }

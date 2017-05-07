@@ -2,6 +2,7 @@ package de.mario.photo.controller.media;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler.Callback;
 
 import java.io.File;
 
@@ -55,6 +56,11 @@ public class MediaUpdateController implements MediaUpdateControlable {
     @Override
     public void sendUpdate(File file) {
         mediaUpdater.sendUpdate(file);
+    }
+
+    @Override
+    public void addUpdateCallback(Callback callback) {
+        mediaUpdater.addCallback(callback);
     }
 
     private void setBitmapLoader(BitmapLoadable bitmapLoader) {
