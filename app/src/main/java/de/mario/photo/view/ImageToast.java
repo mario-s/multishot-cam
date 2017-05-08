@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.view;
 
 import android.graphics.Bitmap;
 import android.view.View;
@@ -8,19 +8,20 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import de.mario.photo.R;
 import de.mario.photo.support.BitmapLoader;
 import de.mario.photo.glue.BitmapLoadable;
 
 /**
  */
-class ImageToast extends Toast{
+public class ImageToast extends Toast{
 
     private final BitmapLoadable loader;
     private ImageView imageView;
     private TextView textView;
     private View toastView;
 
-    ImageToast(View toastView) {
+    public ImageToast(View toastView) {
         super(toastView.getContext());
         this.toastView = toastView;
         this.loader = new BitmapLoader();
@@ -38,17 +39,17 @@ class ImageToast extends Toast{
         setView(toastView);
     }
 
-    ImageToast setImage(File file) {
+    public ImageToast setImage(File file) {
         imageView.setImageBitmap(loader.loadThumbnail(file));
         return this;
     }
 
-    ImageToast setImage(Bitmap bitmap) {
+    public ImageToast setImage(Bitmap bitmap) {
         imageView.setImageBitmap(bitmap);
         return this;
     }
 
-    ImageToast setText(String text) {
+    public ImageToast setText(String text) {
         textView.setText(text);
         return this;
     }

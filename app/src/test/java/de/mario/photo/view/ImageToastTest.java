@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.view;
 
 import android.content.Context;
 import android.view.View;
@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import de.mario.photo.R;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
