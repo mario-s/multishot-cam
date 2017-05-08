@@ -56,6 +56,7 @@ public class MediaUpdateControllerTest {
         given(context.getString(anyInt())).willReturn("Foo");
         given(galleryOpener.newIntent()).willReturn(intent);
         given(imageOpener.newIntent()).willReturn(intent);
+        given(file.exists()).willReturn(true);
 
         setInternalState(classUnderTest, "mediaUpdater", mediaUpdater);
         setInternalState(classUnderTest, "imageOpener", imageOpener);
