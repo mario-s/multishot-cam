@@ -44,9 +44,4 @@ public class ImageResultListenerTest {
         order.verify(activity).refreshPictureFolder(anyString());
     }
 
-    @Test
-    public void testHandleMessage() {
-        classUnderTest.handleMessage(null);
-        verify(activity).toggleImageButton();
-    }
 }

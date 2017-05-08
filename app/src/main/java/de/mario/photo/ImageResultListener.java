@@ -4,16 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import android.os.Handler.Callback;
-import android.os.Message;
-
 import de.mario.photo.glue.PhotoActivable;
 
 /**
- * Receiver for messages when the processing of an image is completed,<br/>
- * or the file has been deleted by the user.
+ * Receiver for messages when the processing of an image is completed.
  */
-final class ImageResultListener extends BroadcastReceiver implements Callback {
+final class ImageResultListener extends BroadcastReceiver {
 
     private final PhotoActivity activity;
 
@@ -28,11 +24,5 @@ final class ImageResultListener extends BroadcastReceiver implements Callback {
             activity.refreshPictureFolder(result);
             activity.toggleImageButton();
         }
-    }
-
-    @Override
-    public boolean handleMessage(Message msg) {
-        activity.toggleImageButton();
-        return true;
     }
 }

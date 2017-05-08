@@ -17,6 +17,4 @@ public interface MediaUpdateControlable {
     Bitmap getLastUpdated();
 
     void sendUpdate(File file);
-
-    void addUpdateCallback(Callback callback);
 }

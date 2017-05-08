@@ -105,7 +105,6 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 	private void onPostCreate() {
 		startupDialog.showIfFirstRun();
-		mediaUpdateController.addUpdateCallback(receiver);
 	}
 
 	private void createImageToast() {
@@ -169,6 +168,8 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 		registerOrientationListeners();
 
 		updatePaintViews();
+
+		updateImageButton();
 
 		cameraController.reinitialize();
 	}
@@ -250,6 +251,10 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	void toggleImageButton() {
 		hideProgress();
 
+		updateImageButton();
+	}
+
+	private void updateImageButton() {
 		Bitmap last = mediaUpdateController.getLastUpdated();
 		if (last != null) {
 			imageButton.setImageBitmap(last);

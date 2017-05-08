@@ -47,7 +47,7 @@ public class MediaUpdateController implements MediaUpdateControlable {
     public Bitmap getLastUpdated() {
         Bitmap lastBitmap = null;
         File lastFile = mediaUpdater.getLastUpdated();
-        if (lastFile != null) {
+        if (lastFile != null && lastFile.exists()) {
             lastBitmap = bitmapLoader.loadThumbnail(lastFile);
         }
         return lastBitmap;
@@ -56,11 +56,6 @@ public class MediaUpdateController implements MediaUpdateControlable {
     @Override
     public void sendUpdate(File file) {
         mediaUpdater.sendUpdate(file);
-    }
-
-    @Override
-    public void addUpdateCallback(Callback callback) {
-        mediaUpdater.addCallback(callback);
     }
 
     private void setBitmapLoader(BitmapLoadable bitmapLoader) {
