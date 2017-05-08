@@ -7,7 +7,7 @@ import android.os.Bundle;
 /**
  * This class provides features to get the geolocation of the device.
  */
-public class MyLocationListener implements LocationListener {
+final class MyLocationListener implements LocationListener {
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
     private Location currentLocation;
