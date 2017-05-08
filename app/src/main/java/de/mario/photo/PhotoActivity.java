@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Handler.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,8 +66,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	LevelView levelView;
 
 	private MessageHandler messageHandler;
-	private Callback updateCallback;
-	private ProcessedMessageReceiver receiver;
+	private ImageResultListener receiver;
 
 	private ViewsOrientationListener orientationListener;
 
@@ -76,8 +74,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 	public PhotoActivity() {
 		messageHandler = new MessageHandler(this);
-		updateCallback = new UpdateCallback(this);
-		receiver = new ProcessedMessageReceiver(this);
+		receiver = new ImageResultListener(this);
 	}
 
 	@Override
@@ -107,7 +104,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 	private void onPostCreate() {
 		startupDialog.showIfFirstRun();
-		mediaUpdateController.addUpdateCallback(updateCallback);
+		mediaUpdateController.addUpdateCallback(receiver);
 	}
 
 	private void createImageToast() {

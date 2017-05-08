@@ -16,11 +16,12 @@ import de.mario.photo.glue.PhotoActivable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
 
 /**
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ProcessedMessageReceiverTest {
+public class ImageResultListenerTest {
     @Mock
     private Context context;
     @Mock
@@ -28,7 +29,7 @@ public class ProcessedMessageReceiverTest {
     @Mock
     private PhotoActivity activity;
     @InjectMocks
-    private ProcessedMessageReceiver classUnderTest;
+    private ImageResultListener classUnderTest;
 
     @Before
     public void setUp() {
@@ -41,5 +42,11 @@ public class ProcessedMessageReceiverTest {
         InOrder order = inOrder(intent, activity);
         order.verify(intent).getStringExtra(PhotoActivable.MERGED);
         order.verify(activity).refreshPictureFolder(anyString());
+    }
+
+    @Test
+    public void testHandleMessage() {
+        classUnderTest.handleMessage(null);
+        verify(activity).toggleImageButton();
     }
 }

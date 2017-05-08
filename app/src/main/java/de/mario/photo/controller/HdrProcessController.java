@@ -3,8 +3,6 @@ package de.mario.photo.controller;
 import android.content.Context;
 import android.content.Intent;
 
-import javax.inject.Inject;
-
 import org.opencv.android.OpenCVLoader;
 
 import de.mario.photo.service.ExposureMergeService;
@@ -16,7 +14,6 @@ import de.mario.photo.service.OpenCvService;
 class HdrProcessController implements HdrProcessControlable {
     private final Context context;
 
-    @Inject
     HdrProcessController(Context context) {
         this.context = context;
     }
