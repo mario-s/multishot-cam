@@ -13,20 +13,17 @@ import de.mario.photo.glue.MediaUpdateControlable;
  * This class handles the update for the media
  */
 public class MediaUpdateController implements MediaUpdateControlable {
-    private static final int IMG_BTN_THUMB = 38;
 
     private MediaUpdater mediaUpdater;
     private ImageOpener imageOpener;
     private GalleryOpener galleryOpener;
-
     private BitmapLoadable bitmapLoader;
 
     public MediaUpdateController(Context context, BitmapLoadable bitmapLoader) {
         mediaUpdater = new MediaUpdater(context);
         imageOpener = new ImageOpener(context);
         galleryOpener = new GalleryOpener(context);
-
-        setBitmapLoader(bitmapLoader);
+        this.bitmapLoader = bitmapLoader;
     }
 
     @Override
@@ -58,8 +55,4 @@ public class MediaUpdateController implements MediaUpdateControlable {
         mediaUpdater.sendUpdate(file);
     }
 
-    private void setBitmapLoader(BitmapLoadable bitmapLoader) {
-        this.bitmapLoader = bitmapLoader;
-        this.bitmapLoader.setThumbnailSize(IMG_BTN_THUMB);
-    }
 }
