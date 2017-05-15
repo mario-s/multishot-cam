@@ -8,10 +8,14 @@ import android.view.Surface;
  * This class fires an event only if the device is in one of the angles:  0, 90, 180 or 270.
  */
 public abstract class AbstractOrientationListener extends OrientationEventListener{
+
+    private final OrientationNoiseFilter noiseFilter;
+
     private int lastOrientation = -1;
 
     public AbstractOrientationListener(Context context) {
         super(context);
+        noiseFilter = new OrientationNoiseFilter();
     }
 
     protected void setLastOrientation(int lastOrientation) {
@@ -24,10 +28,12 @@ public abstract class AbstractOrientationListener extends OrientationEventListen
 
     @Override
     public void onOrientationChanged(int angle) {
-        int orientation = getOrientationInDeg(angle);
-        if(orientation != getLastOrientation()) {
-            orientationChanged(orientation);
-            setLastOrientation(orientation);
+        if (angle != OrientationEventListener.ORIENTATION_UNKNOWN) {
+            int orientation = getOrientationInDeg(noiseFilter.filter(angle));
+            if(orientation != getLastOrientation()) {
+                orientationChanged(orientation);
+                setLastOrientation(orientation);
+            }
         }
     }
 
