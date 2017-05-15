@@ -8,6 +8,8 @@ import android.view.OrientationEventListener;
 
 import javax.inject.Inject;
 
+import de.mario.photo.support.OrientationNoiseFilter;
+
 /**
  * This view draws an indicator when the device is near horizontal or vertical.
  */

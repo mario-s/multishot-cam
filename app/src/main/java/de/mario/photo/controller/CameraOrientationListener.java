@@ -4,7 +4,7 @@ import android.content.Context;
 import android.hardware.Camera;
 import android.view.Surface;
 
-import de.mario.photo.AbstractOrientationListener;
+import de.mario.photo.support.AbstractOrientationListener;
 
 /**
  * Listener when the orientation of the device changes, since we can't count

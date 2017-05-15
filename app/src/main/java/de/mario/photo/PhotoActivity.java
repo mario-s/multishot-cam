@@ -27,6 +27,7 @@ import de.mario.photo.glue.MediaUpdateControlable;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.glue.SettingsAccessable;
 import de.mario.photo.settings.SettingsIntentFactory;
+import de.mario.photo.support.ViewsOrientationListener;
 import de.mario.photo.view.GridView;
 import de.mario.photo.view.ImageToast;
 import de.mario.photo.view.LevelView;

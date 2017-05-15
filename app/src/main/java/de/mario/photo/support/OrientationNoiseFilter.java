@@ -1,4 +1,4 @@
-package de.mario.photo.view;
+package de.mario.photo.support;
 
 import static java.lang.Math.*;
 
@@ -6,7 +6,7 @@ import static java.lang.Math.*;
  * Noise reduction for the values of the device orientation.<br/>
  * It uses a low pass filter.
  */
-class OrientationNoiseFilter {
+public class OrientationNoiseFilter {
 
     private static final float TIME_CONSTANT = .297f;
 
@@ -22,7 +22,7 @@ class OrientationNoiseFilter {
 
     private int values[];
 
-    OrientationNoiseFilter() {
+    public OrientationNoiseFilter() {
         timestamp = System.nanoTime();
         timestampOld = System.nanoTime();
         values = new int[0];
@@ -33,7 +33,7 @@ class OrientationNoiseFilter {
      * @param input values in degree
      * @return result in degree.
      */
-    int filter(int input) {
+    public int filter(int input) {
         //there is no need to filter if we have only one
         if(values.length == 0) {
             values = new int[] {0, input};

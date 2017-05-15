@@ -1,4 +1,4 @@
-package de.mario.photo.view;
+package de.mario.photo.support;
 
 import org.junit.Before;
 import org.junit.Test;

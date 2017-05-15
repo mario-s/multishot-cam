@@ -1,4 +1,4 @@
-package de.mario.photo;
+package de.mario.photo.support;
 
 import android.content.Context;
 import android.view.View;
@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * Orientation listener to update the rotation of views.
  */
-final class ViewsOrientationListener extends AbstractOrientationListener {
+public final class ViewsOrientationListener extends AbstractOrientationListener {
 
     private final List<View> views;
 
-    ViewsOrientationListener(Context context){
+    public ViewsOrientationListener(Context context){
         super(context);
         views = new ArrayList<>();
     }
@@ -33,11 +33,11 @@ final class ViewsOrientationListener extends AbstractOrientationListener {
         }
     }
 
-    void addView(View view){
+    public void addView(View view){
         views.add(view);
     }
 
-    void removeView(View view){
+    public void removeView(View view){
         views.remove(view);
     }
 }
