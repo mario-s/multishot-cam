@@ -90,6 +90,8 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 		((PhotoApp)getApplication()).getAppComponent().inject(this);
 
+		cameraController.setActivity(this);
+
 		progressBar =  findViewById(R.id.progress_bar);
 		imageButton = (ImageView) findViewById(R.id.image_button);
 
@@ -99,12 +101,10 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 				.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 			toast(getString(R.string.no_cam));
 		} else {
-			onPostCreate();
-		}
-	}
+			startupDialog.showIfFirstRun();
 
-	private void onPostCreate() {
-		startupDialog.showIfFirstRun();
+			setup();
+		}
 	}
 
 	private void createImageToast() {
@@ -112,27 +112,26 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 		imageToast = new ImageToast(view);
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		cameraController.setActivity(this);
+	private void setup() {
 		boolean hasCam = cameraController.lookupCamera();
 		if (!hasCam) {
 			toast(getString(R.string.no_back_cam));
 		} else {
-			onPostStart();
+			cameraController.initialize();
 		}
 	}
 
-	private void onPostStart() {
-		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
-
-		cameraController.initialize();
-
+	private void addViews() {
 		getPreviewLayout().addView(cameraController.getPreview(), 0);
 		getPreviewLayout().addView(gridView, 1);
 		getPreviewLayout().addView(levelView, 2);
 		getPreviewLayout().addView(cameraController.getFocusView(), 3);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		registerReceiver(receiver, new IntentFilter(EXPOSURE_MERGE));
 	}
 
 	private void registerLocationListener() {
@@ -164,14 +163,15 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	protected void onResume() {
 		super.onResume();
 
+		cameraController.reinitialize();
+		addViews();
+
 		registerLocationListener();
 		registerOrientationListeners();
 
 		updatePaintViews();
 
 		updateImageButton();
-
-		cameraController.reinitialize();
 	}
 
 	private ViewGroup getPreviewLayout() {
@@ -184,11 +184,16 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 	@Override
 	protected void onPause() {
-		getPreviewLayout().removeAllViews();
-		cameraController.releaseCamera();
-		unregisterReceiver(receiver);
-		unregisterLocationListener();
 		super.onPause();
+		cameraController.releaseCamera();
+		unregisterLocationListener();
+		getPreviewLayout().removeAllViews();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		unregisterReceiver(receiver);
 	}
 
 	@Override
