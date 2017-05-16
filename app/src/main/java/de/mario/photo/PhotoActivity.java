@@ -26,11 +26,10 @@ import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.glue.MediaUpdateControlable;
 import de.mario.photo.glue.PhotoActivable;
 import de.mario.photo.glue.SettingsAccessable;
+import de.mario.photo.glue.ViewsMediatable;
 import de.mario.photo.settings.SettingsIntentFactory;
 import de.mario.photo.support.ViewsOrientationListener;
-import de.mario.photo.view.GridView;
 import de.mario.photo.view.ImageToast;
-import de.mario.photo.view.LevelView;
 
 
 /**
@@ -49,8 +48,6 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	private ImageView imageButton;
 
 	@Inject
-	GridView gridView;
-	@Inject
 	MyLocationListener locationListener;
 	@Inject
 	LocationManager locationManager;
@@ -65,7 +62,9 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	@Inject
 	HdrProcessControlable processHdrController;
 	@Inject
-	LevelView levelView;
+	SettingsAccessable settingsAccess;
+	@Inject
+	ViewsMediatable viewsMediator;
 
 	private MessageHandler messageHandler;
 	private ImageResultListener receiver;
@@ -118,16 +117,11 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 		if (!hasCam) {
 			toast(getString(R.string.no_back_cam));
 		} else {
+			viewsMediator.setPreview((ViewGroup) findViewById(R.id.preview));
 			cameraController.initialize();
 		}
 	}
 
-	private void addViews() {
-		getPreviewLayout().addView(cameraController.getPreview(), 0);
-		getPreviewLayout().addView(gridView, 1);
-		getPreviewLayout().addView(levelView, 2);
-		getPreviewLayout().addView(cameraController.getFocusView(), 3);
-	}
 
 	@Override
 	protected void onStart() {
@@ -155,28 +149,19 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 		locationManager.removeUpdates(locationListener);
 	}
 
-	private void updatePaintViews() {
-		levelView.enable(isEnabled(R.string.level));
-		gridView.setShowGrid(isEnabled(R.string.grid));
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
 
 		cameraController.reinitialize();
-		addViews();
+		viewsMediator.setupViews();
 
 		registerLocationListener();
 		registerOrientationListeners();
 
-		updatePaintViews();
+		viewsMediator.updatePaintViews();
 
 		updateImageButton();
-	}
-
-	private ViewGroup getPreviewLayout() {
-		return (ViewGroup) findViewById(R.id.preview);
 	}
 
 	private void toast(String msg) {
@@ -188,7 +173,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 		super.onPause();
 		cameraController.releaseCamera();
 		unregisterLocationListener();
-		getPreviewLayout().removeAllViews();
+		viewsMediator.removeViews();
 	}
 
 	@Override
@@ -305,11 +290,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	}
 
 	private boolean isEnabled(int key) {
-		return getSettingsAccess().isEnabled(key);
-	}
-
-	private SettingsAccessable getSettingsAccess() {
-		return cameraController.getSettingsAccess();
+		return settingsAccess.isEnabled(key);
 	}
 
 	private void showProgress() {

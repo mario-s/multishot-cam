@@ -7,6 +7,7 @@ import de.mario.photo.controller.ControllerModule;
 import de.mario.photo.controller.lookup.LookupModule;
 import de.mario.photo.settings.SettingsModule;
 import de.mario.photo.support.SupportModule;
+import de.mario.photo.view.ViewsModule;
 
 /**
  *
@@ -17,7 +18,8 @@ import de.mario.photo.support.SupportModule;
         SettingsModule.class,
         SupportModule.class,
         LookupModule.class,
-        ControllerModule.class})
+        ControllerModule.class,
+        ViewsModule.class})
 public interface AppComponent {
     void inject(PhotoActivity activity);
 }

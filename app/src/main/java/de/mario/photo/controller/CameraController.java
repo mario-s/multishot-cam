@@ -128,7 +128,7 @@ public class CameraController implements CameraControlable {
     private void execute(int delay) {
         Log.d(TAG, String.format("delay for photo: %s", delay));
 
-        Runnable command = new PhotoCommand(CameraController.this, activity);
+        Runnable command = new PhotoCommand(this, settingsAccess, activity);
         if (delay > MIN) {
             handler.postDelayed(command, delay * 1000);
         } else {
@@ -188,11 +188,6 @@ public class CameraController implements CameraControlable {
     @Override
     public void shot() {
         handler.post(new ShotRunner());
-    }
-
-    @Override
-    public SettingsAccessable getSettingsAccess() {
-        return settingsAccess;
     }
 
     void setSettingsAccess(SettingsAccessable settingsAccess) {

@@ -11,7 +11,8 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
-import de.mario.photo.controller.CameraController;
+import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.ViewsMediatable;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -25,16 +26,30 @@ public class PhotoActivityTest {
 
     private PhotoActivity classUnderTest;
 
-    private CameraController cameraController;
+    private CameraControlable cameraController;
+
+    private ViewsMediatable viewsMediator;
 
     @Before
     public void setUp(){
         ActivityController<PhotoActivity> controller = Robolectric.buildActivity(PhotoActivity.class);
         classUnderTest = controller.attach().create().get();
-        cameraController = mock(CameraController.class);
+
+        cameraController = mock(CameraControlable.class);
+        viewsMediator = mock(ViewsMediatable.class);
+
         setInternalState(classUnderTest, "cameraController", cameraController);
+        setInternalState(classUnderTest, "viewsMediator", viewsMediator);
+
         ImageView imageButton = mock(ImageView.class);
         setInternalState(classUnderTest, "imageButton", imageButton);
+    }
+
+    @Test
+    public void testOnResume() {
+        classUnderTest.onResume();
+        verify(cameraController).reinitialize();
+        verify(viewsMediator).setupViews();
     }
 
     @Test
@@ -43,4 +58,6 @@ public class PhotoActivityTest {
         btn.performClick();
         verify(cameraController).shot();
     }
+
+
 }
