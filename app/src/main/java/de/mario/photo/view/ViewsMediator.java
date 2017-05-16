@@ -1,7 +1,9 @@
 package de.mario.photo.view;
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import de.mario.photo.R;
 import de.mario.photo.glue.CameraControlable;
@@ -12,7 +14,7 @@ import de.mario.photo.glue.ViewsMediatable;
  * Mediator for the views.
  */
 
-final class ViewsMediator implements ViewsMediatable{
+final class ViewsMediator implements ViewsMediatable {
 
     private final SettingsAccessable settingsAccess;
 
@@ -23,6 +25,10 @@ final class ViewsMediator implements ViewsMediatable{
     private final GridView gridView;
 
     private final LevelView levelView;
+
+    private View progressBar;
+
+    private ImageView imageView;
 
     ViewsMediator(SettingsAccessable settingsAccess, CameraControlable cameraController, GridView gridView, LevelView levelView) {
         this.settingsAccess = settingsAccess;
@@ -37,6 +43,35 @@ final class ViewsMediator implements ViewsMediatable{
     }
 
     @Override
+    public void setProgressBar(View progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    @Override
+    public void setDisplayImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    @Override
+    public void updateDisplayImageView(Bitmap bitmap) {
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            imageView.setVisibility(View.VISIBLE);
+        } else {
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showProgressBar(boolean show) {
+        if(show) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void setupViews() {
         addView(cameraController.getPreview(), 0);
         addView(gridView, 1);
@@ -45,7 +80,7 @@ final class ViewsMediator implements ViewsMediatable{
     }
 
     @Override
-    public void removeViews(){
+    public void removeViews() {
         preview.removeAllViews();
     }
 

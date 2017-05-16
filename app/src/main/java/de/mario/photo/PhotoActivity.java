@@ -43,9 +43,6 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	private static final int[] VIEW_IDS = new int[]{R.id.shutter_button, R.id.settings_button,
 			R.id.gallery_button, R.id.image_button};
 
-	private View progressBar;
-
-	private ImageView imageButton;
 
 	@Inject
 	MyLocationListener locationListener;
@@ -92,9 +89,6 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 
 		cameraController.setActivity(this);
 
-		progressBar =  findViewById(R.id.progress_bar);
-		imageButton = (ImageView) findViewById(R.id.image_button);
-
 		createImageToast();
 
 		if (!getPackageManager()
@@ -118,6 +112,9 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 			toast(getString(R.string.no_back_cam));
 		} else {
 			viewsMediator.setPreview((ViewGroup) findViewById(R.id.preview));
+			viewsMediator.setProgressBar(findViewById(R.id.progress_bar));
+			viewsMediator.setDisplayImageView((ImageView) findViewById(R.id.image_button));
+
 			cameraController.initialize();
 		}
 	}
@@ -212,7 +209,7 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 		}
 		//will be enabled after image is processed
 		if (!enabled) {
-			imageButton.setVisibility(View.GONE);
+			viewsMediator.updateDisplayImageView(null);
 		}
 	}
 
@@ -241,18 +238,12 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	 */
 	void toggleImageButton() {
 		hideProgress();
-
 		updateImageButton();
 	}
 
 	private void updateImageButton() {
-		Bitmap last = mediaUpdateController.getLastUpdated();
-		if (last != null) {
-			imageButton.setImageBitmap(last);
-			imageButton.setVisibility(View.VISIBLE);
-		} else {
-			imageButton.setVisibility(View.GONE);
-		}
+		Bitmap bitmap = mediaUpdateController.getLastUpdated();
+		viewsMediator.updateDisplayImageView(bitmap);
 	}
 
 	@Override
@@ -294,11 +285,11 @@ public class PhotoActivity extends Activity implements PhotoActivable {
 	}
 
 	private void showProgress() {
-		progressBar.setVisibility(View.VISIBLE);
+		viewsMediator.showProgressBar(true);
 	}
 
 	private void hideProgress() {
-		progressBar.setVisibility(View.GONE);
+		viewsMediator.showProgressBar(false);
 	}
 
 	void refreshPictureFolder(String path){
