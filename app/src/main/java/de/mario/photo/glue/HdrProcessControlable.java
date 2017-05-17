@@ -1,7 +1,7 @@
-package de.mario.photo.controller;
+package de.mario.photo.glue;
 
 /**
- * This interfaces exposes the controller to for the HDR process.
+ * This interfaces exposes the controller for the HDR process.
  */
 public interface HdrProcessControlable {
     /**

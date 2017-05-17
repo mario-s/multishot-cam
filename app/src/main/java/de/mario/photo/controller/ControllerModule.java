@@ -10,6 +10,7 @@ import de.mario.photo.controller.lookup.StorageLookable;
 import de.mario.photo.controller.media.MediaUpdateController;
 import de.mario.photo.glue.BitmapLoadable;
 import de.mario.photo.glue.CameraControlable;
+import de.mario.photo.glue.HdrProcessControlable;
 import de.mario.photo.glue.MediaUpdateControlable;
 import de.mario.photo.glue.SettingsAccessable;
 

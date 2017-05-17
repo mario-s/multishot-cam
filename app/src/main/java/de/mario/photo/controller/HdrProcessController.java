@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import org.opencv.android.OpenCVLoader;
 
+import de.mario.photo.glue.HdrProcessControlable;
 import de.mario.photo.service.ExposureMergeService;
 import de.mario.photo.service.OpenCvService;
 

@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import java.io.File;
 
-import de.mario.photo.controller.HdrProcessControlable;
+import de.mario.photo.glue.HdrProcessControlable;
 import de.mario.photo.glue.CameraControlable;
 import de.mario.photo.glue.MediaUpdateControlable;
 import de.mario.photo.glue.PhotoActivable;
