@@ -31,8 +31,6 @@ public class ViewsMediatorTest {
     @Mock
     private AbstractPaintView gridView;
     @Mock
-    private AbstractPaintView levelView;
-    @Mock
     private ViewGroup preview;
     @InjectMocks
     private ViewsMediator classUnderTest;
