@@ -2,11 +2,9 @@ package de.mario.photo.glue;
 
 import android.hardware.Camera;
 import android.os.Message;
+import android.view.View;
 
 import java.io.File;
-
-import de.mario.photo.view.FocusView;
-import de.mario.photo.view.Preview;
 
 /**
  */
@@ -29,9 +27,9 @@ public interface CameraControlable {
 
     void shot();
 
-    Preview getPreview();
+    View getPreview();
 
-    FocusView getFocusView();
+    View getFocusView();
 
     void setActivity(PhotoActivable activity);
 

@@ -63,6 +63,7 @@ public class LevelView extends AbstractPaintView {
         return Math.abs(0 - orientation) <= TOLERANCE || Math.abs(180 - orientation) <= TOLERANCE;
     }
 
+    @Override
     public void enable(boolean enabled) {
         this.showLevel = enabled;
         if (showLevel) {

@@ -41,7 +41,7 @@ public class GridViewTest {
 
     @Test
     public void testDrawGrid() {
-        classUnderTest.setShowGrid(true);
+        classUnderTest.enable(true);
         classUnderTest.drawGrid(canvas);
         verify(canvas, times(4)).drawLine(anyFloat(), anyFloat(), anyFloat(), anyFloat(), eq(paint));
     }

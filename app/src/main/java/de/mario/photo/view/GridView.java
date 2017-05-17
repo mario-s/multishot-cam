@@ -38,7 +38,8 @@ public class GridView extends AbstractPaintView {
         }
     }
 
-    public void setShowGrid(boolean showGrid) {
+    @Override
+    public void enable(boolean showGrid) {
         this.showGrid = showGrid;
     }
 }

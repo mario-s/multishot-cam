@@ -4,6 +4,7 @@ import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 
 import java.io.File;
 
@@ -171,12 +172,12 @@ public class CameraController implements CameraControlable {
     }
 
     @Override
-    public Preview getPreview() {
+    public View getPreview() {
         return preview;
     }
 
     @Override
-    public FocusView getFocusView() {
+    public View getFocusView() {
         return focusView;
     }
 
@@ -211,7 +212,7 @@ public class CameraController implements CameraControlable {
 
         @Override
         public void onAutoFocus(boolean success, Camera camera) {
-            focusView.focused(success);
+            focusView.enable(success);
             if (success) {
                 execute(getSettings().getDelay());
             } else {

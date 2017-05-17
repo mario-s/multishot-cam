@@ -22,15 +22,16 @@ final class ViewsMediator implements ViewsMediatable {
 
     private ViewGroup preview;
 
-    private final GridView gridView;
+    private final AbstractPaintView gridView;
 
-    private final LevelView levelView;
+    private final AbstractPaintView levelView;
 
     private View progressBar;
 
     private ImageView imageView;
 
-    ViewsMediator(SettingsAccessable settingsAccess, CameraControlable cameraController, GridView gridView, LevelView levelView) {
+    ViewsMediator(SettingsAccessable settingsAccess, CameraControlable cameraController,
+                  AbstractPaintView gridView, AbstractPaintView levelView) {
         this.settingsAccess = settingsAccess;
         this.cameraController = cameraController;
         this.gridView = gridView;
@@ -87,7 +88,7 @@ final class ViewsMediator implements ViewsMediatable {
     @Override
     public void updatePaintViews() {
         levelView.enable(isEnabled(R.string.level));
-        gridView.setShowGrid(isEnabled(R.string.grid));
+        gridView.enable(isEnabled(R.string.grid));
     }
 
     private void addView(View view, int index) {

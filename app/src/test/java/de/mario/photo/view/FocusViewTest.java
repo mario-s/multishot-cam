@@ -41,13 +41,13 @@ public class FocusViewTest {
 
     @Test
     public void testFocused_Success() {
-        classUnderTest.focused(true);
+        classUnderTest.enable(true);
         verify(paint).setColor(Color.GREEN);
     }
 
     @Test
     public void testFocused_Failed() {
-        classUnderTest.focused(false);
+        classUnderTest.enable(false);
         verify(paint).setColor(Color.RED);
     }
 

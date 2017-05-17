@@ -31,7 +31,8 @@ public class FocusView extends AbstractPaintView {
     /**
      * changes the indicator to show successful or failed focus
      */
-    public void focused(boolean success) {
+    @Override
+    public void enable(boolean success) {
         if(success) {
             repaintFocusIndicator(Color.GREEN);
         }else{

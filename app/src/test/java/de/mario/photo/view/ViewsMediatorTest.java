@@ -29,9 +29,9 @@ public class ViewsMediatorTest {
     @Mock
     private CameraControlable cameraController;
     @Mock
-    private GridView gridView;
+    private AbstractPaintView gridView;
     @Mock
-    private LevelView levelView;
+    private AbstractPaintView levelView;
     @Mock
     private ViewGroup preview;
     @InjectMocks
@@ -51,7 +51,6 @@ public class ViewsMediatorTest {
     @Test
     public void testUpdatePaintViews() {
         classUnderTest.updatePaintViews();
-        verify(levelView).enable(false);
-        verify(gridView).setShowGrid(false);
+        verify(gridView, atLeastOnce()).enable(false);
     }
 }

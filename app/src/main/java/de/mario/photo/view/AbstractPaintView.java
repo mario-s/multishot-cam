@@ -7,7 +7,7 @@ import android.view.View;
 /**
  * This class returns a {@link Paint} by using the {@link PaintFactory}.
  */
-abstract class AbstractPaintView extends View{
+public abstract class AbstractPaintView extends View{
 
     private PaintFactory paintFactory;
 
@@ -28,4 +28,10 @@ abstract class AbstractPaintView extends View{
         }
         return paint;
     }
+
+    /**
+     * Enables or disables this view.
+     * @param enabled
+     */
+    public abstract void enable(boolean enabled);
 }
