@@ -4,6 +4,8 @@ local.properties
 .gradle
 build/
 
+.DS_Store
+
 # idea project files
 .idea/
 .idea/.name
